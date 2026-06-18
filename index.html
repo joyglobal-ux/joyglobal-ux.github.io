@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polaris · 투자 허브</title>
+<meta name="description" content="Jay의 투자 커맨드 센터 — 포트폴리오 · RS 스크리너 · 리서치 노트">
+<style>
+  :root{
+    --bg:#0b0d14; --bg2:#0f1117; --panel:#161a24; --panel2:#1d2230; --line:#272d3c;
+    --txt:#e8eaf0; --muted:#9aa3b2; --faint:#69727f;
+    --accent:#8b9bff; --accent-dim:#5b6bd6; --gold:#ffd66b;
+    --go:#22c55e; --stop:#ef4444;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;
+    background:var(--bg); color:var(--txt); line-height:1.6; -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px}
+
+  /* ===== HERO ===== */
+  header{
+    position:relative; overflow:hidden;
+    background:
+      radial-gradient(120% 90% at 85% -10%, rgba(139,155,255,0.18), transparent 55%),
+      radial-gradient(90% 70% at 10% 0%, rgba(91,107,214,0.10), transparent 50%),
+      linear-gradient(180deg,#0c0f18,#0b0d14);
+    border-bottom:1px solid var(--line);
+  }
+  .stars{position:absolute;inset:0;z-index:0;opacity:.85;pointer-events:none}
+  .hero{position:relative;z-index:1;padding:64px 0 52px}
+  .brand{display:flex;align-items:center;gap:13px}
+  .mark{
+    width:38px;height:38px;flex-shrink:0;filter:drop-shadow(0 0 10px rgba(139,155,255,.6));
+  }
+  .wordmark{font-size:30px;font-weight:800;letter-spacing:5px;
+    background:linear-gradient(90deg,#fff,#b9c2ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .tagline{font-size:14px;color:var(--muted);margin-top:14px;max-width:560px;line-height:1.65}
+  .tagline b{color:var(--txt);font-weight:600}
+  .creed{display:inline-flex;align-items:center;gap:8px;margin-top:20px;
+    font-size:12px;color:var(--accent);background:rgba(139,155,255,0.08);
+    border:1px solid rgba(139,155,255,0.22);border-radius:999px;padding:6px 14px}
+  .creed .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+
+  /* ===== SECTION ===== */
+  main{padding:42px 0 10px}
+  section{margin-bottom:48px}
+  .shead{display:flex;align-items:baseline;gap:11px;margin-bottom:18px}
+  .shead h2{font-size:15px;font-weight:800;letter-spacing:-.2px}
+  .shead .num{font-size:11px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;
+    border:1px solid var(--line);border-radius:6px;padding:2px 7px}
+  .shead .sub{font-size:12px;color:var(--faint);margin-left:auto}
+
+  /* ===== TOOL CARDS ===== */
+  .tools{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .tool{
+    position:relative;display:flex;flex-direction:column;gap:0;
+    background:linear-gradient(180deg,var(--panel),#13161f);
+    border:1px solid var(--line);border-radius:16px;padding:22px;
+    transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+  }
+  .tool:hover{transform:translateY(-3px);border-color:var(--accent-dim);
+    box-shadow:0 12px 34px -16px rgba(139,155,255,.55)}
+  .tool .ico{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;
+    font-size:23px;background:var(--panel2);border:1px solid var(--line);margin-bottom:15px}
+  .tool h3{font-size:17px;font-weight:800;letter-spacing:-.2px}
+  .tool .en{font-size:11px;font-weight:700;color:var(--faint);letter-spacing:1.5px;text-transform:uppercase;margin-top:3px}
+  .tool p{font-size:13px;color:var(--muted);margin-top:11px;line-height:1.6;flex:1}
+  .tool .feat{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+  .tool .feat span{font-size:11px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+    border-radius:7px;padding:3px 9px}
+  .tool .foot{display:flex;align-items:center;justify-content:space-between;margin-top:18px;
+    padding-top:14px;border-top:1px solid var(--line)}
+  .live{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--go);font-weight:600}
+  .live .pulse{width:7px;height:7px;border-radius:50%;background:var(--go);
+    box-shadow:0 0 0 0 rgba(34,197,94,.5);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}70%{box-shadow:0 0 0 7px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+  .go{font-size:13px;font-weight:700;color:var(--accent);display:inline-flex;align-items:center;gap:5px}
+  .tool:hover .go .arr{transform:translateX(3px)}
+  .go .arr{transition:transform .18s ease}
+
+  /* ===== RESEARCH ===== */
+  .rnote{font-size:12.5px;color:var(--muted);background:var(--panel);border:1px solid var(--line);
+    border-left:3px solid var(--accent-dim);border-radius:11px;padding:13px 15px;margin-bottom:18px;line-height:1.6}
+  .rnote b{color:var(--txt);font-weight:600}
+  .cats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .cat{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:16px;
+    transition:border-color .18s ease,transform .18s ease}
+  .cat:hover{border-color:var(--accent-dim);transform:translateY(-2px)}
+  .cat .ci{font-size:20px}
+  .cat .cn{font-size:13.5px;font-weight:800;margin-top:9px}
+  .cat .cd{font-size:11.5px;color:var(--faint);margin-top:4px;line-height:1.5}
+  .cat .cc{display:inline-block;font-size:10.5px;color:var(--faint);margin-top:11px;
+    background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+
+  /* ===== FOOTER ===== */
+  footer{border-top:1px solid var(--line);margin-top:24px;padding:26px 0 40px;
+    font-size:11.5px;color:var(--faint);text-align:center;line-height:1.9}
+  footer .ftop{font-size:12px;color:var(--muted);margin-bottom:6px}
+  footer .star{color:var(--accent)}
+
+  @media(max-width:680px){
+    .hero{padding:48px 0 40px}
+    .wordmark{font-size:25px;letter-spacing:4px}
+    .mark{width:32px;height:32px}
+    .tools{grid-template-columns:1fr}
+    .cats{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:440px){ .cats{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<header>
+  <!-- 작은곰자리 끝의 Polaris(북극성) 콘스텔레이션 -->
+  <svg class="stars" viewBox="0 0 920 280" preserveAspectRatio="xMaxYMin slice" aria-hidden="true">
+    <defs>
+      <radialGradient id="pg" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#dfe4ff"/><stop offset="100%" stop-color="#8b9bff"/>
+      </radialGradient>
+    </defs>
+    <g stroke="#8b9bff" stroke-opacity="0.22" stroke-width="1" fill="none">
+      <polyline points="720,46 772,86 812,150 760,188 690,176 668,118 712,96"/>
+      <polyline points="712,96 720,46"/>
+    </g>
+    <g fill="#c7ccdb">
+      <circle cx="772" cy="86" r="1.6" opacity=".7"/>
+      <circle cx="812" cy="150" r="1.9" opacity=".8"/>
+      <circle cx="760" cy="188" r="1.5" opacity=".6"/>
+      <circle cx="690" cy="176" r="1.7" opacity=".7"/>
+      <circle cx="668" cy="118" r="1.4" opacity=".6"/>
+      <circle cx="712" cy="96" r="1.8" opacity=".75"/>
+      <circle cx="120" cy="60" r="1" opacity=".4"/><circle cx="240" cy="120" r="1.1" opacity=".45"/>
+      <circle cx="60" cy="170" r="1" opacity=".35"/><circle cx="400" cy="70" r="1" opacity=".4"/>
+      <circle cx="520" cy="200" r="1.1" opacity=".4"/><circle cx="320" cy="210" r="1" opacity=".35"/>
+      <circle cx="860" cy="60" r="1" opacity=".4"/><circle cx="180" cy="230" r="1" opacity=".35"/>
+    </g>
+    <!-- Polaris -->
+    <circle cx="720" cy="46" r="7" fill="url(#pg)" opacity=".30"/>
+    <circle cx="720" cy="46" r="3" fill="#fff"/>
+  </svg>
+
+  <div class="wrap hero">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 1.5 L13.4 9.2 L21 10.6 L13.8 12 L12 22.5 L10.2 12 L3 10.6 L10.6 9.2 Z"
+              fill="url(#mg)"/>
+        <defs><linearGradient id="mg" x1="0" y1="0" x2="24" y2="24">
+          <stop offset="0" stop-color="#dfe4ff"/><stop offset="1" stop-color="#8b9bff"/>
+        </linearGradient></defs>
+      </svg>
+      <div class="wordmark">POLARIS</div>
+    </div>
+    <p class="tagline">
+      흔들릴 때 방향을 잡아주는 <b>북극성</b>. &nbsp;Jay의 투자 커맨드 센터 —
+      포트폴리오 운용, 상대강도 스크리닝, 그리고 정예 리서치를 한 곳에서.
+    </p>
+    <div class="creed"><span class="dot"></span>집중과 현금 · 수익은 길게, 손실은 짧게</div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- TOOLS -->
+  <section id="tools">
+    <div class="shead">
+      <span class="num">01</span>
+      <h2>도구</h2>
+      <span class="sub">매일 자동 갱신 · 실시간 레이어</span>
+    </div>
+    <div class="tools">
+
+      <a class="tool" href="/portfolio-tracker/">
+        <div class="ico">📊</div>
+        <h3>포트폴리오 관리</h3>
+        <div class="en">Portfolio Journal</div>
+        <p>규모·TWR 성과·종목 비중·매매 저널·워치리스트를 한 화면에서. 결정과 그 이유를 시간순으로 누적하는 저널.</p>
+        <div class="feat"><span>성과(TWR)</span><span>비중</span><span>매매 저널</span><span>워치</span></div>
+        <div class="foot">
+          <span class="live"><span class="pulse"></span>매일 자동 갱신</span>
+          <span class="go">열기 <span class="arr">→</span></span>
+        </div>
+      </a>
+
+      <a class="tool" href="/rs-screener/">
+        <div class="ico">📈</div>
+        <h3>RS 스크리너</h3>
+        <div class="en">Relative Strength</div>
+        <p>미국·한국 종목을 기간별 상대강도로 정렬. 분할조정 가격수익률 기반으로 "오른 놈이 더 오른다"를 빠르게 포착.</p>
+        <div class="feat"><span>US · KR</span><span>기간별 RS</span><span>분할조정</span><span>섹터</span></div>
+        <div class="foot">
+          <span class="live"><span class="pulse"></span>매일 자동 갱신</span>
+          <span class="go">열기 <span class="arr">→</span></span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section id="research">
+    <div class="shead">
+      <span class="num">02</span>
+      <h2>리서치 노트</h2>
+      <span class="sub">정예만 누적 (append-only)</span>
+    </div>
+    <div class="rnote">
+      공부한 것 전부가 아니라 <b>아주 높은 퀄리티 · 결정에 영향을 준 핵심</b>만 요약해 쌓는 공간.
+      한번 정리한 노트는 지우지 않고 날짜순으로 누적합니다. 아래는 분류 카테고리 —
+      개별 보고서는 준비되는 대로 채워집니다.
+    </div>
+    <div class="cats">
+      <div class="cat">
+        <div class="ci">🔌</div>
+        <div class="cn">반도체 · AI 인프라</div>
+        <div class="cd">병목·소부장·광통신 등 공급망 핵심</div>
+        <div class="cc">노트 준비 중</div>
+      </div>
+      <div class="cat">
+        <div class="ci">🤖</div>
+        <div class="cn">로봇 · Physical AI</div>
+        <div class="cd">피지컬 AI 베팅 맵과 후보군</div>
+        <div class="cc">노트 준비 중</div>
+      </div>
+      <div class="cat">
+        <div class="ci">🌐</div>
+        <div class="cn">매크로 · 시장</div>
+        <div class="cd">유동성·금리·시장 국면 판단</div>
+        <div class="cc">노트 준비 중</div>
+      </div>
+      <div class="cat">
+        <div class="ci">🎯</div>
+        <div class="cn">종목 Thesis</div>
+        <div class="cd">개별 종목 심층 분석과 트리거</div>
+        <div class="cc">노트 준비 중</div>
+      </div>
+      <div class="cat">
+        <div class="ci">📐</div>
+        <div class="cn">원칙 · 방법론</div>
+        <div class="cd">투자 헌법·매매 규율·매도 원칙</div>
+        <div class="cc">노트 준비 중</div>
+      </div>
+      <div class="cat">
+        <div class="ci">⚙️</div>
+        <div class="cn">시스템매매</div>
+        <div class="cd">추세추종 전략·백테스트 기록</div>
+        <div class="cc">노트 준비 중</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="ftop"><span class="star">✦</span> POLARIS — Jay's Investing Hub</div>
+    <div id="upd">최종 업데이트 2026.06.18</div>
+  </div>
+</footer>
+
+</body>
+</html>
