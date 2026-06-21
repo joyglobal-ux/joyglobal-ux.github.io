@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 헬스케어 · 메디컬 — Polaris 리서치</title>
+<meta name="description" content="Polaris 리서치 노트 · AI 헬스케어 · 메디컬 — 핵심만 누적">
+<style>
+  :root{
+    --bg:#0b0d14; --bg2:#0f1117; --panel:#161a24; --panel2:#1d2230; --line:#272d3c;
+    --txt:#e8eaf0; --muted:#9aa3b2; --faint:#69727f;
+    --accent:#8b9bff; --accent-dim:#5b6bd6; --gold:#ffd66b;
+    --go:#22c55e; --stop:#ef4444;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;
+    background:var(--bg); color:var(--txt); line-height:1.65; -webkit-font-smoothing:antialiased; min-height:100vh;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px}
+
+  header{
+    background:
+      radial-gradient(120% 90% at 85% -10%, rgba(139,155,255,0.16), transparent 55%),
+      linear-gradient(180deg,#0c0f18,#0b0d14);
+    border-bottom:1px solid var(--line);
+  }
+  .top{padding:22px 0 0}
+  .back{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;padding:5px 13px;transition:border-color .18s,color .18s}
+  .back:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .hero{padding:26px 0 30px}
+  .kicker{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint)}
+  .htitle{display:flex;align-items:center;gap:12px;margin-top:10px}
+  .htitle .ic{font-size:27px}
+  .htitle h1{font-size:25px;font-weight:800;letter-spacing:-.3px}
+  .hsub{font-size:13px;color:var(--muted);margin-top:11px;max-width:600px}
+
+  main{padding:32px 0 10px}
+
+  .note{background:linear-gradient(180deg,var(--panel),#13161f);border:1px solid var(--line);
+    border-radius:15px;padding:22px 22px 20px;margin-bottom:20px}
+  .nmeta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:13px}
+  .nmeta .date{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums;
+    border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .nmeta .tk{font-size:11.5px;font-weight:800;letter-spacing:.4px;color:var(--accent);
+    background:rgba(139,155,255,0.08);border:1px solid rgba(139,155,255,0.22);border-radius:6px;padding:2px 9px}
+  .nmeta .tag{font-size:11px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+    border-radius:6px;padding:2px 9px}
+  .ntitle{font-size:17px;font-weight:800;letter-spacing:-.2px;margin-bottom:14px}
+  .rows{display:flex;flex-direction:column;gap:11px}
+  .r{display:grid;grid-template-columns:74px 1fr;gap:13px;align-items:start}
+  .r .lab{font-size:11.5px;font-weight:800;color:var(--accent);letter-spacing:.3px;padding-top:1px}
+  .r .val{font-size:13.5px;color:var(--muted)}
+  .r .val b{color:var(--txt);font-weight:600}
+  .r.verdict .val{color:var(--txt)}
+  .r.verdict .lab{color:var(--gold)}
+  .disc{font-size:11px;color:var(--faint);margin-top:16px;line-height:1.6;border-top:1px solid var(--line);padding-top:13px}
+
+  footer{border-top:1px solid var(--line);margin-top:18px;padding:24px 0 38px;
+    font-size:11.5px;color:var(--faint);text-align:center}
+  footer .star{color:var(--accent)}
+
+  @media(max-width:560px){
+    .htitle h1{font-size:21px}
+    .r{grid-template-columns:62px 1fr;gap:10px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap top">
+    <a class="back" href="/">← Polaris 허브</a>
+  </div>
+  <div class="wrap hero">
+    <div class="kicker">Research · 산업 노트</div>
+    <div class="htitle">
+      <span class="ic">🩺</span>
+      <h1>AI 헬스케어 · 메디컬</h1>
+    </div>
+    <p class="hsub">
+      AI가 application 레이어에서 의료·진단·이미징을 먹는 흐름. 결정에 영향 주는 정수만 — 테제·촉매·밸류·리스크·판정. 최신순 누적.
+    </p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- 새 노트는 이 줄 바로 아래에 추가 (최신순) -->
+
+  <article class="note">
+    <div class="nmeta">
+      <span class="date">2026.06.21</span>
+      <span class="tk">BFLY · NYSE</span>
+      <span class="tag">반도체 초음파</span>
+      <span class="tag">메디컬 이미징</span>
+    </div>
+    <div class="ntitle">Butterfly Network — 초음파의 "칩 플랫폼" 전환</div>
+    <div class="rows">
+      <div class="r"><div class="lab">한 줄</div><div class="val">트랜스듀서를 통째로 실리콘 칩(CMUT-on-CMOS)에 올린 <b>반도체 기반 초음파</b> 회사. 칩 하나가 9,000소자를 개별 제어 → 프로브 1개(iQ3)로 전신 스캔(phased·linear·curved 대체).</div></div>
+      <div class="r"><div class="lab">테제</div><div class="val"><b>"초음파의 NVIDIA."</b> POCUS 본업(15만 대·2,500만+ 이미지 데이터 해자) 위에, 칩을 제3자에 라이선싱하는 <b>Butterfly Embedded</b>로 전환. TAM $20B→$350B 주장. 핵심은 "칩=플랫폼" 재평가.</div></div>
+      <div class="r"><div class="lab">촉매</div><div class="val">미드저니 전신 스캐너(6/18 공개)의 <b>칩 공급사</b> — 프로토타입에 BFLY 칩 40장. 발표에 <b>+30%대·4년 신고가</b>. Embedded 9개 파트너 서명 + 경영진 "미드저니급 추가 딜" 예고. 4세대 'Apollo' 칩(2027, 처리 20배).</div></div>
+      <div class="r"><div class="lab">재무</div><div class="val">Q1'26 매출 <b>$26.5M(+25%)</b>, GM <b>69%</b>(전년 63%), 조정EBITDA -$6.1M, 현금 $138M 무차입. FY26 가이드 $117–121M(+20–24%), <b>여전히 적자</b>. Core $20.8M / Embedded $5.7M(+147%, 미드저니 주동인).</div></div>
+      <div class="r"><div class="lab">밸류</div><div class="val">급등 후 시총 ~$2.3B·<b>EV/Sales ~20배+</b> = 내러티브 주도. 미드저니 계약 고정분은 5년 $74M(≈연 $15M)로 실적 임팩트는 작음. 시나리오 상방=칩 물량(스캐너 1대 ≈ BFLY 실리콘 ~$25k)이나 어디까지나 옵션.</div></div>
+      <div class="r"><div class="lab">리스크</div><div class="val">적자·희석; 경쟁(Exo pMUT 실리콘, GE/Philips); 미드저니 <b>"커스텀 실리콘 2028"</b>이 칩 물량 폭발 구간을 디자인아웃할 수 있음; 밸류 과열(애널 목표가 $4–6대로 현재가 하회).</div></div>
+      <div class="r verdict"><div class="lab">판정</div><div class="val">구조 스토리(칩 플랫폼 재평가)는 매력적이나 밸류는 내러티브가 실적을 앞섬. <b>코어 아닌 트레이드 바구니</b>: 가격액션 + 계약 고정분($15M)만 언더라이트, 시나리오 상방은 로또로 얹기. 타이트한 구조 손절.</div></div>
+      <div class="r"><div class="lab">KPI</div><div class="val">①추가 Embedded 대형 딜 ②유닛당 칩 수↑ vs 미드저니 자체 칩 언급 ③Apollo/4세대 출시 ④Embedded 매출 비중 inflect.</div></div>
+    </div>
+    <div class="disc">미인대회·구조적 변화·가격액션 렌즈. 투자권유 아님 · 수치는 작성 시점 기준(2026.06).</div>
+  </article>
+
+</main>
+
+<footer>
+  <div class="wrap"><span class="star">✦</span> POLARIS — Research Notes</div>
+</footer>
+
+</body>
+</html>
