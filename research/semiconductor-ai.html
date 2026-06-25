@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>반도체 · AI 인프라 — Polaris 리서치</title>
+<meta name="description" content="Polaris 리서치 노트 · 반도체 · AI 인프라 — 핵심만 누적">
+<style>
+  :root{
+    --bg:#0b0d14; --bg2:#0f1117; --panel:#161a24; --panel2:#1d2230; --line:#272d3c;
+    --txt:#e8eaf0; --muted:#9aa3b2; --faint:#69727f;
+    --accent:#8b9bff; --accent-dim:#5b6bd6; --gold:#ffd66b;
+    --go:#22c55e; --stop:#ef4444; --cyan:#5fd0e0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;
+    background:var(--bg); color:var(--txt); line-height:1.65; -webkit-font-smoothing:antialiased; min-height:100vh;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px}
+
+  header{
+    background:
+      radial-gradient(120% 90% at 85% -10%, rgba(139,155,255,0.16), transparent 55%),
+      linear-gradient(180deg,#0c0f18,#0b0d14);
+    border-bottom:1px solid var(--line);
+  }
+  .top{padding:22px 0 0}
+  .back{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;padding:5px 13px;transition:border-color .18s,color .18s}
+  .back:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .hero{padding:26px 0 30px}
+  .kicker{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint)}
+  .htitle{display:flex;align-items:center;gap:12px;margin-top:10px}
+  .htitle .ic{font-size:27px}
+  .htitle h1{font-size:25px;font-weight:800;letter-spacing:-.3px}
+  .hsub{font-size:13px;color:var(--muted);margin-top:11px;max-width:620px}
+
+  main{padding:32px 0 10px}
+
+  .note{background:linear-gradient(180deg,var(--panel),#13161f);border:1px solid var(--line);
+    border-radius:15px;padding:22px 22px 20px;margin-bottom:20px}
+  .nmeta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:13px}
+  .nmeta .date{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums;
+    border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .nmeta .tk{font-size:11.5px;font-weight:800;letter-spacing:.4px;color:var(--accent);
+    background:rgba(139,155,255,0.08);border:1px solid rgba(139,155,255,0.22);border-radius:6px;padding:2px 9px}
+  .nmeta .tag{font-size:11px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+    border-radius:6px;padding:2px 9px}
+  .ntitle{font-size:19px;font-weight:800;letter-spacing:-.3px;margin-bottom:6px}
+  .nlede{font-size:13px;color:var(--muted);margin-bottom:6px}
+  .nlede b{color:var(--txt);font-weight:600}
+
+  /* section within note */
+  .sec{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+  .sech{display:flex;align-items:center;gap:9px;margin-bottom:14px}
+  .sech .sn{font-size:10.5px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;
+    border:1px solid rgba(139,155,255,0.3);border-radius:5px;padding:1px 6px}
+  .sech h3{font-size:14.5px;font-weight:800;letter-spacing:-.2px}
+  .p{font-size:13px;color:var(--muted);margin:10px 0}
+  .p b{color:var(--txt);font-weight:600}
+  .hl{color:var(--accent);font-weight:600}
+
+  /* PDN distance diagram */
+  .pdn{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 6px;position:relative}
+  .pdn .node{background:var(--panel2);border:1px solid var(--line);border-radius:11px;
+    padding:13px 10px;text-align:center}
+  .pdn .node.near{border-color:var(--accent-dim);background:rgba(139,155,255,0.07)}
+  .pdn .node.die{border-color:var(--gold);background:rgba(255,214,107,0.06)}
+  .pdn .node .e{font-size:21px}
+  .pdn .node .t{font-size:12px;font-weight:800;margin-top:6px}
+  .pdn .node .d{font-size:10.5px;color:var(--faint);margin-top:4px;line-height:1.45}
+  .pdn .node .tag2{display:inline-block;font-size:9.5px;font-weight:700;margin-top:7px;border-radius:5px;padding:1px 6px}
+  .tag-mlcc{color:var(--cyan);background:rgba(95,208,224,.1);border:1px solid rgba(95,208,224,.3)}
+  .tag-sic{color:var(--accent);background:rgba(139,155,255,.1);border:1px solid rgba(139,155,255,.3)}
+  .axis{display:flex;justify-content:space-between;font-size:10.5px;color:var(--faint);margin-top:9px;
+    padding:7px 4px 0;border-top:1px dashed var(--line)}
+  .axis b{color:var(--muted);font-weight:600}
+
+  /* tables */
+  .tbl{width:100%;border-collapse:collapse;margin:12px 0 4px;font-size:12.5px}
+  .tbl th,.tbl td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  .tbl thead th{font-size:11px;color:var(--faint);font-weight:700;letter-spacing:.3px;
+    text-transform:none;border-bottom:1px solid var(--line)}
+  .tbl tbody td:first-child{font-weight:700;color:var(--txt);white-space:nowrap}
+  .tbl .c-mlcc{color:var(--cyan)}
+  .tbl .c-sic{color:var(--accent)}
+  .tbl td b{color:var(--txt);font-weight:600}
+  .tbl .me{font-weight:800;color:var(--accent)} /* highlight samsung row */
+  .tbl tr.me-row td:first-child{color:var(--accent)}
+
+  /* ESL/ESR explainer */
+  .esx{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 4px}
+  .esx .card{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:13px 14px}
+  .esx .card .h{font-size:12px;font-weight:800;color:var(--accent);margin-bottom:5px}
+  .esx .card .h small{color:var(--faint);font-weight:600;font-size:10px;letter-spacing:.3px}
+  .esx .card .b{font-size:11.5px;color:var(--muted);line-height:1.55}
+  .esx .card .b b{color:var(--txt);font-weight:600}
+  .why{background:rgba(139,155,255,0.06);border:1px solid rgba(139,155,255,0.2);border-radius:11px;
+    padding:12px 14px;margin-top:10px;font-size:12px;color:var(--muted);line-height:1.6}
+  .why b{color:var(--txt);font-weight:600}
+
+  /* bottleneck layers */
+  .bn{display:flex;flex-direction:column;gap:9px;margin:13px 0 4px}
+  .bn .lay{border-radius:11px;padding:13px 15px;border:1px solid var(--line)}
+  .bn .lay .lh{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;margin-bottom:5px}
+  .bn .lay .lb{font-size:11.5px;color:var(--muted);line-height:1.55}
+  .bn .lay .lb b{color:var(--txt);font-weight:600}
+  .bn .sys{background:rgba(239,68,68,0.05);border-color:rgba(239,68,68,0.25)}
+  .bn .sys .lh{color:var(--stop)}
+  .bn .comp{background:rgba(34,197,94,0.05);border-color:rgba(34,197,94,0.25)}
+  .bn .comp .lh{color:var(--go)}
+  .pill{font-size:10px;font-weight:800;border-radius:999px;padding:2px 9px;margin-left:auto}
+  .pill.no{color:var(--stop);background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3)}
+  .pill.yes{color:var(--go);background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3)}
+
+  /* timeline */
+  .tl{position:relative;margin:14px 0 4px;padding-left:6px}
+  .tl .ev{position:relative;padding:0 0 16px 22px;border-left:2px solid var(--line)}
+  .tl .ev:last-child{border-left-color:transparent;padding-bottom:0}
+  .tl .ev::before{content:"";position:absolute;left:-7px;top:2px;width:12px;height:12px;border-radius:50%;
+    background:var(--panel2);border:2px solid var(--accent-dim)}
+  .tl .ev.done::before{background:var(--go);border-color:var(--go)}
+  .tl .ev.future::before{background:var(--panel2);border-color:var(--gold)}
+  .tl .ev .when{font-size:11px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums}
+  .tl .ev.future .when{color:var(--gold)}
+  .tl .ev .what{font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.5}
+  .tl .ev .what b{color:var(--txt);font-weight:600}
+
+  /* label rows */
+  .rows{display:flex;flex-direction:column;gap:11px;margin-top:6px}
+  .r{display:grid;grid-template-columns:74px 1fr;gap:13px;align-items:start}
+  .r .lab{font-size:11.5px;font-weight:800;color:var(--accent);letter-spacing:.3px;padding-top:1px}
+  .r .val{font-size:13px;color:var(--muted)}
+  .r .val b{color:var(--txt);font-weight:600}
+  .r.verdict{background:rgba(255,214,107,0.05);border:1px solid rgba(255,214,107,0.22);
+    border-radius:11px;padding:13px 14px;grid-template-columns:64px 1fr}
+  .r.verdict .val{color:var(--txt)}
+  .r.verdict .lab{color:var(--gold)}
+
+  .disc{font-size:11px;color:var(--faint);margin-top:18px;line-height:1.65;border-top:1px solid var(--line);padding-top:13px}
+  .disc .src{color:var(--muted)}
+
+  footer{border-top:1px solid var(--line);margin-top:18px;padding:24px 0 38px;
+    font-size:11.5px;color:var(--faint);text-align:center}
+  footer .star{color:var(--accent)}
+
+  @media(max-width:560px){
+    .htitle h1{font-size:21px}
+    .pdn{grid-template-columns:1fr 1fr}
+    .esx{grid-template-columns:1fr}
+    .r{grid-template-columns:60px 1fr;gap:10px}
+    .tbl{font-size:11.5px}
+    .tbl th,.tbl td{padding:7px 8px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap top">
+    <a class="back" href="/">← Polaris 허브</a>
+  </div>
+  <div class="wrap hero">
+    <div class="kicker">Research · 산업 노트</div>
+    <div class="htitle">
+      <span class="ic">🔌</span>
+      <h1>반도체 · AI 인프라</h1>
+    </div>
+    <p class="hsub">
+      HBM · 파운드리 · 어드밴스드 패키징 · 소부장 등 AI 공급망. 결정에 영향 주는 정수만 — 테제·기술·병목·경쟁·타임라인·판정. 최신순 누적.
+    </p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- 새 노트는 이 줄 바로 아래에 추가 (최신순) -->
+
+  <article class="note">
+    <div class="nmeta">
+      <span class="date">2026.06.25</span>
+      <span class="tk">009150 · 삼성전기</span>
+      <span class="tag">실리콘 커패시터</span>
+      <span class="tag">AI 패키징 수동부품</span>
+      <span class="tag">전력 무결성</span>
+    </div>
+    <div class="ntitle">삼성전기 SI-CAP — AI 전력의 "라스트 인치"</div>
+    <p class="nlede">
+      <b>한 줄:</b> 실리콘 웨이퍼에 딥트렌치를 파서 만드는 <b>초박형(100μm↓) 디커플링 커패시터</b>.
+      AI GPU·HBM 패키지 <b>내부, 다이 바로 옆</b>에서 순간 전력변동을 잡아준다.
+      MLCC를 죽이는 게 아니라 <span class="hl">MLCC(보드) + Si-Cap(패키지)의 듀얼 트랙</span>으로 같이 큰다.
+    </p>
+
+    <!-- ===== 1. 어디에 쓰이나 ===== -->
+    <div class="sec">
+      <div class="sech"><span class="sn">01</span><h3>어디서 일하나 — PDN의 "라스트 인치"</h3></div>
+      <p class="p">
+        전원(VRM)에서 칩까지 전류가 흘러오는 경로가 PDN(전력공급망)이다. 칩에서 멀수록 <b>느린 변동</b>만 받아주고,
+        가까울수록 <b>빠른 변동</b>을 받아줘야 한다. AI칩은 나노초 단위로 전력이 출렁여서, 다이 바로 옆의 마지막 한 칸이 핵심이다.
+      </p>
+      <div class="pdn">
+        <div class="node">
+          <div class="e">🔋</div><div class="t">VRM</div>
+          <div class="d">전압 레귤레이터<br>(전원 공급)</div>
+        </div>
+        <div class="node">
+          <div class="e">🟦</div><div class="t">보드</div>
+          <div class="d">기판 위<br>대용량 안정</div>
+          <div class="tag2 tag-mlcc">MLCC</div>
+        </div>
+        <div class="node near">
+          <div class="e">🟪</div><div class="t">패키지</div>
+          <div class="d">다이 근처<br>고주파 디커플링</div>
+          <div class="tag2 tag-sic">Si-Cap</div>
+        </div>
+        <div class="node die">
+          <div class="e">🟨</div><div class="t">Die</div>
+          <div class="d">GPU · HBM<br>(전력 소비)</div>
+        </div>
+      </div>
+      <div class="axis">
+        <span>전원에서 <b>멀다</b> · <b>저주파</b>(느린 변동)</span>
+        <span><b>가깝다</b> · <b>고주파</b>(빠른 변동) → 라스트 인치</span>
+      </div>
+      <p class="p" style="margin-top:13px">
+        그래서 둘은 경쟁이 아니라 <b>보완</b>이다(TrendForce: <i>"complementarity, not substitution"</i>).
+        엔비디아 Vera Rubin처럼 전력밀도가 오르면 <b>랙당 MLCC 수요도 늘고 Si-Cap 침투율도 같이 오른다</b> —
+        AI 사이클이 삼성전기의 MLCC와 Si-Cap을 <span class="hl">동시에</span> 키우는 구조.
+      </p>
+    </div>
+
+    <!-- ===== 2. 기술 — MLCC vs Si-Cap + ESL/ESR ===== -->
+    <div class="sec">
+      <div class="sech"><span class="sn">02</span><h3>기술 — MLCC와 무엇이 다른가</h3></div>
+      <table class="tbl">
+        <thead><tr><th>항목</th><th class="c-mlcc">MLCC (적층세라믹)</th><th class="c-sic">실리콘 커패시터</th></tr></thead>
+        <tbody>
+          <tr><td>구조</td><td>세라믹 수백 겹 적층</td><td>실리콘 웨이퍼 딥트렌치</td></tr>
+          <tr><td>두께</td><td>수백 μm ~ mm</td><td><b>100μm 이하</b> (초박형)</td></tr>
+          <tr><td>위치</td><td>보드 (기판 위)</td><td><b>패키지 내부, 다이 근처</b></td></tr>
+          <tr><td>ESL / ESR</td><td>상대적으로 높음</td><td><b>매우 낮음</b> (저ESL이 강점)</td></tr>
+          <tr><td>강점</td><td>대용량 · 고전압 · 저가</td><td>초소형 · 고주파 · 전력무결성</td></tr>
+          <tr><td>역할</td><td>보드 레벨 전력 안정</td><td>라스트 인치 디커플링</td></tr>
+        </tbody>
+      </table>
+
+      <p class="p" style="margin-top:16px"><b>ESL / ESR이 뭐고 왜 저게 중요한가</b> — 현실의 커패시터엔 기생 저항·인덕턴스가 직렬로 딸려온다.</p>
+      <div class="esx">
+        <div class="card">
+          <div class="h">ESR <small>등가직렬저항</small></div>
+          <div class="b">숨은 <b>저항</b>. 높으면 열로 에너지가 새고 노이즈를 못 거른다.</div>
+        </div>
+        <div class="card">
+          <div class="h">ESL <small>등가직렬인덕턴스</small></div>
+          <div class="b">숨은 <b>인덕턴스</b>. 높으면 <b>빠른 전류 변동에 반응을 못 한다</b> → AI칩에선 치명적.</div>
+        </div>
+      </div>
+      <div class="why">
+        <b>왜 실리콘 캡은 ESL/ESR이 낮나(=특정 회사 비법 아님, 카테고리 물리):</b>
+        ① <b>얇아서 다이에 붙는다</b> → 전류 루프가 짧아 인덕턴스↓ &nbsp;② 딥트렌치로 <b>미세 셀을 대량 병렬</b>로 깐다 → 인덕턴스는 병렬 개수만큼 줄어든다(L/n) &nbsp;③ <b>짧고 굵은 저저항 전극</b> → 저항↓.
+        Murata·ST·삼성전기가 다같이 낮은 건 이 때문. 벤더 차이는 유전체·트렌치 깊이 같은 마진 영역.
+        <br><span style="color:var(--faint)">※ 삼성 자사 "ESL/ESR 100배↓"는 단일 벤더 스펙(타사는 ~16배 주장) — 방향성은 맞되 정확한 배수는 보수적으로.</span>
+      </div>
+      <p class="p" style="margin-top:12px">
+        제조 계보도 갈린다 — <b>삼성전기는 DRAM 캐패시터 셀 구조를 응용(300mm 웨이퍼)</b>, TSMC는 로직 트렌치, Murata는 비공개.
+        메모리 강국의 공정 노하우를 그대로 가져온 게 삼성의 출발점.
+      </p>
+    </div>
+
+    <!-- ===== 3. 병목인가 ===== -->
+    <div class="sec">
+      <div class="sech"><span class="sn">03</span><h3>"병목"이라고 봐도 되나 — 층을 나눠서</h3></div>
+      <div class="bn">
+        <div class="lay sys">
+          <div class="lh">시스템 레벨 병목 <span class="pill no">Si-Cap ✗</span></div>
+          <div class="lb">2026년 AI 공급망의 <b>진짜</b> 병목은 <b>CoWoS(어드밴스드 패키징)</b> — 2026년치 매진, TSMC도 "공급=수요는 2027년". 다음이 HBM, MLCC도 타이트. <b>Si-Cap을 "AI 핵심 병목"이라 부르는 건 과장.</b></div>
+        </div>
+        <div class="lay comp">
+          <div class="lh">부품 레벨 병목성 <span class="pill yes">Si-Cap ✓</span></div>
+          <div class="lb">대신 <b>병목의 경제학</b>은 가진다 — ① 딥트렌치 특허·박막 노하우 <b>고진입장벽</b> ② <b>상위 5개사 매출 63% 과점</b> ③ AI칩 인증이 까다로워 한번 들어가면 락인 ④ 삼성도 "수요 따라 <b>캐파 증설 검토</b>" = 공급 타이트.</div>
+        </div>
+      </div>
+      <p class="p" style="margin-top:13px">
+        <b>판정:</b> 시스템 전체의 병목축은 아니다. 하지만 <span class="hl">소수만 만드는 고진입장벽·과점·고마진 니치</span>로 신규 진입한다는 그림 —
+        투자 관점에선 "병목 그 자체"보다 이게 더 매력적이다.
+        <span style="color:var(--faint)">(※ 캐파·수율·수급 타이트니스 정량 1차증거는 부족 — 정성 종합)</span>
+      </p>
+    </div>
+
+    <!-- ===== 4. 경쟁 구도 ===== -->
+    <div class="sec">
+      <div class="sech"><span class="sn">04</span><h3>경쟁 구도 & 삼성전기 차별화</h3></div>
+      <table class="tbl">
+        <thead><tr><th>업체</th><th>기술 계보</th><th>포지션</th></tr></thead>
+        <tbody>
+          <tr><td>Murata 🇯🇵</td><td>비공개</td><td>리더, <b>점유율 18~22%</b>, 모바일/IoT</td></tr>
+          <tr><td>TSMC 🇹🇼</td><td>로직 트렌치</td><td>CoWoS에 <b>임베디드 내재화</b></td></tr>
+          <tr><td>STMicro 🇪🇺</td><td>실리콘캡 전통강자</td><td>산업·통신 주력 (AI비중 제한적)</td></tr>
+          <tr><td>Empower 🇺🇸</td><td>임베디드 ECAP</td><td>'26.2 AI/HPC 3종 출시, 신흥</td></tr>
+          <tr class="me-row"><td>삼성전기 🇰🇷</td><td>DRAM 기반·300mm</td><td>후발이나 <b>3중통합+대형수주로 급부상</b></td></tr>
+        </tbody>
+      </table>
+      <p class="p" style="margin-top:14px">
+        <b>차별화 ① 3중 통합(유일).</b> "컴포넌트(MLCC)도, 실리콘캡도, 기판(FC-BGA)도 다 하는 곳은 삼성전기뿐" — AI 패키지 부품을 <b>토털 솔루션</b>으로.
+      </p>
+      <p class="p">
+        <b>차별화 ② 팹리스 모델.</b> 설계·테스트만 내재, 웨이퍼는 파운드리·패키징은 OSAT 외주 → <b>추가 대규모 capex 없이 매출 확장</b> = 수익성 레버리지.
+        <span style="color:var(--faint)">(※ "고객에 엔비디아·AMD·아마존 포함"은 FC-BGA 기판 고객을 Si-Cap 고객으로 혼동한 것 — Si-Cap 확정 출하는 <b>마벨 + 삼성전자 Exynos2600</b>뿐, 나머진 검토.)</span>
+      </p>
+    </div>
+
+    <!-- ===== 5. 타임라인 & 밸류 ===== -->
+    <div class="sec">
+      <div class="sech"><span class="sn">05</span><h3>상업화 타임라인 & 실적</h3></div>
+      <div class="tl">
+        <div class="ev done"><div class="when">CES 2025</div><div class="what">장덕현 CEO: 고객 2곳 확보, 내부 목표 <b>1,000억원+</b></div></div>
+        <div class="ev done"><div class="when">2025 Q1말</div><div class="what"><b>마벨(Marvell) 양산 시작</b> — 첫 AI칩 부품 진입 ✅</div></div>
+        <div class="ev done"><div class="when">2026.05.20</div><div class="what"><b>~1조5,570억원</b> 공급계약 (미국 빅테크, 미공개) = <b>작년 매출 13.8%</b></div></div>
+        <div class="ev future"><div class="when">2027~2028</div><div class="what">계약 매출 본격 발생 · DB증권 추정 <b>'27 ~5,500억 / '28 ~1조원</b></div></div>
+      </div>
+      <p class="p" style="margin-top:13px">
+        지금(2026)은 <b>"수주 확보 + 양산 초기"</b> 단계 — 실적 가시화 전 모멘텀. 시장규모는 출처마다 갈려(전체 ~$4B·CAGR ~8% vs 삼성 "AI향 연 18%+") <span style="color:var(--faint)">검증된 단일 TAM은 없음</span>.
+        전사 연매출 ~11조 대비 '27~28년 5,500억~1조면 <b>유의미하나 회사를 바꿀 규모는 아직 아닌, 비중 확대 중인 신성장 옵션</b>.
+      </p>
+    </div>
+
+    <!-- ===== 판정 & KPI ===== -->
+    <div class="sec">
+      <div class="rows">
+        <div class="r verdict">
+          <div class="lab">판정</div>
+          <div class="val">삼성전기 스토리에서 <b>2026년 가장 강한 신규 내러티브 + 중기(2027~) 실적 옵션</b>. 단 "수주는 났지만 매출은 1년 뒤, 고객·숫자는 추정" 단계 — <b>공부(스토리)와 베팅(가격·타이밍)은 별개</b>로. AI 사이클이 MLCC·기판·Si-Cap을 동반 견인하는 구조라 "AI 토털 솔루션" 리레이팅 재료로서의 가치가 핵심.</div>
+        </div>
+        <div class="r">
+          <div class="lab">KPI</div>
+          <div class="val">① <b>1.5조 계약 고객사 공식 확인</b>(엔비디아/구글 직접 채용 여부 — 현재 추정) ② 마벨 외 <b>2·3번째 대형 고객</b> ③ <b>캐파 증설</b> "검토 → 결정" 전환 ④ <b>2027 가이던스</b>에 Si-Cap 매출 반영 시점.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="disc">
+      미인대회 · 구조적 변화 · 가격액션 렌즈. 투자권유 아님 · 수치는 작성 시점 기준(2026.06).
+      <br><span class="src">출처: 삼성전기 IR/보도자료 · DART 공시 · TrendForce · THE ELEC · 전자신문 · 머니투데이 · Electronic Design · Wevolver · Mordor Intelligence. 다중 교차검증(deep-research).</span>
+    </div>
+  </article>
+
+</main>
+
+<footer>
+  <div class="wrap"><span class="star">✦</span> POLARIS — Research Notes</div>
+</footer>
+
+</body>
+</html>
