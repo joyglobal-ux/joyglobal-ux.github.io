@@ -162,7 +162,7 @@
       포트폴리오 운용, 상대강도 스크리닝, 그리고 산업 리서치를 한 곳에서.
     </p>
     <div class="creed"><span class="dot"></span>집중과 현금 · 수익은 길게, 손실은 짧게</div>
-    <div class="updated">최종 업데이트 · <b>2026.06.21</b></div>
+    <div class="updated">최종 업데이트 · <b id="upd">2026.06.25</b></div>
   </div>
 </header>
 
@@ -261,6 +261,18 @@
     <div class="ftop"><span class="star">✦</span> POLARIS — Jay's Investing Hub</div>
   </div>
 </footer>
+
+<script>
+  // 최종 업데이트 = 실제 마지막 배포 시점(GitHub Pages Last-Modified). 수동 갱신 불필요.
+  (function(){
+    var d = new Date(document.lastModified);
+    if (!isNaN(d.getTime())) {
+      var p = function(n){ return (n < 10 ? '0' : '') + n; };
+      document.getElementById('upd').textContent =
+        d.getFullYear() + '.' + p(d.getMonth() + 1) + '.' + p(d.getDate());
+    }
+  })();
+</script>
 
 </body>
 </html>
