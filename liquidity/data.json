@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-05T07:44:02+00:00",
+  "generatedAt": "2026-07-05T08:08:36+00:00",
   "indicators": [
     {
       "id": "net_liquidity",
@@ -9,6 +9,20 @@
       "decimals": 2,
       "source": "FRED · WALCL/WTREGEN/RRPONTSYD",
       "sourceUrl": "https://fred.stlouisfed.org/series/WALCL",
+      "links": [
+        {
+          "label": "WALCL",
+          "url": "https://fred.stlouisfed.org/series/WALCL"
+        },
+        {
+          "label": "TGA",
+          "url": "https://fred.stlouisfed.org/series/WTREGEN"
+        },
+        {
+          "label": "RRP",
+          "url": "https://fred.stlouisfed.org/series/RRPONTSYD"
+        }
+      ],
       "value": 5.843,
       "asOf": "2026-07-01",
       "history": [

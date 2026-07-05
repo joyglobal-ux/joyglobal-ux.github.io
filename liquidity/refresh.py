@@ -137,6 +137,11 @@ def build() -> dict:
             "role": "WALCL − TGA − RRP · 위험자산의 물때", "decimals": 2,
             "source": "FRED · WALCL/WTREGEN/RRPONTSYD",
             "sourceUrl": "https://fred.stlouisfed.org/series/WALCL",
+            "links": [
+                {"label": "WALCL", "url": "https://fred.stlouisfed.org/series/WALCL"},
+                {"label": "TGA", "url": "https://fred.stlouisfed.org/series/WTREGEN"},
+                {"label": "RRP", "url": "https://fred.stlouisfed.org/series/RRPONTSYD"},
+            ],
             "value": nl_hist[-1]["v"], "asOf": nl_hist[-1]["t"],
             "history": nl_hist, "mom": nl_mom,
             "deltaNote": "13주 Δ {dN:+.2f}$T · 직전주 {d1:+.2f}",

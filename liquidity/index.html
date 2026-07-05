@@ -54,8 +54,13 @@
   .card .phase{font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:8px;
     margin-left:auto;align-self:center;letter-spacing:-.1px;white-space:nowrap}
   .card .mom{font-size:11.5px;color:var(--muted);margin-top:8px;font-variant-numeric:tabular-nums}
-  .card .spark{margin-top:auto;padding-top:12px}
-  .card canvas{width:100%;height:56px;display:block}
+  .card .spark{margin-top:auto;padding-top:12px;position:relative}
+  .card canvas{width:100%;height:72px;display:block;cursor:crosshair}
+  .tip{position:absolute;pointer-events:none;background:#0f1117;border:1px solid var(--line);
+    border-radius:7px;padding:4px 9px;font-size:11px;color:var(--txt);font-variant-numeric:tabular-nums;
+    white-space:nowrap;transform:translate(-50%,-115%);display:none;z-index:5;
+    box-shadow:0 4px 14px rgba(0,0,0,.45)}
+  .tip b{color:var(--accent);font-weight:800}
   .card .foot{display:flex;align-items:center;justify-content:space-between;margin-top:11px;
     font-size:11px;color:var(--faint)}
   .card .src:hover{color:var(--accent)}
@@ -129,6 +134,14 @@
       momLine = '<div class="mom">'+esc(i.momLine||'')+'</div>';
     }
     var disp = Number(i.value).toFixed(i.decimals);
+    var srcHtml;
+    if(i.links && i.links.length){
+      srcHtml = 'FRED: ' + i.links.map(function(l){
+        return '<a class="src" href="'+esc(l.url)+'" target="_blank" rel="noopener">'+esc(l.label)+'↗</a>';
+      }).join(' · ');
+    }else{
+      srcHtml = '<a class="src" href="'+esc(i.sourceUrl)+'" target="_blank" rel="noopener">'+esc(i.source)+' ↗</a>';
+    }
     return '<div class="card">'+
       '<div class="crole">'+esc(i.role)+'</div>'+
       '<h3>'+esc(i.label)+'</h3>'+
@@ -136,17 +149,17 @@
       momLine+
       '<div class="spark"><canvas id="sp_'+i.id+'"></canvas></div>'+
       '<div class="foot">'+
-        '<a class="src" href="'+esc(i.sourceUrl)+'" target="_blank" rel="noopener">'+esc(i.source)+' ↗</a>'+
+        '<span>'+srcHtml+'</span>'+
         '<span class="badge">자동'+(i.asOf?' · '+esc(i.asOf):'')+'</span>'+
       '</div>'+
     '</div>';
   }
   document.getElementById('cards').innerHTML = D.indicators.map(card).join('');
 
-  function spark(i){
+  function spark(i, hk){
     var cv = document.getElementById('sp_'+i.id);
     if(!cv || !i.history || i.history.length<2) return;
-    var dpr = window.devicePixelRatio||1, w = cv.clientWidth, h = 56;
+    var dpr = window.devicePixelRatio||1, w = cv.clientWidth, h = 72;
     cv.width = w*dpr; cv.height = h*dpr;
     var ctx = cv.getContext('2d'); ctx.scale(dpr,dpr);
     var vs = i.history.map(function(p){return p.v;});
@@ -165,16 +178,48 @@
     if(last>=1){ ctx.beginPath(); ctx.moveTo(X(last-1),Y(vs[last-1])); ctx.lineTo(X(last),Y(vs[last]));
       ctx.strokeStyle=turn; ctx.lineWidth=2.6; ctx.lineCap='round'; ctx.stroke(); }
     ctx.beginPath(); ctx.arc(X(last),Y(vs[last]),2.8,0,7); ctx.fillStyle=turn; ctx.fill();
+    // 호버 크로스헤어
+    if(hk!=null){
+      ctx.save(); ctx.strokeStyle='#9aa3b2'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+      ctx.beginPath(); ctx.moveTo(X(hk),0); ctx.lineTo(X(hk),h); ctx.stroke(); ctx.restore();
+      ctx.beginPath(); ctx.arc(X(hk),Y(vs[hk]),3.4,0,7);
+      ctx.fillStyle='#0f1117'; ctx.fill();
+      ctx.strokeStyle='#8b9bff'; ctx.lineWidth=2; ctx.stroke();
+    }
   }
-  D.indicators.forEach(spark);
-  window.addEventListener('resize', function(){ D.indicators.forEach(spark); });
+  function attachHover(i){
+    var cv = document.getElementById('sp_'+i.id);
+    if(!cv || !i.history || i.history.length<2) return;
+    var wrap = cv.parentNode;
+    var tip = document.createElement('div'); tip.className='tip'; wrap.appendChild(tip);
+    function move(clientX){
+      var r = cv.getBoundingClientRect(), n = i.history.length;
+      var k = Math.round((clientX - r.left - 1)/(r.width-4)*(n-1));
+      k = Math.max(0, Math.min(n-1, k));
+      spark(i, k);
+      var p = i.history[k];
+      tip.style.display='block';
+      tip.style.left = ((k/(n-1))*(r.width-4)+1)+'px';
+      tip.style.top = '10px';
+      tip.innerHTML = esc(p.t)+' · <b>'+p.v+'</b> '+esc(i.unit);
+    }
+    cv.addEventListener('mousemove', function(ev){ move(ev.clientX); });
+    cv.addEventListener('touchmove', function(ev){ if(ev.touches.length){ move(ev.touches[0].clientX); ev.preventDefault(); } }, {passive:false});
+    cv.addEventListener('mouseleave', function(){ tip.style.display='none'; spark(i); });
+    cv.addEventListener('touchend', function(){ tip.style.display='none'; spark(i); });
+  }
+  D.indicators.forEach(function(i){ spark(i); attachHover(i); });
+  window.addEventListener('resize', function(){ D.indicators.forEach(function(i){ spark(i); }); });
 
   document.getElementById('note').innerHTML =
     '<b>읽는 법.</b> 유동성은 주가의 연료가 아니라 <b>물때</b>다 — 썰물에 혼자 헤엄치지 않기 위한 배경 지표. '+
     '판정은 레벨이 아니라 <b>13주 방향</b>(월간 지표는 3개월): "우호 둔화"는 추세는 우호인데 직전 구간이 꺾인 조기 경보. '+
     '<b>HY 스프레드·NFCI는 역방향</b>(하락=우호).<br>'+
     '<b>순유동성.</b> Fed 총자산(WALCL) − 재무부 현금(TGA) − 역레포(RRP) — 시중에 실제로 풀린 달러. '+
-    '셋 다 FRED 원시 시리즈에서 직접 계산, 출처 링크에서 검증 가능. · '+esc(D.note||'');
+    '셋 다 FRED 원시 시리즈에서 직접 계산, 카드 하단 링크에서 원본 검증 가능.<br>'+
+    '<b>갱신 주기.</b> HY 스프레드·RRP = 일간(하루 지연) · WALCL·TGA = 주간(수요일 기준, 목요일 발표) '+
+    '· NFCI = 주간(수요일 발표) · M2 = 월간(~4주 지연). 트래커는 평일 아침(KST 7:30) 자동 수집 — '+
+    '각 시리즈는 FRED에 새 값이 뜨는 대로 다음 수집에 반영. 차트에 마우스를 올리면 날짜·값 확인. · '+esc(D.note||'');
   }
   var s = document.createElement('script');
   s.src = 'data.js?ts=' + Date.now();
