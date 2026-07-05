@@ -36,6 +36,13 @@
     border-radius:8px;padding:5px 10px;display:flex;align-items:center;gap:7px}
   .chip b{color:var(--txt);font-weight:700}
   .chip .st{font-size:10.5px;padding:1px 6px;border-radius:5px;font-weight:700}
+  .alertline{margin-top:12px;font-size:12.5px;font-weight:700;color:var(--stop);
+    background:rgba(239,68,68,.09);border:1px solid rgba(239,68,68,.35);border-radius:10px;
+    padding:8px 12px;line-height:1.5}
+  .alertline b{color:var(--txt)}
+  .card .calert{margin-top:8px;font-size:11.5px;font-weight:700;color:var(--stop);
+    background:rgba(239,68,68,.09);border:1px solid rgba(239,68,68,.3);border-radius:8px;
+    padding:5px 9px;line-height:1.5}
 
   .shead{display:flex;align-items:center;gap:10px;margin:30px 0 13px}
   .shead .ttl{font-size:13px;font-weight:800;color:var(--txt);letter-spacing:.2px}
@@ -123,6 +130,9 @@
           '<span class="en">'+esc(iv.regimeEn)+'</span></span>'+
       '</div>'+
       '<div class="headline">'+esc(iv.headline)+'</div>'+
+      ((iv.alerts&&iv.alerts.length)?iv.alerts.map(function(a){
+        return '<div class="alertline">🚨 <b>'+esc(a.label)+'</b> — '+esc(a.text)+'</div>';
+      }).join(''):'')+
       (chips?'<div class="bullets">'+chips+'</div>':'')+
     '</div>';
 
@@ -147,6 +157,7 @@
       '<h3>'+esc(i.label)+'</h3>'+
       '<div class="val"><span class="num">'+disp+'</span><span class="unit">'+esc(i.unit)+'</span>'+phaseChip+'</div>'+
       momLine+
+      (i.alert?'<div class="calert">🚨 '+esc(i.alert.text)+'</div>':'')+
       '<div class="spark"><canvas id="sp_'+i.id+'"></canvas></div>'+
       '<div class="foot">'+
         '<span>'+srcHtml+'</span>'+
@@ -219,7 +230,10 @@
     '셋 다 FRED 원시 시리즈에서 직접 계산, 카드 하단 링크에서 원본 검증 가능.<br>'+
     '<b>갱신 주기.</b> HY 스프레드·RRP = 일간(하루 지연) · WALCL·TGA = 주간(수요일 기준, 목요일 발표) '+
     '· NFCI = 주간(수요일 발표) · M2 = 월간(~4주 지연). 트래커는 평일 아침(KST 7:30) 자동 수집 — '+
-    '각 시리즈는 FRED에 새 값이 뜨는 대로 다음 수집에 반영. 차트에 마우스를 올리면 날짜·값 확인. · '+esc(D.note||'');
+    '각 시리즈는 FRED에 새 값이 뜨는 대로 다음 수집에 반영. 차트에 마우스를 올리면 날짜·값 확인.<br>'+
+    '<b>🚨 급배수 경보.</b> 순유동성이 한 주에 0.15$T 이상 빠지면 13주 추세와 무관하게 발동 — '+
+    '13주 판정이 평활해서 놓치는 단발 드레인(세금시즌 TGA 급증 등)용. 백테스트: 최근 3년 5회 발동, '+
+    '전부 세금·분기말 시즌(24.6·24.9·25.1·25.4·26.4)과 일치. · '+esc(D.note||'');
   }
   var s = document.createElement('script');
   s.src = 'data.js?ts=' + Date.now();

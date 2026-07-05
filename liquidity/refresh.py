@@ -91,6 +91,25 @@ def momentum(hist: list[dict], good_dir: int, eps: float, lookback: int = 13) ->
     return {"phase": phase, "tone": tone, "d1": round(d1, 3), "dN": round(dN, 3), "lookback": lookback}
 
 
+DRAIN_ALERT_T = -0.15  # $T — 순유동성 주간 급배수 경보 임계치 (2026-04-22 -0.25$T 사례 기준)
+
+
+def drain_alert(mom: dict | None) -> dict | None:
+    """직전주 순유동성이 임계치 이상 빠지면 13주 추세와 무관하게 경보.
+
+    2026-04 세금시즌 드레인(-253B/주)처럼 추세 판정(13주)이 평활해서 놓치는
+    단발 급배수를 잡는다. 원인 후보: 세금납부 시즌 TGA 급증(4/15·6/15·9/15·1/15),
+    부채한도 후 TGA 리빌드, QT 가속.
+    """
+    if not mom or mom["d1"] > DRAIN_ALERT_T:
+        return None
+    return {
+        "tone": "neg",
+        "text": f"주간 급배수 {mom['d1']:+.2f}$T — 추세와 무관한 단발 경보. "
+                f"원인 확인: 세금시즌 TGA 급증 / TGA 리빌드 / QT 가속",
+    }
+
+
 def build() -> dict:
     _log("=== 유동성 데이터 수집 (FRED) ===")
     walcl = fetch_series("WALCL")        # $M, 주간(수)
@@ -144,6 +163,7 @@ def build() -> dict:
             ],
             "value": nl_hist[-1]["v"], "asOf": nl_hist[-1]["t"],
             "history": nl_hist, "mom": nl_mom,
+            "alert": drain_alert(nl_mom),
             "deltaNote": "13주 Δ {dN:+.2f}$T · 직전주 {d1:+.2f}",
         },
         {
@@ -185,6 +205,7 @@ def build() -> dict:
     sup = sum(1 for i in indicators if supportive(i))
     cooling = [i["label"] for i in indicators if i["mom"] and i["mom"]["phase"] == "우호 둔화"]
     against = [i["label"] for i in indicators if i["mom"] and i["mom"]["phase"] in ("역풍",)]
+    alerts = [{"label": i["label"], "text": i["alert"]["text"]} for i in indicators if i.get("alert")]
     if sup >= 3 and not against:
         regime, regimeEn, tone = "유동성 순풍", "Tailwind", "pos"
     elif sup >= 2:
@@ -196,13 +217,15 @@ def build() -> dict:
         headline += f"  ⚠ 둔화 감시: {', '.join(cooling)}."
     if against:
         headline += f"  ✖ 역풍: {', '.join(against)}."
+    if alerts:
+        headline += f"  🚨 급배수 경보: {', '.join(a['label'] for a in alerts)}."
 
     return {
         "generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "indicators": indicators,
         "interpretation": {
             "regime": regime, "regimeEn": regimeEn, "tone": tone,
-            "headline": headline, "supportive": sup,
+            "headline": headline, "supportive": sup, "alerts": alerts,
             "bullets": [
                 {"label": i["label"], "value": i["value"], "unit": i["unit"],
                  "phase": i["mom"]["phase"] if i["mom"] else "", "tone": i["mom"]["tone"] if i["mom"] else "neutral"}

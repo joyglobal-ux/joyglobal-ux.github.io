@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-05T08:08:36+00:00",
+  "generatedAt": "2026-07-05T08:25:05+00:00",
   "indicators": [
     {
       "id": "net_liquidity",
@@ -658,6 +658,7 @@
         "dN": 0.017,
         "lookback": 13
       },
+      "alert": null,
       "momLine": "13주 Δ +0.02$T · 직전주 +0.03"
     },
     {
@@ -2122,6 +2123,7 @@
     "tone": "pos",
     "headline": "지표 4개 중 우호 3개 → 유동성 순풍.",
     "supportive": 3,
+    "alerts": [],
     "bullets": [
       {
         "label": "Fed 순유동성",
