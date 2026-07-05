@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>유동성 · Polaris</title>
+<meta name="description" content="Fed 순유동성·M2·하이일드 스프레드·NFCI — 위험자산의 물때를 FRED에서 직접 추적.">
+<style>
+  :root{
+    --bg:#0b0d14; --bg2:#0f1117; --panel:#161a24; --panel2:#1d2230; --line:#272d3c;
+    --txt:#e8eaf0; --muted:#9aa3b2; --faint:#69727f;
+    --accent:#8b9bff; --accent-dim:#5b6bd6; --gold:#ffd66b;
+    --go:#22c55e; --stop:#ef4444;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none}
+  .wrap{max-width:920px;margin:0 auto;padding:22px 20px 60px}
+  .backlink{display:inline-block;font-size:12.5px;color:var(--muted);font-weight:600;margin-bottom:16px}
+  .backlink:hover{color:var(--accent)}
+  h1{font-size:24px;font-weight:800;letter-spacing:-.4px;margin:0}
+  .sub{color:var(--muted);font-size:13px;margin-top:6px}
+  .updated{font-size:11.5px;color:var(--faint);margin-top:8px;font-variant-numeric:tabular-nums}
+  .updated b{color:var(--muted);font-weight:600}
+
+  .verdict{margin:22px 0 8px;border:1px solid var(--line);border-radius:16px;background:var(--panel);
+    padding:18px 20px}
+  .verdict .vtop{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .regime{font-size:15px;font-weight:800;padding:6px 14px;border-radius:10px;letter-spacing:-.2px}
+  .regime .en{font-size:11px;font-weight:700;opacity:.7;margin-left:7px;text-transform:uppercase;letter-spacing:1px}
+  .headline{font-size:15px;color:var(--txt);margin-top:13px;font-weight:600;line-height:1.55}
+  .bullets{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .chip{font-size:12px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+    border-radius:8px;padding:5px 10px;display:flex;align-items:center;gap:7px}
+  .chip b{color:var(--txt);font-weight:700}
+  .chip .st{font-size:10.5px;padding:1px 6px;border-radius:5px;font-weight:700}
+
+  .shead{display:flex;align-items:center;gap:10px;margin:30px 0 13px}
+  .shead .ttl{font-size:13px;font-weight:800;color:var(--txt);letter-spacing:.2px}
+  .shead .desc{font-size:11.5px;color:var(--faint)}
+  .shead .ln{flex:1;height:1px;background:var(--line)}
+
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:640px){.cards{grid-template-columns:1fr}}
+  .card{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:16px 17px;
+    display:flex;flex-direction:column;min-height:190px}
+  .card .crole{font-size:11px;color:var(--faint);font-weight:600}
+  .card h3{font-size:15.5px;font-weight:800;margin:3px 0 0;letter-spacing:-.2px}
+  .card .val{display:flex;align-items:center;gap:8px;margin-top:11px}
+  .card .num{font-size:30px;font-weight:800;letter-spacing:-1px;font-variant-numeric:tabular-nums;line-height:1}
+  .card .unit{font-size:12px;color:var(--faint);font-weight:700}
+  .card .phase{font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:8px;
+    margin-left:auto;align-self:center;letter-spacing:-.1px;white-space:nowrap}
+  .card .mom{font-size:11.5px;color:var(--muted);margin-top:8px;font-variant-numeric:tabular-nums}
+  .card .spark{margin-top:auto;padding-top:12px}
+  .card canvas{width:100%;height:56px;display:block}
+  .card .foot{display:flex;align-items:center;justify-content:space-between;margin-top:11px;
+    font-size:11px;color:var(--faint)}
+  .card .src:hover{color:var(--accent)}
+  .badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;letter-spacing:.2px;
+    color:var(--go);background:rgba(34,197,94,.1)}
+
+  .foot-note{margin-top:34px;font-size:11.5px;color:var(--faint);line-height:1.7;
+    border-top:1px solid var(--line);padding-top:16px}
+  .foot-note b{color:var(--muted);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="/">← Polaris 허브</a>
+  <h1>유동성</h1>
+  <div class="sub">위험자산의 <b style="color:var(--txt)">물때</b> — Fed 순유동성·M2·크레딧·금융여건을 FRED에서 직접</div>
+  <div class="updated" id="updated">불러오는 중…</div>
+
+  <div id="verdict"></div>
+
+  <div class="shead" style="margin-top:26px">
+    <span class="ttl">유동성 지표</span>
+    <span class="desc">전부 자동 갱신 · 판정은 레벨이 아니라 13주 방향</span>
+    <span class="ln"></span>
+  </div>
+  <div class="cards" id="cards"></div>
+
+  <div class="foot-note" id="note"></div>
+</div>
+
+<script>
+(function(){
+  function render(){
+  var D = window.LIQ_DATA;
+  if(!D){ document.getElementById('updated').textContent = 'data.js 로드 실패 — refresh.py를 먼저 실행하세요.'; return; }
+
+  var TONE = {
+    pos:      {c:'var(--go)',     bg:'rgba(34,197,94,.13)'},
+    warn:     {c:'var(--gold)',   bg:'rgba(255,214,107,.13)'},
+    'warn-pos':{c:'var(--accent)',bg:'rgba(139,155,255,.13)'},
+    neg:      {c:'var(--stop)',   bg:'rgba(239,68,68,.13)'},
+    neutral:  {c:'var(--muted)',  bg:'var(--panel2)'}
+  };
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function fnum(v,d){ return (v>=0&&d!=='abs'?'+':'') + Number(v).toFixed(typeof d==='number'?d:1); }
+
+  var g = D.generatedAt || '';
+  document.getElementById('updated').innerHTML = '갱신 <b>'+esc(g.slice(0,16).replace('T',' '))+' UTC</b>';
+
+  var iv = D.interpretation, tone = TONE[iv.tone] || TONE.neutral;
+  var chips = iv.bullets.map(function(b){
+    var bt = TONE[b.tone] || TONE.neutral;
+    var ph = b.phase ? '<span class="st" style="color:'+bt.c+';background:'+bt.bg+'">'+esc(b.phase)+'</span>' : '';
+    return '<span class="chip"><b>'+esc(b.label)+'</b> '+b.value+' '+esc(b.unit)+' '+ph+'</span>';
+  }).join('');
+  document.getElementById('verdict').innerHTML =
+    '<div class="verdict">'+
+      '<div class="vtop">'+
+        '<span class="regime" style="color:'+tone.c+';background:'+tone.bg+'">'+esc(iv.regime)+
+          '<span class="en">'+esc(iv.regimeEn)+'</span></span>'+
+      '</div>'+
+      '<div class="headline">'+esc(iv.headline)+'</div>'+
+      (chips?'<div class="bullets">'+chips+'</div>':'')+
+    '</div>';
+
+  function card(i){
+    var m = i.mom, phaseChip='', momLine='';
+    if(m){
+      var mt = TONE[m.tone] || TONE.neutral;
+      phaseChip = '<span class="phase" style="color:'+mt.c+';background:'+mt.bg+'">'+esc(m.phase)+'</span>';
+      momLine = '<div class="mom">'+esc(i.momLine||'')+'</div>';
+    }
+    var disp = Number(i.value).toFixed(i.decimals);
+    return '<div class="card">'+
+      '<div class="crole">'+esc(i.role)+'</div>'+
+      '<h3>'+esc(i.label)+'</h3>'+
+      '<div class="val"><span class="num">'+disp+'</span><span class="unit">'+esc(i.unit)+'</span>'+phaseChip+'</div>'+
+      momLine+
+      '<div class="spark"><canvas id="sp_'+i.id+'"></canvas></div>'+
+      '<div class="foot">'+
+        '<a class="src" href="'+esc(i.sourceUrl)+'" target="_blank" rel="noopener">'+esc(i.source)+' ↗</a>'+
+        '<span class="badge">자동'+(i.asOf?' · '+esc(i.asOf):'')+'</span>'+
+      '</div>'+
+    '</div>';
+  }
+  document.getElementById('cards').innerHTML = D.indicators.map(card).join('');
+
+  function spark(i){
+    var cv = document.getElementById('sp_'+i.id);
+    if(!cv || !i.history || i.history.length<2) return;
+    var dpr = window.devicePixelRatio||1, w = cv.clientWidth, h = 56;
+    cv.width = w*dpr; cv.height = h*dpr;
+    var ctx = cv.getContext('2d'); ctx.scale(dpr,dpr);
+    var vs = i.history.map(function(p){return p.v;});
+    var min = Math.min.apply(null,vs), max = Math.max.apply(null,vs), rng=(max-min)||1;
+    var pT=7,pB=5,pR=3;
+    function X(k){return (k/(vs.length-1))*(w-2-pR)+1;}
+    function Y(v){return h-pB-((v-min)/rng)*(h-pT-pB);}
+    var last = vs.length-1;
+    var m = i.mom||{};
+    var turn = (m.d1||0)===0?'#9aa3b2':((m.d1>0)===(i.id==='net_liquidity'||i.id==='m2_yoy')?'#22c55e':'#ef4444');
+    ctx.beginPath(); ctx.moveTo(X(0),Y(vs[0]));
+    for(var k=1;k<vs.length;k++) ctx.lineTo(X(k),Y(vs[k]));
+    ctx.strokeStyle='#5b6bd6'; ctx.lineWidth=1.5; ctx.lineJoin='round'; ctx.stroke();
+    ctx.lineTo(X(last),Y(min)); ctx.lineTo(X(0),Y(min)); ctx.closePath();
+    ctx.globalAlpha=.07; ctx.fillStyle='#5b6bd6'; ctx.fill(); ctx.globalAlpha=1;
+    if(last>=1){ ctx.beginPath(); ctx.moveTo(X(last-1),Y(vs[last-1])); ctx.lineTo(X(last),Y(vs[last]));
+      ctx.strokeStyle=turn; ctx.lineWidth=2.6; ctx.lineCap='round'; ctx.stroke(); }
+    ctx.beginPath(); ctx.arc(X(last),Y(vs[last]),2.8,0,7); ctx.fillStyle=turn; ctx.fill();
+  }
+  D.indicators.forEach(spark);
+  window.addEventListener('resize', function(){ D.indicators.forEach(spark); });
+
+  document.getElementById('note').innerHTML =
+    '<b>읽는 법.</b> 유동성은 주가의 연료가 아니라 <b>물때</b>다 — 썰물에 혼자 헤엄치지 않기 위한 배경 지표. '+
+    '판정은 레벨이 아니라 <b>13주 방향</b>(월간 지표는 3개월): "우호 둔화"는 추세는 우호인데 직전 구간이 꺾인 조기 경보. '+
+    '<b>HY 스프레드·NFCI는 역방향</b>(하락=우호).<br>'+
+    '<b>순유동성.</b> Fed 총자산(WALCL) − 재무부 현금(TGA) − 역레포(RRP) — 시중에 실제로 풀린 달러. '+
+    '셋 다 FRED 원시 시리즈에서 직접 계산, 출처 링크에서 검증 가능. · '+esc(D.note||'');
+  }
+  var s = document.createElement('script');
+  s.src = 'data.js?ts=' + Date.now();
+  s.onload = render;
+  s.onerror = function(){ var u = document.getElementById('updated'); if(u) u.textContent = 'data.js 로드 실패'; };
+  document.head.appendChild(s);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+name: Liquidity refresh
+
+on:
+  schedule:
+    # Cron은 UTC. FRED 갱신(주간 목요일/일간)을 커버 — 평일 미국 데이터 반영 후.
+    - cron: "30 22 * * 1-5"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: liquidity-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Collect indicators
+        run: |
+          pip install requests
+          for attempt in 1 2 3; do
+            echo "::group::refresh attempt $attempt"
+            if python liquidity/refresh.py; then
+              echo "::endgroup::"; echo "ok on attempt $attempt"; exit 0
+            fi
+            echo "::endgroup::"; echo "attempt $attempt failed"
+            [ "$attempt" -lt 3 ] && sleep 60
+          done
+          echo "all attempts failed"; exit 1
+
+      - name: Commit & push if data changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add liquidity/data.js liquidity/data.json
+          if git diff --staged --quiet; then
+            echo "No data changes."
+          else
+            git commit -m "data: liquidity refresh $(date -u +%Y-%m-%d)"
+            git pull --rebase --autostash origin main || true
+            git push
+          fi
