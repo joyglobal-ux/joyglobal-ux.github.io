@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>에너지 · 정유 — Polaris 리서치</title>
+<meta name="description" content="Polaris 리서치 노트 · 에너지 · 정유 — 핵심만 누적">
+<style>
+  :root{
+    --bg:#0b0d14; --bg2:#0f1117; --panel:#161a24; --panel2:#1d2230; --line:#272d3c;
+    --txt:#e8eaf0; --muted:#9aa3b2; --faint:#69727f;
+    --accent:#8b9bff; --accent-dim:#5b6bd6; --gold:#ffd66b;
+    --go:#22c55e; --stop:#ef4444;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;
+    background:var(--bg); color:var(--txt); line-height:1.65; -webkit-font-smoothing:antialiased; min-height:100vh;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px}
+
+  header{
+    background:
+      radial-gradient(120% 90% at 85% -10%, rgba(139,155,255,0.16), transparent 55%),
+      linear-gradient(180deg,#0c0f18,#0b0d14);
+    border-bottom:1px solid var(--line);
+  }
+  .top{padding:22px 0 0}
+  .back{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;padding:5px 13px;transition:border-color .18s,color .18s}
+  .back:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .hero{padding:26px 0 30px}
+  .kicker{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint)}
+  .htitle{display:flex;align-items:center;gap:12px;margin-top:10px}
+  .htitle .ic{font-size:27px}
+  .htitle h1{font-size:25px;font-weight:800;letter-spacing:-.3px}
+  .hsub{font-size:13px;color:var(--muted);margin-top:11px;max-width:600px}
+
+  main{padding:32px 0 10px}
+
+  .note{background:linear-gradient(180deg,var(--panel),#13161f);border:1px solid var(--line);
+    border-radius:15px;padding:22px 22px 20px;margin-bottom:20px}
+  .nmeta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:13px}
+  .nmeta .date{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums;
+    border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .nmeta .tk{font-size:11.5px;font-weight:800;letter-spacing:.4px;color:var(--accent);
+    background:rgba(139,155,255,0.08);border:1px solid rgba(139,155,255,0.22);border-radius:6px;padding:2px 9px}
+  .nmeta .tag{font-size:11px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+    border-radius:6px;padding:2px 9px}
+  .ntitle{font-size:17px;font-weight:800;letter-spacing:-.2px;margin-bottom:14px}
+  .rows{display:flex;flex-direction:column;gap:11px}
+  .r{display:grid;grid-template-columns:74px 1fr;gap:13px;align-items:start}
+  .r .lab{font-size:11.5px;font-weight:800;color:var(--accent);letter-spacing:.3px;padding-top:1px}
+  .r .val{font-size:13.5px;color:var(--muted)}
+  .r .val b{color:var(--txt);font-weight:600}
+  .r.verdict .val{color:var(--txt)}
+  .r.verdict .lab{color:var(--gold)}
+  .disc{font-size:11px;color:var(--faint);margin-top:16px;line-height:1.6;border-top:1px solid var(--line);padding-top:13px}
+
+  footer{border-top:1px solid var(--line);margin-top:18px;padding:24px 0 38px;
+    font-size:11.5px;color:var(--faint);text-align:center}
+  footer .star{color:var(--accent)}
+
+  @media(max-width:560px){
+    .htitle h1{font-size:21px}
+    .r{grid-template-columns:62px 1fr;gap:10px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap top">
+    <a class="back" href="/">← Polaris 허브</a>
+  </div>
+  <div class="wrap hero">
+    <div class="kicker">Research · 산업 노트</div>
+    <div class="htitle">
+      <span class="ic">🛢️</span>
+      <h1>에너지 · 정유</h1>
+    </div>
+    <p class="hsub">
+      정유·윤활·에너지 인프라. 스프레드 사이클을 가격 액션으로 트레이드하는 렌즈. 결정에 영향 주는 정수만 — 테제·촉매·밸류·리스크·판정. 최신순 누적.
+    </p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- 새 노트는 이 줄 바로 아래에 추가 (최신순) -->
+
+  <article class="note">
+    <div class="nmeta">
+      <span class="date">2026.07.12</span>
+      <span class="tk">S-Oil · 010950</span>
+      <span class="tag">정유</span>
+      <span class="tag">윤활기유</span>
+      <span class="tag">공급 교란</span>
+    </div>
+    <div class="ntitle">정유업의 구조 — 스프레드 장사와 2026 공급교란 사이클 (S-Oil)</div>
+    <div class="rows">
+      <div class="r"><div class="lab">한 줄</div><div class="val">정유업 = <b>원유를 사서(국제가) 제품으로 바꿔 파는(국제가) 스프레드 장사</b>. 가격 결정권 없음, 이익은 크랙 스프레드 하나로 결정. 마진은 평시 $4~10 밴드 회귀가 본성이고, 밴드 돌파는 언제나 <b>공급 교란</b>에서만 나온다(2022 러-우, 2026 러 설비 파괴).</div></div>
+      <div class="r"><div class="lab">테제</div><div class="val">러시아(세계 3위 정제국·2위 디젤 수출국)가 드론 피격으로 <b>"원유는 과잉, 제품은 결핍"</b> 상태 → ①디젤 크랙 폭발(정제마진 34.3$, 평시의 3~8배) ②사우디 OSP -1.5$(원가 할인) ③VGO의 디젤 전용→윤활기유 부족([윤활기유−B-C] 스프레드 사상 최대 ~$165/톤). <b>판가↑·원가↓·부업(윤활)까지 트리플이 동시에 S-Oil 손익에 꽂히는 희귀 국면.</b></div></div>
+      <div class="r"><div class="lab">촉매</div><div class="val">7/8 러시아 <b>디젤 수출 전면 금지(~7/31 시한부)</b> → 유럽 디젤선물 +11%. 미국 3-2-1 마진 역사적 최대·MPC 등 미 정유주 신고가 = <b>카테고리 대장이 먼저 논리 검증</b>. 7/12 IRGC 호르무즈 전면 봉쇄 발표. 하나증권(윤재성) TP 130k→200k(7/7).</div></div>
+      <div class="r"><div class="lab">구조</div><div class="val">S-Oil: 울산 단일 66.9만b/d(단일공장 세계 최대급). 매출 정유 79%·석화 12%·윤활 9%, 단 <b>윤활 9%가 불황기 이익의 절반</b>(매출·이익 비중 따로 논다). 아람코 지분 63%, 원유 전량 사우디 도입(두바이유+OSP). 수출 ~60%(호주·동남아·항공유 미서부). 상장 순수 정유 플레이는 사실상 S-Oil 유일(SK이노=배터리 혼재, GS칼텍스·HD오일뱅크 비상장).</div></div>
+      <div class="r"><div class="lab">히스토리</div><div class="val">마진 사이클: 2011~13 골든에이지($8~10) → 2020 코로나(마이너스, 영업적자 1.1조) → <b>2022 러-우($20~25, 사상최대 이익 3.4조)</b> → 2023~25 침체($4~8, 2025 영업익 -44%) → <b>2026.07 $34.3 슈퍼스파이크</b>. 2022는 제재(수요 재편), 2026은 물리적 설비 파괴(공급) — 복구 느리고 재피격 반복.</div></div>
+      <div class="r"><div class="lab">리스크</div><div class="val">①촉매 시한부 — 러 금지 7/31 판정(단, 6월 수출은 금지 <b>이전에</b> 이미 YoY -46% → 해제돼도 물량 복원 어려움) ②<b>호르무즈 양날</b> — 마진 스파이크는 호재나 S-Oil 원유 전량이 호르무즈 통과 사우디산, 봉쇄 장기화 시 조달 리스크로 반전 ③밴드 회귀 본성 — 교란 종료 시 마진 정상화.</div></div>
+      <div class="r verdict"><div class="lab">판정</div><div class="val">좋은 회사 장기보유가 아니라 <b>교란이 지속되는 동안의 스프레드 수취 = 기한 있는 트레이드</b>. 출구는 가격 룰로만 — 마진/스프레드 차트는 후행(2022년에도 주가가 마진 피크 전에 먼저 -20~30%). <b>선행지표 = MPC/VLO 가격액션</b>, 미국 대장이 분배 패턴 보이면 한국 후행주의 시간도 끝.</div></div>
+      <div class="r"><div class="lab">KPI</div><div class="val">①러 디젤 금지 연장 여부(7/31) ②주간 복합정제마진 ③[윤활기유−B-C] 스프레드 ④MPC/VLO 테이프 ⑤사우디 OSP 월별 발표 ⑥호르무즈 헤드라인.</div></div>
+    </div>
+    <div class="disc">미인대회·구조적 변화·가격액션 렌즈. 출처: 하나증권 에너지/화학 Weekly(2026.07.13, 윤재성)·Bloomberg·EIA. 투자권유 아님 · 수치는 작성 시점 기준(2026.07).</div>
+  </article>
+
+</main>
+
+<footer>
+  <div class="wrap"><span class="star">✦</span> POLARIS — Research Notes</div>
+</footer>
+
+</body>
+</html>
