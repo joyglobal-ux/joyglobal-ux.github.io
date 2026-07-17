@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>보안 · 사이버시큐리티 — Polaris 리서치</title>
+<meta name="description" content="Polaris 리서치 노트 · 보안 · 사이버시큐리티 — 핵심만 누적">
+<style>
+  :root{
+    --bg:#0b0d14; --bg2:#0f1117; --panel:#161a24; --panel2:#1d2230; --line:#272d3c;
+    --txt:#e8eaf0; --muted:#9aa3b2; --faint:#69727f;
+    --accent:#8b9bff; --accent-dim:#5b6bd6; --gold:#ffd66b;
+    --go:#22c55e; --stop:#ef4444;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;
+    background:var(--bg); color:var(--txt); line-height:1.65; -webkit-font-smoothing:antialiased; min-height:100vh;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px}
+
+  header{
+    background:
+      radial-gradient(120% 90% at 85% -10%, rgba(139,155,255,0.16), transparent 55%),
+      linear-gradient(180deg,#0c0f18,#0b0d14);
+    border-bottom:1px solid var(--line);
+  }
+  .top{padding:22px 0 0}
+  .back{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;padding:5px 13px;transition:border-color .18s,color .18s}
+  .back:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .hero{padding:26px 0 30px}
+  .kicker{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint)}
+  .htitle{display:flex;align-items:center;gap:12px;margin-top:10px}
+  .htitle .ic{font-size:27px}
+  .htitle h1{font-size:25px;font-weight:800;letter-spacing:-.3px}
+  .hsub{font-size:13px;color:var(--muted);margin-top:11px;max-width:600px}
+
+  main{padding:32px 0 10px}
+
+  .note{background:linear-gradient(180deg,var(--panel),#13161f);border:1px solid var(--line);
+    border-radius:15px;padding:22px 22px 20px;margin-bottom:20px}
+  .nmeta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:13px}
+  .nmeta .date{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums;
+    border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .nmeta .tk{font-size:11.5px;font-weight:800;letter-spacing:.4px;color:var(--accent);
+    background:rgba(139,155,255,0.08);border:1px solid rgba(139,155,255,0.22);border-radius:6px;padding:2px 9px}
+  .nmeta .tag{font-size:11px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+    border-radius:6px;padding:2px 9px}
+  .ntitle{font-size:17px;font-weight:800;letter-spacing:-.2px;margin-bottom:14px}
+  .rows{display:flex;flex-direction:column;gap:11px}
+  .r{display:grid;grid-template-columns:74px 1fr;gap:13px;align-items:start}
+  .r .lab{font-size:11.5px;font-weight:800;color:var(--accent);letter-spacing:.3px;padding-top:1px}
+  .r .val{font-size:13.5px;color:var(--muted)}
+  .r .val b{color:var(--txt);font-weight:600}
+  .r.verdict .val{color:var(--txt)}
+  .r.verdict .lab{color:var(--gold)}
+  .disc{font-size:11px;color:var(--faint);margin-top:16px;line-height:1.6;border-top:1px solid var(--line);padding-top:13px}
+
+  /* 비교 테이블 */
+  .cmp{width:100%;border-collapse:collapse;margin:4px 0 2px;font-size:12.5px}
+  .cmp th,.cmp td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+  .cmp th{color:var(--faint);font-size:11px;font-weight:700;letter-spacing:.3px;background:var(--panel2)}
+  .cmp td{color:var(--muted)}
+  .cmp td b{color:var(--txt);font-weight:600}
+  .cmp .win{color:var(--gold);font-weight:700}
+  .cmp-scroll{overflow-x:auto}
+
+  footer{border-top:1px solid var(--line);margin-top:18px;padding:24px 0 38px;
+    font-size:11.5px;color:var(--faint);text-align:center}
+  footer .star{color:var(--accent)}
+
+  @media(max-width:560px){
+    .htitle h1{font-size:21px}
+    .r{grid-template-columns:62px 1fr;gap:10px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap top">
+    <a class="back" href="/">← Polaris 허브</a>
+  </div>
+  <div class="wrap hero">
+    <div class="kicker">Research · 산업 노트</div>
+    <div class="htitle">
+      <span class="ic">🛡️</span>
+      <h1>보안 · 사이버시큐리티</h1>
+    </div>
+    <p class="hsub">
+      엔드포인트 · 네트워크 · AI 보안 플랫폼. AI 공격면 확대가 만드는 구조적 수요를 주도주 렌즈로 추적. 결정에 영향 주는 정수만 — 테제·해자·계량·리스크·판정. 최신순 누적.
+    </p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- 새 노트는 이 줄 바로 아래에 추가 (최신순) -->
+
+  <article class="note">
+    <div class="nmeta">
+      <span class="date">2026.07.17</span>
+      <span class="tk">PANW · CRWD</span>
+      <span class="tag">AI 보안</span>
+      <span class="tag">플랫폼화</span>
+      <span class="tag">USD 배치 후보</span>
+    </div>
+    <div class="ntitle">보안 주도주 비교 — AI 보안 사이클의 대장, PANW vs CRWD</div>
+    <div class="rows">
+      <div class="r"><div class="lab">한 줄</div><div class="val">2026년 보안 = <b>"AI를 쓰려면 보안이 필수"라는 서사가 실제 수주·ARR로 확인된, 미국 시장의 현재 주도 테마</b>(PANW RS 98 · CRWD 97). 4월 프런티어 모델발 자율 해킹 위협("Mythos 모먼트")이 보안을 리스크 관리 비용에서 <b>AI 도입의 전제 인프라</b>로 격상 — 양사 CEO 모두 "터미널 밸류가 커졌다"고 선언한 변곡.</div></div>
+      <div class="r"><div class="lab">해자</div><div class="val"><b>CRWD = 단일 에이전트 + 데이터 플라이휠.</b> 하나의 경량 센서로 33개 모듈 attach(6+ 모듈 51%, 8+ 25%), Flex 소비모델 ARR $1.9B(+99%)·재계약(Re-Flex) 시 평균 +26~51% 증액 = 갈수록 빼기 어려운 락인. 엔드포인트 텔레메트리가 AI 방어를 학습시키는 플라이휠. <b>PANW = 설치기반 전환 + 인수 플랫폼화.</b> 방화벽 ~100만대·125M 센서·일 17PB 위에 Strata/Prisma/Cortex 묶음(플랫폼화 고객 ~2,280, NRR ~120%, 이탈률 한 자릿수). XSIAM ARR $600M +100%로 SOC 장악. 락인의 질은 <b>CRWD가 유기적(제품이 흡착), PANW는 구조적(아키텍처 표준화 + CyberArk·Chronosphere 인수 결합)</b> — 둘 다 견고하나 깨지기 더 어려운 쪽은 에이전트가 이미 깔린 CRWD.</div></div>
+      <div class="r"><div class="lab">계량</div><div class="val">
+        <div class="cmp-scroll"><table class="cmp">
+          <tr><th></th><th>CRWD (FQ1'27, 6/3 발표)</th><th>PANW (FQ3'26, 6/2 발표)</th></tr>
+          <tr><td>매출 성장</td><td><b>+26%</b> ($1.39B) — <span class="win">4분기 연속 가속</span>, 전부 유기</td><td>+31% ($3.0B) — <b>유기는 +14%</b> (CyberArk·Chronosphere $388M 제외 시)</td></tr>
+          <tr><td>ARR</td><td>$5.51B +24% 가속 · NNARR $256M <span class="win">+32%</span></td><td>NGS $8.13B +60% — 유기 $6.5B +28%, 유기 NNARR +18%</td></tr>
+          <tr><td>FCF 마진</td><td>34% (분기 사상 최고)</td><td><span class="win">TTM 38.5%</span> → FY28 40% 목표</td></tr>
+          <tr><td>Rule of 40</td><td><span class="win">59</span> (FCF 기준, 사상 최고·4분기 연속 상승)</td><td>헤드라인 ~69, 유기 기준 ~52</td></tr>
+          <tr><td>NRR</td><td>115% (FQ4'26 기준)</td><td>플랫폼화 코호트 ~120%</td></tr>
+          <tr><td>SBC</td><td>매출의 ~23% ($318M, GAAP 영업적자 $31M)</td><td>매출의 17% (M&A로 상승, 12~18개월 내 정상화 목표)</td></tr>
+          <tr><td>가이던스</td><td><span class="win">NNARR 성장 가이던스 +520bp 상향</span> = 전년 대비 "가속" 선언</td><td>전 지표 상향, 단 Nikesh "윈드폴 아닌 견조한 성장"</td></tr>
+        </table></div>
+      </div></div>
+      <div class="r"><div class="lab">AI 검증</div><div class="val">서사가 숫자로 확인되는가 — <b>양사 모두 Yes.</b> CRWD: Anthropic·OpenAI 모델 보안 프로그램에 <b>처음부터 양쪽 다 선정된 유일한 보안사</b>, AIDR(AI 탐지·대응) ARR 2분기 만에 QoQ +250%·파이프라인 $50M+, Kurtz "커리어에서 가장 빠른 도입, EDR보다 큰 시장"(에이전트가 돌 VM마다 센서 = 그린필드). PANW: Prisma AIRS 고객 1분기 만에 100→300+ (사상 최고속 제품, 2분기 내 ARR $100M 가시권 — 단 크레딧 배분 기반 집계), 프런티어 AI랩 1곳에서 ARR $200M 돌파(분기 +$100M), AI 데이터센터발 방화벽 부킹 +40%·하드웨어 10년 최고. <b>유기적 가속의 순도는 CRWD가 우위</b> — PANW 헤드라인엔 M&A 착시가 섞임.</div></div>
+      <div class="r"><div class="lab">리스크</div><div class="val">①<b>밸류에이션 — CRWD가 문제.</b> fwd P/E ~152x·EV/S 41x(10년 중앙값 24.5x 대비 +69%, 최근 한 분기 만에 멀티플 2배 = 상승분 대부분이 멀티플 확장), 애널리스트 평균 목표가가 주가 아래. PANW는 fwd ~50x·EV/S 11x로 상대적 부담 덜함. ②<b>MSFT 번들링</b> — IDC 기준 모던 엔드포인트 점유율 1위는 MS(28.6%, 3년 연속)로 CRWD 코어를 직접 압박, Google-Wiz $32B 인수 마감으로 클라우드 보안도 하이퍼스케일러 전장. ③<b>파라볼릭 되돌림</b> — 양사 50일선 위 +26~29%, CRWD는 RSI 다이버전스(86→68). 6월 초 실적 비트에도 당일 하락(CRWD -7%·PANW -3%) = 기대치 선반영 증거. 첫 눌림 -10~15%(20일선), 깊으면 50일선(-25%)까지 열려 있음. ④PANW 고유: CyberArk $25B 통합 리스크 + Prisma→Cortex Cloud 마이그레이션 6개월 더 소요.</div></div>
+      <div class="r verdict"><div class="lab">판정</div><div class="val"><b>눌림 시 CRWD 선택 (확신도 7/10).</b> ①성장의 순도 — 유일하게 <b>전부 유기적으로 매출 4분기 연속 가속 + NNARR +32% + 가이던스 대폭 상향</b>. PANW의 헤드라인은 인수 착시(유기 +14%)로 CANSLIM 'C' 미달. ②서사의 순수 노출 — AI 보안 그린필드(AIDR·에이전트당 센서)의 'N'은 CRWD가 본체, PANW는 방화벽 성숙사업에 희석. ③단일 플랫폼 락인 + Flex 증액 사이클이 멀티이어 어닝 가시성 제공. <b>대가: 극단적 멀티플</b> → 트리거 DB 룰 유지(20일선 위 거래량 마른 눌림만 진입, 사이즈 보수 + 진입 즉시 시세포착 손절). 밸류 우선이면 PANW가 답이지만, 주도주 전략에서 2등 성장률에 타협하는 것이 더 큰 리스크.</div></div>
+      <div class="r"><div class="lab">KPI</div><div class="val">①CRWD FQ2 실적(8월 말) — NNARR 가이던스($284~286M) 상회 여부 ②AIDR ARR·파이프라인 후속 수치 ③PANW 유기 성장률(FY27부터 세그먼트 공시 전환) ④MSFT 엔드포인트 점유율 추이 ⑤둘의 20일선 이탈 여부(추세 종료 신호) ⑥CIBR 대비 상대강도.</div></div>
+    </div>
+    <div class="disc">미인대회·구조적 변화·가격액션 렌즈. 출처: CRWD FQ1'27 어닝콜 트랜스크립트·프레젠테이션(S&P Global, 2026.06.03), PANW FQ3'26 어닝콜 트랜스크립트·프레젠테이션(2026.06.02), SEC 8-K, 양사 보도자료, TIKR·GuruFocus 밸류에이션 데이터, IDC 엔드포인트 점유율(2025.05). 딥리서치 검증 8건 확인·반박 0건. 투자권유 아님 · 수치는 작성 시점 기준(2026.07).</div>
+  </article>
+
+</main>
+
+<footer>
+  <div class="wrap"><span class="star">✦</span> POLARIS — Research Notes</div>
+</footer>
+
+</body>
+</html>
