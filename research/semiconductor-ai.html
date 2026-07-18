@@ -180,6 +180,73 @@
 
   <article class="note">
     <div class="nmeta">
+      <span class="date">2026.07.18</span>
+      <span class="tk">메모리 · AI 인프라</span>
+      <span class="tag">Kimi K3</span>
+      <span class="tag">오픈웨이트</span>
+      <span class="tag">레이어 케이크</span>
+    </div>
+    <div class="ntitle">Kimi K3 쇼크 — 케이크의 가운데가 눌릴 때, 곡괭이는 팔린다</div>
+    <p class="nlede">
+      <b>한 줄:</b> 7/16 K3 쇼크로 반도체가 폭락했지만, 실제로 squeeze당하는 층은 Model이고 메모리는
+      <span class="hl">구조적 수혜자가 구조적 피해자의 대리로 팔린 것</span>(수급 문제).
+      희소 MoE는 비용을 연산→메모리로 옮긴 구조라, 오픈웨이트 확산은 메모리에 중립~긍정.
+    </p>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">01</span><h3>사건 — 팩트체크 완료</h3></div>
+      <p class="p">
+        7/16 Moonshot AI가 Kimi K3 출시. <b>2.8T 파라미터 MoE(전문가 896개 중 16개 활성 = 1.8%)</b>, 1M 컨텍스트,
+        7/27 가중치 전면 공개 예고. Frontend Code Arena 1위(1,679점, 오픈웨이트 최초)지만 실무 태스크(GDPval-AA v2)는
+        Fable 5 Max·GPT-5.6 Sol Max에 이은 3위 — <b>"한 세대 전 프론티어(Opus 4.8)를 제쳤고, 현행과의 격차를 압축한 추격"</b>이 정확한 독법.
+        API 가격은 전작 대비 3~4배 인상($3/$15). 학습비용 $15~25M설은 외부인의 FLOPs 추정일 뿐.
+        같은 날 반도체 폭락(하이닉스 -11.5%, KOSPI 사이드카)은 <span class="hl">TSMC 캐펙스 가이던스 상향 + CXMT $8.6B IPO 소식이 겹친 복합 촉발</span> — K3 단독 인과로 읽으면 오독.
+      </p>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">02</span><h3>구조 — squeeze는 Model 층, 매도는 메모리에 착탄</h3></div>
+      <p class="p">
+        레이어 케이크(Energy–Chip–Infrastructure–Model–Application)에서 이번 사건이 압박하는 층은 Model.
+        추격 시차 단축 = 학습 런 감가상각 가속, 오픈웨이트 = 클로즈드 API 가격결정력에 상한.
+        그런데 위협받는 당사자(OpenAI·Anthropic)는 <b>비상장</b>이라, 시장은 유동성 있는 상장 AI 종목 — 만만한 메모리 — 를 대신 팔았다.
+        <span class="hl">모델 층을 향해야 할 매도가 반도체 층에 착탄한 것 = 미스프라이싱의 원천</span>.
+      </p>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">03</span><h3>메모리 함의 — 청구서는 연산이 아니라 메모리로 간다</h3></div>
+      <p class="p">
+        극단 희소 MoE는 비용을 없앤 게 아니라 <b>연산에서 메모리로 이전</b>한 구조
+        (K2→K3: 총 파라미터 2.8배 vs 활성 1.6배 — 덩치가 연산보다 빠르게 큼).
+        ① 대형 서빙: 배치로 묶으면 896개 전문가가 사실상 전부 호출 → <b>풀 HBM 상주 강제, HBM 수요 불변</b>.
+        ② 소배치 온프레미스(금융·정부·방산): 자주 쓰는 전문가만 HBM, 나머지는 서버 DRAM 오프로딩 성립 —
+        랙스케일 가격이면 도입 포기했을 고객이라 <span class="hl">서버 RDIMM에 "없던 수요"가 신설</span>(굶던 사람이 도시락을 사는 것).
+        ③ 초저가로 점유율 사던 추격자가 가격을 3~4배 올림 = <b>지불의사 실재의 직접 증거</b> → 캐펙스 사이클 지속의 강세 논거.
+      </p>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">04</span><h3>확장 — 앱 레이어 그립 지도 · 판정</h3></div>
+      <p class="p">
+        후속 논의: Application 층의 승자는 <b>전환비용 사다리(접촉 &lt; 습관 &lt; 기억 &lt; 자산 &lt; 내장) × 잡은 지갑 수</b>로 판별.
+        지배자 자리(도달 최상 × 내장)는 공석, 최근접은 MS(단, 마찰 락인 + 시대 이월 리스크).
+        사다리를 오르는 화살표는 OpenAI(기억→자산, io 디바이스)·Anthropic(기억→내장, 코딩 에이전트) 둘뿐인데 둘 다 비상장.
+        Jay 결론: <span class="hl">생태계 보유자가 모델을 이식하는 게, 모델 보유자가 생태계를 만드는 것보다 쉽다 → 애플 승자론</span>
+        (모델 커머디티화가 진행될수록 유리). 판정 트리거는 <b>7/27 가중치 공개</b> —
+        토큰당 연산량·메모리 풋프린트 확정 + 서드파티 서빙 호가가 원가의 직접 측정치.
+        Moonshot이 서드파티 등장에 맞춰 가격을 내리면 기존 가격은 희소성 프리미엄이었다는 증거.
+      </p>
+      <p class="p">
+        블로그 정리: <a href="https://blog.naver.com/tenbagger_4050/224350030606" target="_blank" style="color:var(--accent)">1편 — 어차피 메모리는 곡괭이다</a> ·
+        <a href="https://blog.naver.com/tenbagger_4050/224350308704" target="_blank" style="color:var(--accent)">2편 — 누가 애플보다 더 많은 고객을 잡을 수 있을까?</a>
+        <br><span class="src">출처: Arena.ai 공식 · TechCrunch · Fortune · The Decoder · MarkTechPost · Latent Space · OfficeChai · CNBC · invezz. 웹 교차검증 팩트체크(2026.07.18 대화).</span>
+      </p>
+    </div>
+  </article>
+
+  <article class="note">
+    <div class="nmeta">
       <span class="date">2026.06.25</span>
       <span class="tk">009150 · 삼성전기</span>
       <span class="tag">실리콘 커패시터</span>
