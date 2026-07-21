@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-20T23:32:48+00:00",
+  "generatedAt": "2026-07-21T23:30:47+00:00",
   "indicators": [
     {
       "id": "net_liquidity",
@@ -834,13 +834,9 @@
       "decimals": 0,
       "source": "FRED · BAMLH0A0HYM2",
       "sourceUrl": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2",
-      "value": 273,
-      "asOf": "2026-07-17",
+      "value": 269,
+      "asOf": "2026-07-20",
       "history": [
-        {
-          "t": "2023-07-28",
-          "v": 382
-        },
         {
           "t": "2023-08-04",
           "v": 401
@@ -1460,16 +1456,20 @@
         {
           "t": "2026-07-17",
           "v": 273
+        },
+        {
+          "t": "2026-07-20",
+          "v": 269
         }
       ],
       "mom": {
-        "phase": "중립",
-        "tone": "neutral",
-        "d1": 4,
-        "dN": -10,
+        "phase": "우호 지속",
+        "tone": "pos",
+        "d1": -4,
+        "dN": -17,
         "lookback": 13
       },
-      "momLine": "13주 Δ -10bp · 직전주 +4"
+      "momLine": "13주 Δ -17bp · 직전주 -4"
     },
     {
       "id": "nfci",
@@ -2118,11 +2118,11 @@
     }
   ],
   "interpretation": {
-    "regime": "혼조",
-    "regimeEn": "Mixed",
-    "tone": "warn",
-    "headline": "지표 4개 중 우호 2개 → 혼조.",
-    "supportive": 2,
+    "regime": "유동성 순풍",
+    "regimeEn": "Tailwind",
+    "tone": "pos",
+    "headline": "지표 4개 중 우호 3개 → 유동성 순풍.",
+    "supportive": 3,
     "alerts": [],
     "bullets": [
       {
@@ -2141,10 +2141,10 @@
       },
       {
         "label": "하이일드 스프레드",
-        "value": 273,
+        "value": 269,
         "unit": "bp",
-        "phase": "중립",
-        "tone": "neutral"
+        "phase": "우호 지속",
+        "tone": "pos"
       },
       {
         "label": "금융여건지수 NFCI",
