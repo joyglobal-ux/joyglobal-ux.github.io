@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-22T23:31:50+00:00",
+  "generatedAt": "2026-07-23T23:30:09+00:00",
   "indicators": [
     {
       "id": "net_liquidity",
@@ -23,13 +23,9 @@
           "url": "https://fred.stlouisfed.org/series/RRPONTSYD"
         }
       ],
-      "value": 5.987,
-      "asOf": "2026-07-15",
+      "value": 5.917,
+      "asOf": "2026-07-22",
       "history": [
-        {
-          "t": "2023-07-26",
-          "v": 5.95
-        },
         {
           "t": "2023-08-02",
           "v": 5.919
@@ -649,17 +645,21 @@
         {
           "t": "2026-07-15",
           "v": 5.987
+        },
+        {
+          "t": "2026-07-22",
+          "v": 5.917
         }
       ],
       "mom": {
-        "phase": "중립",
-        "tone": "neutral",
-        "d1": 0.029,
-        "dN": 0.033,
+        "phase": "우호 둔화",
+        "tone": "warn",
+        "d1": -0.07,
+        "dN": 0.216,
         "lookback": 13
       },
       "alert": null,
-      "momLine": "13주 Δ +0.03$T · 직전주 +0.03"
+      "momLine": "13주 Δ +0.22$T · 직전주 -0.07"
     },
     {
       "id": "m2_yoy",
@@ -834,8 +834,8 @@
       "decimals": 0,
       "source": "FRED · BAMLH0A0HYM2",
       "sourceUrl": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2",
-      "value": 269,
-      "asOf": "2026-07-21",
+      "value": 268,
+      "asOf": "2026-07-22",
       "history": [
         {
           "t": "2023-08-04",
@@ -1458,18 +1458,18 @@
           "v": 273
         },
         {
-          "t": "2026-07-21",
-          "v": 269
+          "t": "2026-07-22",
+          "v": 268
         }
       ],
       "mom": {
         "phase": "우호 지속",
         "tone": "pos",
-        "d1": -4,
-        "dN": -17,
+        "d1": -5,
+        "dN": -18,
         "lookback": 13
       },
-      "momLine": "13주 Δ -17bp · 직전주 -4"
+      "momLine": "13주 Δ -18bp · 직전주 -5"
     },
     {
       "id": "nfci",
@@ -2121,16 +2121,16 @@
     "regime": "유동성 순풍",
     "regimeEn": "Tailwind",
     "tone": "pos",
-    "headline": "지표 4개 중 우호 3개 → 유동성 순풍.",
-    "supportive": 3,
+    "headline": "지표 4개 중 우호 4개 → 유동성 순풍.  ⚠ 둔화 감시: Fed 순유동성.",
+    "supportive": 4,
     "alerts": [],
     "bullets": [
       {
         "label": "Fed 순유동성",
-        "value": 5.987,
+        "value": 5.917,
         "unit": "$T",
-        "phase": "중립",
-        "tone": "neutral"
+        "phase": "우호 둔화",
+        "tone": "warn"
       },
       {
         "label": "M2 통화량",
@@ -2141,7 +2141,7 @@
       },
       {
         "label": "하이일드 스프레드",
-        "value": 269,
+        "value": 268,
         "unit": "bp",
         "phase": "우호 지속",
         "tone": "pos"
