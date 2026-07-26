@@ -139,6 +139,53 @@
   .r.verdict .val{color:var(--txt)}
   .r.verdict .lab{color:var(--gold)}
 
+  /* ── 오픈소스 TCO 3-lane (2026.07 노트) ── */
+  .lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 6px}
+  .lane{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 13px}
+  .lane .le{font-size:22px}
+  .lane .lt{font-size:12.5px;font-weight:800;margin-top:7px}
+  .lane .ls{font-size:10.5px;color:var(--accent);font-weight:700;margin-top:3px}
+  .lane .ld{font-size:11px;color:var(--faint);margin-top:8px;line-height:1.5}
+  .lane .lp{font-size:11px;color:var(--muted);margin-top:9px;padding-top:8px;border-top:1px dashed var(--line);line-height:1.5}
+  .lane .lp b{color:var(--txt);font-weight:700}
+  .lane.pick{border-color:var(--gold);background:rgba(255,214,107,0.05)}
+  .lane.pick .ls{color:var(--gold)}
+
+  /* 손익분기 스케일 */
+  .bex{margin:14px 0 4px}
+  .bex .brow{display:grid;grid-template-columns:132px 1fr;gap:12px;align-items:center;margin-bottom:9px}
+  .bex .blab{font-size:11.5px;color:var(--muted);font-weight:700;line-height:1.4}
+  .bex .btrack{position:relative;height:27px;background:var(--panel2);border:1px solid var(--line);border-radius:7px;overflow:hidden}
+  .bex .bfill{position:absolute;left:0;top:0;bottom:0;
+    background:linear-gradient(90deg,rgba(139,155,255,.4),rgba(139,155,255,.1))}
+  .bex .bval{position:absolute;right:10px;top:0;line-height:27px;font-size:11px;font-weight:800;
+    color:var(--txt);font-variant-numeric:tabular-nums}
+
+  /* 누가 어디에 있나 */
+  .who{display:flex;flex-direction:column;gap:8px;margin:13px 0 4px}
+  .who .wr{display:grid;grid-template-columns:132px 1fr;gap:11px;align-items:start;
+    background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+  .who .wn{font-size:12px;font-weight:800;color:var(--txt)}
+  .who .wn small{display:block;font-size:10px;color:var(--faint);font-weight:600;margin-top:2px}
+  .who .wv{font-size:11.5px;color:var(--muted);line-height:1.55}
+  .who .wv b{color:var(--txt);font-weight:600}
+  .who .wr.a{border-color:rgba(34,197,94,.28);background:rgba(34,197,94,.05)}
+  .who .wr.b{border-color:rgba(255,214,107,.28);background:rgba(255,214,107,.05)}
+
+  /* distillation 체인 */
+  .chn{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:13px 0 6px}
+  .chn .cbox{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;
+    font-size:11.5px;font-weight:700;color:var(--txt);text-align:center;line-height:1.4}
+  .chn .cbox small{display:block;font-size:9.5px;color:var(--faint);font-weight:600;margin-top:2px}
+  .chn .cbox.src{border-color:var(--gold);background:rgba(255,214,107,.07);color:var(--gold)}
+  .chn .arw{color:var(--faint);font-size:13px}
+
+  /* 정정 박스 */
+  .fix{background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.25);border-radius:11px;
+    padding:12px 14px;margin:12px 0 4px;font-size:12px;color:var(--muted);line-height:1.6}
+  .fix b{color:var(--txt);font-weight:600}
+  .fix .fh{color:var(--stop);font-weight:800;font-size:11.5px;letter-spacing:.2px;display:block;margin-bottom:5px}
+
   .disc{font-size:11px;color:var(--faint);margin-top:18px;line-height:1.65;border-top:1px solid var(--line);padding-top:13px}
   .disc .src{color:var(--muted)}
 
@@ -153,6 +200,9 @@
     .r{grid-template-columns:60px 1fr;gap:10px}
     .tbl{font-size:11.5px}
     .tbl th,.tbl td{padding:7px 8px}
+    .lanes{grid-template-columns:1fr}
+    .bex .brow{grid-template-columns:1fr;gap:5px}
+    .who .wr{grid-template-columns:1fr;gap:5px}
   }
 </style>
 </head>
@@ -177,6 +227,227 @@
 <main class="wrap">
 
   <!-- 새 노트는 이 줄 바로 아래에 추가 (최신순) -->
+
+  <article class="note">
+    <div class="nmeta">
+      <span class="date">2026.07.26</span>
+      <span class="tk">오픈소스 vs 프론티어</span>
+      <span class="tag">TCO 손익분기</span>
+      <span class="tag">3축 프레임</span>
+      <span class="tag">All-In Ep.282</span>
+    </div>
+    <div class="ntitle">오픈소스 AI 논쟁 — 축이 틀렸다</div>
+    <p class="nlede">
+      <b>한 줄:</b> "오픈 vs 클로즈드"는 잘못된 축이다. 실제로는 <b>물량축</b>(자체호스팅 손익분기를 넘느냐) ·
+      <b>레이어축</b>(모델은 커모디티, 하네스·계약은 아님) · <b>스택축</b>(오픈은 프론티어의 파생물)이 겹쳐 있고,
+      대부분 기업의 답은 양쪽 다 아닌 <span class="hl">"클라우드에서 오픈웨이트 임대"</span> —
+      그래서 가치 이전의 종착지는 기업이 아니라 <span class="hl">클라우드</span>다.
+    </p>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">01</span><h3>사건 — 무엇이 논쟁이 됐나</h3></div>
+      <p class="p">
+        Kimi K3 이후(아래 7/18 노트 참조) 미국에서 <b>중국 오픈소스 모델 금지론</b>이 부상.
+        백악관이 검토한다는 Axios 보도, 상무장관 Lutnick은 반대한다는 Wired 보도가 같은 주에 엇갈렸고,
+        Polymarket "2026년 미 정부의 오픈소스 모델 금지" 확률이 <b>22% → 45%</b>로 급등.
+        Anthropic은 "산업적 규모의 distillation 공격"이라는 프레임으로 규제를 요청 중.
+        All-In Ep.282에서 출연자 4인이 <b>전원 오픈소스 편</b>으로 이 논쟁을 다뤘다 — 아래는 그 논지의 검증과 재구성.
+      </p>
+      <div class="fix">
+        <span class="fh">⚠︎ 정책 리스크를 읽을 때의 전제 정정</span>
+        David Sacks는 <b>2026.03.26부로 백악관 AI·크립토 차르가 아니다</b>. SGE(특별정부고용) 신분의
+        <b>연 130일 근무 상한</b>을 소진해 물러났고 현재는 <b>PCAST(대통령 과학기술자문위)</b> 위원.
+        그의 "백악관은 아직 결정 안 했다"는 <b>결정 정보가 아니라 로비 진행 상황</b>으로 읽어야 한다
+        (본인도 방송에서 <i>"on good authority"</i>, <i>"내 목소리도 한 표 보태는 차원"</i>이라고 표현).
+        <br>실제 집행 레버는 <b>상무부(수출통제·BIS·ICTS)</b>와 OSTP(Kratsios)에 있다 — Polymarket 45%가
+        그의 발언에도 안 내려간 이유.
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">02</span><h3>축 ① 물량 — "정수기 vs 생수"</h3></div>
+      <p class="p">
+        <b>"오픈소스가 50~100배 싸다"</b>는 주장은 조건부로만 참이다. 쉽게 보려면 <b>물 마시는 방법 3가지</b>로 놓으면 된다.
+      </p>
+      <div class="lanes">
+        <div class="lane">
+          <div class="le">🏪</div>
+          <div class="lt">편의점 생수</div>
+          <div class="ls">= 프론티어 API</div>
+          <div class="ld">한 병이 제일 비싸다. 대신 <b>설치비 0원</b>, 마실 때만 돈이 나간다.</div>
+          <div class="lp">가끔 마시면 <b>이게 제일 싸다</b></div>
+        </div>
+        <div class="lane pick">
+          <div class="le">🚚</div>
+          <div class="lt">대용량 정기배달</div>
+          <div class="ls">= 클라우드 오픈웨이트 임대</div>
+          <div class="ld">편의점보다 훨씬 싸고, 설치·관리는 여전히 <b>남이 해준다</b>. (Bedrock · Vertex · Azure)</div>
+          <div class="lp">대부분 기업의 <b>실제 정답</b></div>
+        </div>
+        <div class="lane">
+          <div class="le">🔧</div>
+          <div class="lt">정수기 + 관리기사 상주</div>
+          <div class="ls">= 오픈모델 자체 호스팅</div>
+          <div class="ld">물 한 잔은 거의 공짜. 대신 설치비·필터·<b>관리기사 인건비가 매달 고정</b>으로 나간다.</div>
+          <div class="lp">물을 <b>어마어마하게</b> 써야 이긴다</div>
+        </div>
+      </div>
+      <p class="p" style="margin-top:14px">
+        핵심은 <b>"물을 얼마나 마시냐"</b>다. 하루 한 잔 마시는 사람이 관리기사를 고용하면 손해고,
+        카페를 운영하면 정수기가 압도적이다. <span class="hl">오픈소스는 싸다 — 단 토큰 물량이 클 때만.</span>
+      </p>
+      <p class="p">
+        <b>손익분기 추정</b> — 자체 호스팅 고정비를 연 <b>약 $250만</b>으로 잡을 때
+        (프론티어급 오픈모델 HA 서빙 8×H200급 replica 2~3개 $50~100만 + ML/인프라 엔지니어 2~4명 $100~200만 + eval·가드레일·3개월 주기 모델 교체 대응 $30~50만),
+        대안별로 이만큼은 써야 본전이다:
+      </p>
+      <div class="bex">
+        <div class="brow">
+          <div class="blab">Opus급 대체</div>
+          <div class="btrack"><div class="bfill" style="width:18%"></div><div class="bval">월 70억 토큰</div></div>
+        </div>
+        <div class="brow">
+          <div class="blab">Sonnet급 대체</div>
+          <div class="btrack"><div class="bfill" style="width:58%"></div><div class="bval">월 370억 토큰</div></div>
+        </div>
+        <div class="brow">
+          <div class="blab">클라우드 임대 대체</div>
+          <div class="btrack"><div class="bfill" style="width:100%"></div><div class="bval">사실상 도달 불가</div></div>
+        </div>
+      </div>
+      <p class="p" style="font-size:11.5px;color:var(--faint);margin-top:2px">
+        ※ 자체 모델링 추정치(조회 수치 아님). 가정: 프론티어 플래그십 블렌디드 $30/M · 미들 $6/M · 클라우드 오픈웨이트 $1.5/M · 자체호스팅 한계 $0.3/M (in:out 7:3).
+      </p>
+      <p class="p" style="margin-top:14px"><b>그래서 누가 어디에 서 있나:</b></p>
+      <div class="who">
+        <div class="wr a">
+          <div class="wn">Cursor · Lovable<small>ElevenLabs 등</small></div>
+          <div class="wv"><b>카페 주인.</b> 토큰이 곧 원재료라 물량이 손익분기를 압도적으로 넘는다 → 실제로 오픈모델로 대거 이동. Composer 2는 Kimi K2.5 위에 자체 코딩데이터로 post-train.</div>
+        </div>
+        <div class="wr b">
+          <div class="wn">일반 대기업<small>코카콜라 類</small></div>
+          <div class="wv"><b>하루 한 잔 마시는 사람.</b> 게다가 <b>토큰이 아니라 좌석(seat)을 산다</b> — $30/명/월. 오픈소스에는 "좌석"이라는 상품 자체가 없다(정수기 회사는 물만 팔지 카페를 차려주진 않는다). <b>50배 비교가 구매 행위에 적용조차 안 된다.</b></div>
+        </div>
+      </div>
+      <div class="why" style="margin-top:14px">
+        <b>에피소드 내부 모순의 해소:</b> Chamath "50~100배 싸다" vs Sacks(Ben Thompson 인용) "K3는 별로 안 싸다" — 둘 다 맞다.
+        <b>50배 싼 모델과 프론티어급 오픈모델은 같은 모델이 아니다.</b> 2.8T MoE는 가중치만 FP8로 1TB라 서빙에 진짜 돈이 든다.
+        <b>구세대 소형 오픈 vs 플래그십 = 30~50배 / 프론티어급 오픈 vs 플래그십 = 2~5배.</b>
+        <br>또한 기업 AI 총원가에서 <b>모델 비용은 10~30%</b>(나머지는 통합·데이터배관·체인지매니지먼트·보안심사)라
+        모델값 3배 차이는 프로그램 원가 1.3~1.6배 차이다 → <b>"코카콜라가 리레이팅당한다"는 논증은 성립하지 않는다.</b>
+      </div>
+      <p class="p" style="margin-top:13px">
+        <b>가장 중요한 결론:</b> 대부분 기업의 정답이 "클라우드에서 오픈웨이트 임대"라면,
+        <span class="hl">가치 이전은 "프론티어랩 → 기업"이 아니라 "프론티어랩 → 클라우드"</span>다.
+        Chamath 본인도 방송에서 인정했다 — <i>"오픈소스의 종말을 원치 않는 또 다른 집단이 있다. 가장 싼 모델을 서빙하려는 자들, 거기가 마진 포획 지점이니까."</i>
+        <b>그의 인프라 테제와 코카콜라 예시는 서로를 반박한다.</b>
+      </p>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">03</span><h3>축 ② 레이어 — 모델 커모디티 ≠ 회사 커모디티</h3></div>
+      <p class="p">
+        엔진이 공짜인 것과 그 층 위가 무가치한 건 전혀 다른 명제다.
+        <b>DB 엔진</b>(Postgres 무료) 위에 Oracle·Snowflake·Databricks가, <b>OS</b>(Linux 무료) 위에 Red Hat($340억)과 <b>AWS($1조+)</b>가 섰다.
+        커모디티화는 <b>층(layer)의 문제지 회사의 문제가 아니다</b> — 그래서 전환비용을 층별로 갈라 봐야 한다.
+      </p>
+      <table class="tbl">
+        <thead><tr><th>레이어</th><th>전환비용</th><th>판정</th></tr></thead>
+        <tbody>
+          <tr><td>API 토큰</td><td>거의 0 — 엔드포인트 한 줄</td><td><b>커모디티 맞음</b></td></tr>
+          <tr><td>하네스·에이전트</td><td>워크플로·프롬프트·서브에이전트 전면 재작성</td><td>해자</td></tr>
+          <tr><td>엔터프라이즈 계약</td><td>SOC2·FedRAMP·데이터레지던시·면책, 조달 12~18개월</td><td>해자</td></tr>
+          <tr><td>컨텍스트·커넥터</td><td>데이터 중력 — 붙을수록 못 뗀다</td><td>해자</td></tr>
+          <tr><td>eval 스위트</td><td>모델 패밀리에 튜닝된 평가체계 전면 재구축</td><td><b>과소평가된 해자</b></td></tr>
+        </tbody>
+      </table>
+      <div class="why" style="margin-top:14px">
+        <b>에피소드가 통째로 빠뜨린 해자 — RL 데이터 플라이휠.</b>
+        Claude Code·Codex가 매일 수집하는 건 매출만이 아니라 <b>장기 과제에서 무엇이 성공하고 실패했는지의 궤적</b>이다.
+        distillation으로는 <b>출력</b>은 훔쳐도 <b>"어떤 시도가 틀렸는지"</b>는 못 훔친다. 에이전틱 RL에서 결정적이고 복리로 쌓인다.
+        <b>출연자 4인 중 아무도 언급하지 않았다</b> — 넷 다 오픈소스 쪽에 book이 있다.
+      </div>
+      <p class="p" style="margin-top:12px">
+        <b>그래서 크럭스는 하나의 숫자로 좁혀진다 — 매출 믹스(좌석 vs API 토큰).</b>
+        좌석 비중이 오르며 <b>총마진이 개선</b>되면 해자는 진짜고, API 토큰 비중이 유지되며 <b>ASP·총마진이 같이 내려가면</b> 커모디티다.
+        <span class="hl">ARR 절대값이 아니라 총마진 방향과 매출 믹스를 봐야 한다.</span>
+      </p>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">04</span><h3>축 ③ 스택 — 오픈은 프론티어의 파생물</h3></div>
+      <p class="p">
+        에피소드가 스스로 증명해놓고 결론을 안 낸 지점. Sacks가 "오픈 생태계의 활력"으로 든 사례를 거꾸로 따라가면:
+      </p>
+      <div class="chn">
+        <div class="cbox">Cursor Composer 2<small>미국 스타트업</small></div>
+        <div class="arw">◀</div>
+        <div class="cbox">Thinking Machines<small>최고 美 오픈모델</small></div>
+        <div class="arw">◀</div>
+        <div class="cbox">Kimi K2.5 / K3<small>중국 오픈웨이트</small></div>
+        <div class="arw">◀</div>
+        <div class="cbox src">프론티어 랩<small>교사(teacher)</small></div>
+      </div>
+      <p class="p">
+        <b>distillation에는 반드시 교사가 필요하다.</b> 교사가 사라지면 학생은 교사의 수준에서 동결된다.
+        경제학은 더 결정적이다 — $50~100억짜리 훈련런을 불확실한 회수 전망으로 지르는 주체가 누구인가:
+      </p>
+      <table class="tbl">
+        <thead><tr><th>오픈웨이트 공급자</th><th>자금 논리</th><th>자기수익으로 지속?</th></tr></thead>
+        <tbody>
+          <tr><td>Meta</td><td>전략적 손실 리더 (경쟁사 해자 파괴)</td><td>경영진 의지에 달림</td></tr>
+          <tr><td>중국 랩</td><td>국가 전략 / 헤지펀드 부업(High-Flyer)</td><td><b>상업 논리 아님</b></td></tr>
+          <tr><td>Mistral 等</td><td>VC 보조금</td><td>유한</td></tr>
+        </tbody>
+      </table>
+      <p class="p" style="margin-top:13px">
+        <b>오픈소스는 누군가 지불한 R&amp;D의 확산 메커니즘이지, R&amp;D 자금조달 메커니즘이 아니다.</b>
+        <span style="color:var(--faint)">(공정한 반례: DeepSeek R1의 GRPO는 진짜 오리지널 기여. 오픈 랩이 혁신을 못 한다는 게 아니라, capex 규모의 프론티어 런을 <b>반복</b> 감당할 수익모델이 없다는 것.)</span>
+      </p>
+      <div class="why" style="margin-top:12px">
+        <b>이 축은 양쪽을 다 벤다.</b>
+        <br>▸ <b>금지론 반박</b> — 오픈이 파생물이면 구조적으로 6~12개월 뒤다. 그럼 실존 위협이 아니고 긴급조치 명분이 사라진다.
+        "기생적 추종자"와 "우리를 파괴할 존재"를 동시에 주장할 수 없다.
+        <br>▸ <b>오픈 승리론 반박</b> — "오픈이 이기고 프론티어랩이 죽는다"는 <b>균형이 아니다</b>. 능력 성장이 마지막 교사 수준에서 멈추고, 그 다음엔 오픈모델도 정체한다.
+        <br>→ Sam Altman의 <b>"프론티어와 오픈 둘 다 미국이 이겨야 한다"</b>는 모순이 아니라 <b>스택 논리</b>다.
+        오픈이 물량(95%)을, 프론티어가 어려운 꼬리(5%)를 맡는 하나의 스택. 오픈웨이트는 안드로이드처럼 <b>세계의 기본 substrate와 표준</b>을 정한다.
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="rows">
+        <div class="r verdict">
+          <div class="lab">판정</div>
+          <div class="val">
+            <b>"오픈 vs 클로즈드"로 포지션을 잡지 말 것.</b> 세 축이 독립적으로 움직인다 —
+            ① 물량축: 대부분 수요가 <b>클라우드 오픈웨이트 임대</b>로 수렴 → 최종 수혜는 <b>하이퍼스케일러·실리콘</b>
+            ② 레이어축: 눌리는 건 <b>모델 층</b>이지 회사가 아님 → 좌석·하네스·계약 보유자는 별개
+            ③ 스택축: 프론티어와 오픈은 <b>보완재</b> → 프론티어 붕괴 시나리오는 오픈에도 악재.
+            <br>출연자 4인 전원이 <b>물량축의 한쪽 끝(고물량 AI 네이티브 스타트업) 데이터로 축 ①②③ 전부를 결론</b>냈다 —
+            설득력 있게 들리면서도 어딘가 안 맞는 이유. <b>전원 book talking</b>(Sacks=정책 포지션, Chamath=8090 온프레미스 배포, Jason=스타트업 투자, Friedberg=구글 출신)이라 반대편 논거는 별도 크로스체크 필요.
+          </div>
+        </div>
+        <div class="r">
+          <div class="lab">KPI</div>
+          <div class="val">
+            ① <b>Polymarket 오픈소스 금지 확률</b> (현 45%) — 상무부/BIS 실제 규칙제정 착수 여부가 진짜 신호
+            ② 프론티어랩 <b>매출 믹스(좌석 vs API)와 총마진 방향</b> — 축 ②의 유일한 판별식
+            ③ <b>OpenRouter 오픈소스 토큰 비중</b> (현 50%+) 추세 — "dark tokens"라 매출 차트엔 안 잡힘
+            ④ 하이퍼스케일러 <b>관리형 오픈웨이트 서빙 매출</b> 공개 여부 — 축 ①의 수혜 실증
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="disc">
+      <b>capex 게이트 워치(~8/8) 연결:</b> 같은 주 구글 capex 가이던스 <b>$1,950~2,050억</b>(내년 추가 상향 예고),
+      테슬라 capex <b>+140% YoY</b> — capex 자체는 안 줄었다. 그런데 <b>구글 -7%, 테슬라 -14%, 둘 다 FCF 마이너스(구글은 상장 이래 최초)</b>.
+      "capex 중단 → 메모리 조정"과 다른 <span class="hl">제3의 시나리오: capex는 지속되지만 자본시장이 조달비용을 올리는 국면</span>
+      (메모리 수요 유지 + 하이퍼스케일러 멀티플 압축). 게이트 프레임에 이 케이스가 들어있는지 점검 필요.
+      <br>참고: 구글 상장 이후 <b>25년 평균 ROIC 32%</b> · OpenAI 2026 1Q 손실 $70억(매출 $1당 비용 $2.22, PitchBook) · Anthropic 저작권 합의 <b>$15억</b>(도서 700만권, 권당 $3,000) — 미국 역사상 최대 저작권 합의.
+      <br><span class="src">출처: All-In Podcast Ep.282(2026.07) 트랜스크립트 · CNBC(Sacks 차르 사임 2026.03.26) · Axios · TechCrunch · Bloomberg · PGIM. TCO·손익분기는 자체 모델링 추정(가정 명시) — 실측 아님. 투자권유 아님.</span>
+    </div>
+  </article>
 
   <article class="note">
     <div class="nmeta">
