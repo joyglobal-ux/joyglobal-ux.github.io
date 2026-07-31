@@ -11,6 +11,7 @@
 | `index.html` | 허브 랜딩 (다크 테마 + 북극성 컨셉, 단일 파일) |
 | `research/*.html` | 산업별 리서치 노트 (파일 하나 = 산업 하나) |
 | `liquidity/` | 유동성 대시보드 (data.json + refresh.py) |
+| `capex-gate/` | CAPEX 게이트 워치 (게이트 판정·팩트 로그는 수동 HTML append-only, 크레딧 레이어는 refresh.py 자동) |
 
 **여기 없는 것**: portfolio-tracker, rs-screener, semiconductor-cycle, etf-tracker는
 **각각 별도 repo**다 (GitHub Pages 프로젝트 사이트로 `/도구이름/` 경로에 붙음).
@@ -32,6 +33,18 @@
    `<a class="cat" href="/research/파일.html">`로 바꾸고 활성 스타일(기존 활성 카드의 인라인 style 복사) 적용.
 5. **새 산업 파일** — 기존 `research/*.html` 하나를 복제해 헤더(아이콘·제목·hsub)만 바꾸고 노트를 넣는다.
    index.html 카드도 추가.
+
+## CAPEX 게이트 워치 (`capex-gate/`)
+
+2026-07-31 노션에서 이관. **노션 페이지는 아카이브 — 거기 새로 쓰지 않는다.**
+
+- **팩트 로그**는 리서치 노트와 같은 append-only 규칙: `<!-- 새 엔트리는 이 줄 바로 아래에 추가 (최신순) -->`
+  주석 바로 아래에 `<div class="entry">`(판정 영향 시 `entry alert`) 추가. 기존 엔트리 수정·삭제 금지.
+- 게이트 상태가 바뀌면 상단 `.gates` 카드의 `.st` 배지 문구·색도 함께 갱신.
+- 미확인 보도는 `<span class="tag">미확인</span>`. 증권사 리포트는 1차 소스와 크로스체크.
+- **숫자 레이어(`refresh.py`, `data.js`)는 Actions가 평일 자동 갱신 — 손대지 않는다.**
+  단 실제 CDS 실측치를 새로 입수하면 `refresh.py`의 `CDS_ANCHOR`·`ANCHOR_DATE`를 갱신할 것
+  (크레딧 프록시의 캘리브레이션 앵커. 실제 CDS는 무료 소스가 없어 변동성 프록시로 대체 중).
 
 ## 스타일 규칙
 
