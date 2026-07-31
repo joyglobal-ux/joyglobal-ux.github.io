@@ -1,0 +1,51 @@
+name: CAPEX gate credit refresh
+
+on:
+  schedule:
+    # UTC. 미국 장마감 후 — FRED 일간 갱신 + 당일 종가 반영.
+    - cron: "40 22 * * 1-5"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: capex-gate-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Collect credit layer
+        run: |
+          pip install requests
+          for attempt in 1 2 3; do
+            echo "::group::refresh attempt $attempt"
+            if python capex-gate/refresh.py; then
+              echo "::endgroup::"; echo "ok on attempt $attempt"; exit 0
+            fi
+            echo "::endgroup::"; echo "attempt $attempt failed"
+            [ "$attempt" -lt 3 ] && sleep 60
+          done
+          echo "all attempts failed"; exit 1
+
+      - name: Commit & push if data changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add capex-gate/data.js capex-gate/data.json
+          if git diff --staged --quiet; then
+            echo "No data changes."
+          else
+            git commit -m "data: capex-gate 크레딧 레이어 갱신 $(date -u +%Y-%m-%d)"
+            git pull --rebase --autostash origin main || true
+            git push
+          fi

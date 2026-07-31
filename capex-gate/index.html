@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CAPEX 게이트 워치 · Polaris</title>
+<meta name="description" content="빅테크가 AI로 돈을 벌 수 있느냐 — 게이트 3개 판정 + 크레딧 조기경보 레이어.">
+<style>
+  :root{
+    --bg:#0b0d14; --bg2:#0f1117; --panel:#161a24; --panel2:#1d2230; --line:#272d3c;
+    --txt:#e8eaf0; --muted:#9aa3b2; --faint:#69727f;
+    --accent:#8b9bff; --accent-dim:#5b6bd6; --gold:#ffd66b;
+    --go:#22c55e; --stop:#ef4444;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none}
+  .wrap{max-width:920px;margin:0 auto;padding:22px 20px 60px}
+  .backlink{display:inline-block;font-size:12.5px;color:var(--muted);font-weight:600;margin-bottom:16px}
+  .backlink:hover{color:var(--accent)}
+  h1{font-size:24px;font-weight:800;letter-spacing:-.4px;margin:0}
+  .sub{color:var(--muted);font-size:13px;margin-top:6px}
+  .updated{font-size:11.5px;color:var(--faint);margin-top:8px;font-variant-numeric:tabular-nums}
+  .updated b{color:var(--muted);font-weight:600}
+
+  .quest{margin:20px 0 0;border:1px solid var(--line);border-left:3px solid var(--gold);
+    border-radius:12px;background:var(--panel);padding:15px 18px;font-size:13.5px;color:var(--muted)}
+  .quest b{color:var(--txt)}
+
+  .verdict{margin:16px 0 8px;border:1px solid var(--line);border-radius:16px;background:var(--panel);
+    padding:18px 20px}
+  .verdict .vtop{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .regime{font-size:15px;font-weight:800;padding:6px 14px;border-radius:10px;letter-spacing:-.2px}
+  .regime .en{font-size:11px;font-weight:700;opacity:.7;margin-left:7px;text-transform:uppercase;letter-spacing:1px}
+  .headline{font-size:15px;color:var(--txt);margin-top:13px;font-weight:600;line-height:1.55}
+  .bullets{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .chip{font-size:12px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+    border-radius:8px;padding:5px 10px;display:flex;align-items:center;gap:7px}
+  .chip b{color:var(--txt);font-weight:700}
+  .chip .st{font-size:10.5px;padding:1px 6px;border-radius:5px;font-weight:700}
+
+  .shead{display:flex;align-items:center;gap:10px;margin:32px 0 13px}
+  .shead .ttl{font-size:13px;font-weight:800;color:var(--txt);letter-spacing:.2px}
+  .shead .desc{font-size:11.5px;color:var(--faint)}
+  .shead .ln{flex:1;height:1px;background:var(--line)}
+
+  /* 게이트 3개 */
+  .gates{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:720px){.gates{grid-template-columns:1fr}}
+  .gate{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:15px 16px}
+  .gate .gn{font-size:10.5px;font-weight:800;color:var(--faint);letter-spacing:1px}
+  .gate h3{font-size:14.5px;font-weight:800;margin:4px 0 7px;letter-spacing:-.2px}
+  .gate p{font-size:12px;color:var(--muted);margin:0 0 10px;line-height:1.55}
+  .gate .st{font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:8px;display:inline-block}
+  .rule{margin-top:12px;font-size:12px;color:var(--muted);background:var(--panel);
+    border:1px solid var(--line);border-radius:12px;padding:12px 15px;line-height:1.6}
+  .rule b{color:var(--txt)}
+
+  /* 지표 카드 */
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:640px){.cards{grid-template-columns:1fr}}
+  .card{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:16px 17px;
+    display:flex;flex-direction:column;min-height:190px}
+  .card .crole{font-size:11px;color:var(--faint);font-weight:600}
+  .card h3{font-size:15.5px;font-weight:800;margin:3px 0 0;letter-spacing:-.2px}
+  .card .val{display:flex;align-items:center;gap:8px;margin-top:11px}
+  .card .num{font-size:30px;font-weight:800;letter-spacing:-1px;font-variant-numeric:tabular-nums;line-height:1}
+  .card .unit{font-size:12px;color:var(--faint);font-weight:700}
+  .card .phase{font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:8px;
+    margin-left:auto;align-self:center;letter-spacing:-.1px;white-space:nowrap}
+  .card .mom{font-size:11.5px;color:var(--muted);margin-top:8px;font-variant-numeric:tabular-nums}
+  .card .spark{margin-top:auto;padding-top:12px;position:relative}
+  .card canvas{width:100%;height:72px;display:block;cursor:crosshair}
+  .tip{position:absolute;pointer-events:none;background:#0f1117;border:1px solid var(--line);
+    border-radius:7px;padding:4px 9px;font-size:11px;color:var(--txt);font-variant-numeric:tabular-nums;
+    white-space:nowrap;transform:translate(-50%,-115%);display:none;z-index:5;
+    box-shadow:0 4px 14px rgba(0,0,0,.45)}
+  .tip b{color:var(--accent);font-weight:800}
+  .card .foot{display:flex;align-items:center;justify-content:space-between;margin-top:11px;
+    font-size:11px;color:var(--faint)}
+  .card .src:hover{color:var(--accent)}
+  .badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;letter-spacing:.2px;
+    color:var(--go);background:rgba(34,197,94,.1)}
+  .badge.px{color:var(--gold);background:rgba(255,214,107,.11)}
+
+  /* 종목별 프록시 테이블 */
+  .tbl{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
+  .tbl th{text-align:right;font-size:10.5px;color:var(--faint);font-weight:700;letter-spacing:.3px;
+    padding:0 10px 7px;border-bottom:1px solid var(--line);white-space:nowrap}
+  .tbl th:first-child,.tbl td:first-child{text-align:left}
+  .tbl th:nth-child(2),.tbl td:nth-child(2){text-align:left}
+  .tbl td{padding:9px 10px;border-bottom:1px solid rgba(39,45,60,.5);white-space:nowrap}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl .tk{font-weight:800;color:var(--txt)}
+  .tbl .rl{color:var(--faint);font-size:11.5px}
+  .tbl .pv{font-weight:800}
+  .tblwrap{border:1px solid var(--line);border-radius:14px;background:var(--panel);
+    padding:14px 16px;overflow-x:auto}
+
+  /* 팩트 로그 */
+  .log{border-left:2px solid var(--line);margin-left:6px;padding-left:0}
+  .entry{position:relative;padding:0 0 4px 20px;margin-bottom:22px}
+  .entry:before{content:"";position:absolute;left:-5px;top:7px;width:8px;height:8px;border-radius:50%;
+    background:var(--accent-dim);border:2px solid var(--bg)}
+  .entry.alert:before{background:var(--stop)}
+  .entry .edate{font-size:11px;color:var(--faint);font-weight:700;letter-spacing:.3px}
+  .entry .etitle{font-size:14.5px;font-weight:800;margin:3px 0 8px;letter-spacing:-.2px;line-height:1.45}
+  .entry ul{margin:0;padding-left:17px}
+  .entry li{font-size:12.5px;color:var(--muted);margin-bottom:6px;line-height:1.6}
+  .entry li b{color:var(--txt)}
+  .entry .src{font-size:11px;color:var(--faint);margin-top:8px}
+  .tag{font-size:10px;font-weight:700;padding:1px 6px;border-radius:5px;margin-left:5px;
+    background:var(--panel2);color:var(--muted);border:1px solid var(--line)}
+  .etbl{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+  .etbl th{text-align:left;font-size:10.5px;color:var(--faint);padding:5px 8px;border-bottom:1px solid var(--line)}
+  .etbl td{padding:6px 8px;border-bottom:1px solid rgba(39,45,60,.5);color:var(--muted)}
+  .etbl td b{color:var(--txt)}
+
+  .foot-note{margin-top:34px;font-size:11.5px;color:var(--faint);line-height:1.7;
+    border-top:1px solid var(--line);padding-top:16px}
+  .foot-note b{color:var(--muted);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="/">← Polaris 허브</a>
+  <h1>🚦 CAPEX 게이트 워치</h1>
+  <div class="sub">AI capex가 계속되는가 — <b style="color:var(--txt)">판정 게이트 3개</b> + 채권시장의 조기경보</div>
+  <div class="updated" id="updated">불러오는 중…</div>
+
+  <div class="quest">
+    <b>본질 질문 (2026-07-08).</b> "빅테크와 프론티어랩이 AI로 돈을 벌 수 있느냐, 그래서 투자를 계속할 거냐."
+    메모리 조정이 <b>순환 조정</b>이냐 <b>추세 대전환</b>이냐를 가르는 판정 기준.
+    검증된 팩트만 append-only로 쌓는다 — 미확인 보도는 <span class="tag">미확인</span> 태그.
+  </div>
+
+  <!-- ===================== 게이트 3개 ===================== -->
+  <div class="shead">
+    <span class="ttl">게이트 3개 — 판정 기준</span>
+    <span class="desc">실적·가이던스 기반 · 수동 판정</span>
+    <span class="ln"></span>
+  </div>
+  <div class="gates">
+    <div class="gate">
+      <div class="gn">GATE 01</div>
+      <h3>FY27 CAPEX 가이던스</h3>
+      <p>컨센서스 +23% YoY 대비 상향/유지/하향. 상향 = 빌드아웃 의지 확인, 하향 = 추세 전환 경보.</p>
+      <span class="st" style="color:var(--go);background:rgba(34,197,94,.13)">우호 확정 · 4/4 상향·유지</span>
+    </div>
+    <div class="gate">
+      <div class="gn">GATE 02</div>
+      <h3>AI 수익화 숫자</h3>
+      <p>토큰·추론 매출 성장률, AI 기여 마진, 프론티어랩 매출. 지출이 매출로 전환되는가.</p>
+      <span class="st" style="color:var(--gold);background:rgba(255,214,107,.13)">부분 우호 · 회수속도 미해결</span>
+    </div>
+    <div class="gate">
+      <div class="gn">GATE 03</div>
+      <h3>잉여 컴퓨트 판매 확산</h3>
+      <p>Meta 외 CSP가 인프라 외부 판매를 언급하면 경보 — 과잉구축 자백의 집단화.</p>
+      <span class="st" style="color:var(--accent);background:rgba(139,155,255,.13)">미확산 · Meta 1건 유지</span>
+    </div>
+  </div>
+  <div class="rule">
+    <b>판정 룰.</b> 우호 2/3 이상 = "세 번째 순환 조정" 확인 → 재진입 트리거(워시아웃 리버설·팔로우스루) 대기.
+    부정 2/3 이상 = 추세 대전환 → 단계 손절선 이행 + 재진입 보류.<br>
+    <b>⚠ 2026-07-30 발견한 설계 한계.</b> 게이트 ①(지출 의지)이 4/4 우호인데 같은 기간 KOSPI −30%.
+    <b>지출 의지가 곧 주가 우호가 아니다</b> — 지출은 선행, 회수는 후행이고 그 사이 구간에서 멀티플이 죽는다.
+    향후 판정은 게이트 ②(수익화 실측)에 가중치를 더 둔다.
+  </div>
+
+  <!-- ===================== 크레딧 레이어 ===================== -->
+  <div class="shead">
+    <span class="ttl">크레딧 조기경보 레이어</span>
+    <span class="desc">자동 갱신 · 판정은 레벨이 아니라 13주 방향</span>
+    <span class="ln"></span>
+  </div>
+  <div id="verdict"></div>
+  <div class="cards" id="cards" style="margin-top:14px"></div>
+
+  <div class="shead">
+    <span class="ttl">종목별 크레딧 프록시</span>
+    <span class="desc">실제 CDS 아님 — 변동성 기반 추정치</span>
+    <span class="ln"></span>
+  </div>
+  <div class="tblwrap"><table class="tbl" id="names"></table></div>
+
+  <!-- ===================== 팩트 로그 ===================== -->
+  <div class="shead">
+    <span class="ttl">검증된 팩트 로그</span>
+    <span class="desc">append-only · 최신순</span>
+    <span class="ln"></span>
+  </div>
+  <div class="log">
+    <!-- 새 엔트리는 이 줄 바로 아래에 추가 (최신순) -->
+
+    <div class="entry alert">
+      <div class="edate">2026-07-31</div>
+      <div class="etitle">🚨 빅테크 CDS 실측 확보 — ORCL 207bp / CRWV 864bp, MSFT의 4배·16배</div>
+      <ul>
+        <li>✅ 실측 5Y CDS(텔레그램 일회성 수신): <b>MSFT 52.55</b> · GOOGL 63.45 · AMZN 64.23 ·
+          NVDA 77.88 · META 94.82 · <b>ORCL 206.88</b> · <b>CRWV 863.53</b> (전부 당일 축소).</li>
+        <li>🔎 <b>판정 의미</b>: 게이트 ①이 "돈을 쓰겠다"를 확인했다면, CDS는 <b>"그 돈을 어떻게 조달하나"</b>에
+          대한 채권시장의 답. 현금으로 조달하는 쪽(MSFT·GOOGL·AMZN 52~64bp)과
+          <b>빚으로 조달하는 쪽(ORCL 207·CRWV 864)의 격차가 이미 4~16배</b>로 벌어져 있다.</li>
+        <li>⚠️ <b>지속 추적 불가 확인.</b> 실제 CDS는 무료 소스가 없다 —
+          DTCC 공개배포는 가격 필드 채움율 <b>0%</b>(20영업일 28,038건 실측)에 빅테크 단일종목은 월 3~11건뿐,
+          ICE는 "무료 공개" 표방하나 실제로는 S&P Global 라이선스로 연결. Markit/S&P는 기관 유료.</li>
+        <li>→ 그래서 아래 크레딧 레이어는 <b>126일 실현변동성을 이 7개 실측에 캘리브레이션한 프록시</b>로 대체
+          (R²=0.93, 평균오차 21%). Merton 구조모형은 저레버리지 구간에서 0bp로 붕괴해 탈락,
+          옵션 IV는 순위상관 0.96이나 옵션체인 수집이 CI에서 불안정해 실현변동성 채택.</li>
+        <li>📌 <b>이 프록시로 봐야 할 것은 레벨이 아니라 격차의 방향</b> — ORCL−MSFT가 벌어지면
+          부채조달 capex의 값이 오르는 중이고, 그건 게이트 ①이 우호여도 실행이 막힐 수 있다는 신호.</li>
+      </ul>
+      <div class="src">소스: 텔레그램(일회성) · 검증: DTCC PPD 직접 수집, FRED, ICE·S&P Global 공개문서</div>
+    </div>
+
+    <div class="entry alert">
+      <div class="edate">2026-07-30</div>
+      <div class="etitle">🚨 Situational Awareness 공개주식 전량 청산 — 이번 폭락의 수급 정체</div>
+      <ul>
+        <li>✅ CNBC(David Faber, 7/30): Leopold Aschenbrenner의 AI 헤지펀드가 <b>공개주식 롱·숏 전량 청산</b>,
+          단일 매수자에게 블록 매각. 공개주식은 전체 보유의 약 2/3.</li>
+        <li>✅ 펀드 규모 <b>$20~24B</b>. ⚠️ 시중에 도는 $200B는 <b>10배 오류</b>.</li>
+        <li>✅ 성과: 상반기 <b>+439% net</b> → 7월 급반전. 손실이 <b>양방향</b> —
+          롱(SK하이닉스·NVDA·NBIS·SNDK) 급락 + 숏(Adobe 등 소프트웨어) 급등.</li>
+        <li>✅ 마진: 프라임브로커(BofA·GS·JPM)와 리스크 축소 협의 — 즉 <b>레버리지 강제 청산</b>.</li>
+        <li>✅ SK하이닉스 익스포저 공시 포트폴리오의 약 <b>6.5%</b>, 추가로 7/9 $28B 미국 ADR 상장 코너스톤 투자자.</li>
+        <li>🔎 <b>판정 영향</b>: 게이트 3개가 전부 우호인데 주가만 −30% 붕괴한 <b>괴리의 직접적 설명</b>.
+          이번 하락의 상당 부분이 펀더멘털이 아니라 크라우디드 레버리지 트레이드의 강제 청산이었다는 증거.</li>
+        <li>⚠️ 바닥 신호로 단정 금지: ① 블록 매각은 보도 기반 <span class="tag">미확인</span>
+          ② 사모·벤처 2/3 잔존 ③ 같은 트레이드 타 펀드의 연쇄 청산 가능성 ④ ADR $28B 신규 공급 부담.</li>
+      </ul>
+      <div class="src">소스: CNBC 2026-07-30, Bloomberg(FT 인용), Hedgeweek</div>
+    </div>
+
+    <div class="entry alert">
+      <div class="edate">2026-07-30</div>
+      <div class="etitle">🚨 게이트 ① 판정: 4/4 우호 (capex 삭감 0건) — 그러나 주가는 −30%</div>
+      <table class="etbl">
+        <tr><th>기업</th><th>발표</th><th>FY26 capex</th><th>방향</th></tr>
+        <tr><td><b>Alphabet</b></td><td>7/22</td><td>$185B → <b>$195-205B 상향</b> · 2027 "significantly increase"</td><td>⬆ 상향</td></tr>
+        <tr><td><b>Microsoft</b></td><td>7/29</td><td>CY26 <b>$175B 유지</b> · 분기 실제 $35.8B(YoY 2배)</td><td>➡ 유지</td></tr>
+        <tr><td><b>Meta</b></td><td>7/29</td><td><b>$136.7B로 상향</b>(+$10B), FY27·28 추정 상향</td><td>⬆ 상향</td></tr>
+        <tr><td>(선행) TSMC</td><td>7/16</td><td>$52-56B → <b>$60-64B 상향</b>, "수요&gt;공급"</td><td>⬆ 상향</td></tr>
+      </table>
+      <ul>
+        <li>⚠️ MSFT "FY27 ~$190B"는 프로젝션 인용 — 사 공식 가이던스인지 <span class="tag">미확인</span>.
+          AMZN·AAPL(7/30 장마감 후)은 미반영.</li>
+        <li>🔎 <b>게이트 ① 우호 확정</b> → 프레임워크상 "세 번째 순환 조정". 게이트 ② 우호(Cloud +82%),
+          게이트 ③ 미확산(Meta 1건 유지).</li>
+        <li>📉 그러나 같은 기간 시장은 붕괴: KOSPI 7,955(7/7) → <b>5,594(7/30, −30%)</b>.
+          하이닉스 2,919,000(52주고점) → <b>1,322,000(−55%)</b>. 7/28 −14.7%, 7/29 −9.6% 연속 패닉.</li>
+        <li>💡 <b>핵심 해석</b>: 베어 시나리오였던 "AI capex 롤오버"는 <b>일어나지 않았다</b>.
+          그런데 시장은 더 크게 무너졌다 → 파는 이유는 <i>지출 규모</i>가 아니라
+          <b>지출 대비 회수(ROI)와 자금조달</b>. Alphabet이 capex 상향에 하락한 것이 증거.
+          즉 <b>"돈을 쓰느냐"는 우호로 판명, "돈을 버느냐"는 미해결.</b></li>
+      </ul>
+    </div>
+
+    <div class="entry alert">
+      <div class="edate">2026-07-23</div>
+      <div class="etitle">🚨 알파벳 Q2 컨콜: FY26 capex $195-205B 상향 + Cloud +82% (게이트 ①·② 우호)</div>
+      <ul>
+        <li>✅ 7/22 AMC: 매출 <b>$119.80B</b>(컨센 $116.93B 상회), 조정 EPS $2.85(컨센 ~$2.87 소폭 하회).
+          <b>Google Cloud +82% YoY</b>(직전 60%대에서 가속), 검색 +17%($63.3B).</li>
+        <li>✅ 핵심: FY26 capex를 <b>$185B → $195-205B로 상향</b>(midpoint +$15B급).
+          Q2 실제 capex <b>$44.9B, YoY +100%</b>. 경영진 2027년 지출 <b>"significantly increase"</b> 명시.</li>
+        <li>📉 시장 반응: 컨콜 중 주가 하락 — capex 추가 상향 + FCF 압박.
+          걱정은 '수요 부족'이 아니라 <b>'지출 대비 회수 속도'</b>.</li>
+        <li>🔎 게이트 ① 우호(FY27 방향 = UP 명시) — "AI capex 롤오버" 베어 시나리오 직접 반박.
+          게이트 ② 우호 — Cloud +82%는 capex가 매출로 전환되고 있다는 실측.</li>
+      </ul>
+      <div class="src">소스: CNBC 2026-07-22, Seeking Alpha, TechTimes 321101</div>
+    </div>
+
+    <div class="entry">
+      <div class="edate">2026-07-18</div>
+      <div class="etitle">TSMC Q2 컨콜: FY26 capex $60-64B 상향 + "AI 수요가 공급 초과" (게이트 ① 선행)</div>
+      <ul>
+        <li>✅ FY26 자본예산 <b>$52-56B → $60-64B 상향</b>(사상 최대). C.C. Wei:
+          "we have decided to raise our full year 2026 capital budget." 근거는 "구조적 수요 + 에이전틱 AI".
+          애리조나 $100B 신규 증설 발표.</li>
+        <li>✅ FY26 매출성장 가이던스 <b>USD 기준 "40% 초과"로 재상향</b>(Q1콜 30%+ → 40%+).
+          Q2 매출 $40.2B(YoY +33.7%). HPC/AI가 매출의 <b>66%</b>. N2 첫 매출 기여 3%.</li>
+        <li>💡 "packaging capacity is so tight that now it's limiting my customers' growth" —
+          병목이 <b>수요가 아니라 공급(CoWoS)</b>.</li>
+        <li>🔎 게이트 ① 우호(선행·공급측 프록시). 정식 판정은 하이퍼스케일러 본 가이던스에서 확정.</li>
+        <li>⚠️ 보조 리스크: 7/14 뉴욕주 행정명령 — 50MW 초과 신규 DC 환경심사 1년 중단,
+          13개州+ 유사 검토(확산 규모 <span class="tag">미확인</span>).
+          수요 게이트가 아니라 <b>실행(부지·전력) 마찰</b> — 판정 미반영, 관찰만.</li>
+      </ul>
+      <div class="src">소스: Motley Fool TSM Q2 2026 트랜스크립트, Investing.com, TechTimes 320696</div>
+    </div>
+
+    <div class="entry">
+      <div class="edate">2026-07-08</div>
+      <div class="etitle">삼성전자 Q2 잠정 영업이익 89.4조 — AI 메모리 수요 실측</div>
+      <ul>
+        <li>✅ 7/7 잠정실적: 연결 매출 <b>171조원</b>, 영업이익 <b>89.4조원</b>.
+          전분기比 매출 +27.7%·OP +56.2%, 전년동기比 매출 +129%·OP +1,810%.
+          컨센서스(84.16조) <b>+6.2% 상회</b>.</li>
+        <li>🔎 <b>후행 지표</b>라 선행 게이트를 직접 바꾸진 않으나, "AI로 돈 벌고 있다"는 본질 질문에
+          메모리단 수요 실체를 확인.</li>
+        <li>⚠️ 잠정치는 총량만 — HBM4 엔비디아 납품 점유율·메모리 마진은 확정실적 컨콜에서 확인 필요.</li>
+      </ul>
+      <div class="src">소스: 삼성전자 뉴스룸 잠정실적 공시, 한국일보, AI타임스 40855</div>
+    </div>
+
+    <div class="entry">
+      <div class="edate">2026-07-08</div>
+      <div class="etitle">Meta Compute 팩트체크 — 리포트 각색이 이 페이지를 만든 이유 (게이트 ③)</div>
+      <ul>
+        <li>✅ 사실: 7/1 Bloomberg — Meta가 잉여 AI 컴퓨트 + Llama 접근권을 판매하는 "Meta Compute" 준비 중
+          (익명 소스, 사 미확인). 2026 인프라 지출 $125-145B.</li>
+        <li>❌ <b>왜곡</b>: BNK 리포트(7/8) "메타 프론티어 모델 포기" — 어느 보도에도 없는 각색.
+          Llama 상품화는 오히려 반대 방향.</li>
+        <li>📊 시장 반응(7/1): <b>META +8.8% vs MU −10.6%</b> — 같은 팩트를 주식시장은 '수익화',
+          하드웨어 체인은 '과잉구축 자백'으로 해석. 이번 메모리 조정의 방아쇠 중 하나.</li>
+        <li>🔎 게이트 ③ "주의" 점등(Meta 1건, 확산 여부 관찰). 단 수익화 관점에선 게이트 ②의 잠재적 순풍.</li>
+        <li>📌 <b>원칙</b>: 리포트 각색은 반드시 1차 소스와 크로스체크.
+          미확인 보도는 <span class="tag">미확인</span> 태그.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="foot-note" id="note"></div>
+</div>
+
+<script>
+(function(){
+  function render(){
+  var D = window.CAPEX_DATA;
+  var upd = document.getElementById('updated');
+  if(!D){ upd.textContent = 'data.js 로드 실패 — refresh.py를 먼저 실행하세요.'; return; }
+
+  var TONE = {
+    pos:      {c:'var(--go)',     bg:'rgba(34,197,94,.13)'},
+    warn:     {c:'var(--gold)',   bg:'rgba(255,214,107,.13)'},
+    'warn-pos':{c:'var(--accent)',bg:'rgba(139,155,255,.13)'},
+    neg:      {c:'var(--stop)',   bg:'rgba(239,68,68,.13)'},
+    neutral:  {c:'var(--muted)',  bg:'var(--panel2)'}
+  };
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+  var g = D.generatedAt || '';
+  upd.innerHTML = '크레딧 레이어 갱신 <b>'+esc(g.slice(0,16).replace('T',' '))+' UTC</b>';
+
+  var iv = D.interpretation, tone = TONE[iv.tone] || TONE.neutral;
+  var chips = iv.bullets.map(function(b){
+    var bt = TONE[b.tone] || TONE.neutral;
+    var ph = b.phase ? '<span class="st" style="color:'+bt.c+';background:'+bt.bg+'">'+esc(b.phase)+'</span>' : '';
+    return '<span class="chip"><b>'+esc(b.label)+'</b> '+b.value+' '+esc(b.unit)+' '+ph+'</span>';
+  }).join('');
+  document.getElementById('verdict').innerHTML =
+    '<div class="verdict">'+
+      '<div class="vtop"><span class="regime" style="color:'+tone.c+';background:'+tone.bg+'">'+
+        esc(iv.regime)+'<span class="en">'+esc(iv.regimeEn)+'</span></span></div>'+
+      '<div class="headline">'+esc(iv.headline)+'</div>'+
+      (chips?'<div class="bullets">'+chips+'</div>':'')+
+    '</div>';
+
+  function card(i){
+    var m = i.mom, phaseChip='', momLine='';
+    if(m){
+      var mt = TONE[m.tone] || TONE.neutral;
+      phaseChip = '<span class="phase" style="color:'+mt.c+';background:'+mt.bg+'">'+esc(m.phase)+'</span>';
+      momLine = '<div class="mom">'+esc(i.momLine||'')+'</div>';
+    }
+    var srcHtml = i.sourceUrl
+      ? '<a class="src" href="'+esc(i.sourceUrl)+'" target="_blank" rel="noopener">'+esc(i.source)+' ↗</a>'
+      : esc(i.source);
+    var bcls = i.proxy ? 'badge px' : 'badge';
+    var btxt = i.proxy ? '프록시' : (i.noisy ? '참고' : '자동');
+    return '<div class="card">'+
+      '<div class="crole">'+esc(i.role)+'</div>'+
+      '<h3>'+esc(i.label)+'</h3>'+
+      '<div class="val"><span class="num">'+Number(i.value).toFixed(i.decimals)+'</span>'+
+        '<span class="unit">'+esc(i.unit)+'</span>'+phaseChip+'</div>'+
+      momLine+
+      '<div class="spark"><canvas id="sp_'+i.id+'"></canvas></div>'+
+      '<div class="foot"><span>'+srcHtml+'</span>'+
+        '<span class="'+bcls+'">'+btxt+(i.asOf?' · '+esc(i.asOf):'')+'</span></div>'+
+    '</div>';
+  }
+  document.getElementById('cards').innerHTML = D.indicators.map(card).join('');
+
+  // 종목별 프록시 테이블
+  var rows = D.names.map(function(n){
+    var mt = TONE[(n.mom&&n.mom.tone)||'neutral'] || TONE.neutral;
+    var ph = n.mom ? '<span class="st" style="color:'+mt.c+';background:'+mt.bg+
+      ';font-size:10.5px;padding:2px 7px;border-radius:5px;font-weight:700">'+esc(n.mom.phase)+'</span>' : '—';
+    var act = n.actual!=null ? Number(n.actual).toFixed(1) : '—';
+    return '<tr><td class="tk">'+esc(n.ticker)+'</td><td class="rl">'+esc(n.role)+'</td>'+
+      '<td>'+n.vol.toFixed(1)+'%</td>'+
+      '<td class="pv" style="color:'+mt.c+'">'+n.proxy+'</td>'+
+      '<td style="color:var(--faint)">'+act+'</td><td>'+ph+'</td></tr>';
+  }).join('');
+  document.getElementById('names').innerHTML =
+    '<thead><tr><th>티커</th><th>성격</th><th>126d 변동성</th><th>프록시 bp</th>'+
+    '<th>실측 '+esc((D.calibration&&D.calibration.anchorDate)||'')+'</th><th>13주 방향</th></tr></thead>'+
+    '<tbody>'+rows+'</tbody>';
+
+  function spark(i, hk){
+    var cv = document.getElementById('sp_'+i.id);
+    if(!cv || !i.history || i.history.length<2) return;
+    var dpr = window.devicePixelRatio||1, w = cv.clientWidth, h = 72;
+    cv.width = w*dpr; cv.height = h*dpr;
+    var ctx = cv.getContext('2d'); ctx.scale(dpr,dpr);
+    var vs = i.history.map(function(p){return p.v;});
+    var min = Math.min.apply(null,vs), max = Math.max.apply(null,vs), rng=(max-min)||1;
+    var pT=7,pB=5,pR=3;
+    function X(k){return (k/(vs.length-1))*(w-2-pR)+1;}
+    function Y(v){return h-pB-((v-min)/rng)*(h-pT-pB);}
+    var last = vs.length-1, m = i.mom||{};
+    // 전부 '하락=우호'인 스프레드류 → 상승은 빨강
+    var turn = (m.d1||0)===0 ? '#9aa3b2' : (m.d1<0 ? '#22c55e' : '#ef4444');
+    ctx.beginPath(); ctx.moveTo(X(0),Y(vs[0]));
+    for(var k=1;k<vs.length;k++) ctx.lineTo(X(k),Y(vs[k]));
+    ctx.strokeStyle='#5b6bd6'; ctx.lineWidth=1.5; ctx.lineJoin='round'; ctx.stroke();
+    ctx.lineTo(X(last),Y(min)); ctx.lineTo(X(0),Y(min)); ctx.closePath();
+    ctx.globalAlpha=.07; ctx.fillStyle='#5b6bd6'; ctx.fill(); ctx.globalAlpha=1;
+    if(last>=1){ ctx.beginPath(); ctx.moveTo(X(last-1),Y(vs[last-1])); ctx.lineTo(X(last),Y(vs[last]));
+      ctx.strokeStyle=turn; ctx.lineWidth=2.6; ctx.lineCap='round'; ctx.stroke(); }
+    ctx.beginPath(); ctx.arc(X(last),Y(vs[last]),2.8,0,7); ctx.fillStyle=turn; ctx.fill();
+    if(hk!=null){
+      ctx.save(); ctx.strokeStyle='#9aa3b2'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+      ctx.beginPath(); ctx.moveTo(X(hk),0); ctx.lineTo(X(hk),h); ctx.stroke(); ctx.restore();
+      ctx.beginPath(); ctx.arc(X(hk),Y(vs[hk]),3.4,0,7);
+      ctx.fillStyle='#0f1117'; ctx.fill(); ctx.strokeStyle='#8b9bff'; ctx.lineWidth=2; ctx.stroke();
+    }
+  }
+  function attachHover(i){
+    var cv = document.getElementById('sp_'+i.id);
+    if(!cv || !i.history || i.history.length<2) return;
+    var wrap = cv.parentNode;
+    var tip = document.createElement('div'); tip.className='tip'; wrap.appendChild(tip);
+    function move(clientX){
+      var r = cv.getBoundingClientRect(), n = i.history.length;
+      var k = Math.max(0, Math.min(n-1, Math.round((clientX - r.left - 1)/(r.width-4)*(n-1))));
+      spark(i, k);
+      var p = i.history[k];
+      tip.style.display='block';
+      tip.style.left = ((k/(n-1))*(r.width-4)+1)+'px';
+      tip.style.top = '10px';
+      tip.innerHTML = esc(p.t)+' · <b>'+p.v+'</b> '+esc(i.unit);
+    }
+    cv.addEventListener('mousemove', function(ev){ move(ev.clientX); });
+    cv.addEventListener('touchmove', function(ev){ if(ev.touches.length){ move(ev.touches[0].clientX); ev.preventDefault(); } }, {passive:false});
+    cv.addEventListener('mouseleave', function(){ tip.style.display='none'; spark(i); });
+    cv.addEventListener('touchend', function(){ tip.style.display='none'; spark(i); });
+  }
+  D.indicators.forEach(function(i){ spark(i); attachHover(i); });
+  window.addEventListener('resize', function(){ D.indicators.forEach(function(i){ spark(i); }); });
+
+  var c = D.calibration || {};
+  document.getElementById('note').innerHTML =
+    '<b>이 페이지의 구조.</b> 위쪽 <b>게이트 3개</b>는 실적·가이던스로 판정하는 수동 레이어(팩트 로그 append-only), '+
+    '아래 <b>크레딧 레이어</b>는 매일 자동 수집되는 조기경보. 게이트가 "돈을 쓰겠다"를 보고, '+
+    '크레딧이 "그 돈을 조달할 수 있나"를 본다.<br>'+
+    '<b>⚠ 크레딧 프록시는 실제 CDS가 아니다.</b> 실제 5Y CDS는 무료 소스가 없어(Markit/S&P 유료, '+
+    'DTCC 공개배포는 가격 채움율 0%) <b>126일 실현변동성</b>을 '+esc(c.anchorDate||'')+' 실측 '+(c.n||0)+'개에 '+
+    '로그-로그 캘리브레이션한 추정치다 (모델 CDS≈a·vol<sup>'+(c.b||'')+'</sup>, '+
+    '<b>R²='+(c.r2||'')+' · 평균 절대오차 '+(c.mae||'')+'%</b>). '+
+    '개별 종목 레벨은 최대 ±50% 틀릴 수 있으니 <b>레벨을 믿지 말고 방향과 격차를 봐라</b>. '+
+    '앵커가 하루치 스냅샷이라 시간이 지날수록 레벨은 드리프트한다 — 새 실측이 생기면 refresh.py의 '+
+    'CDS_ANCHOR를 갱신할 것.<br>'+
+    '<b>AI 크레딧 프리미엄.</b> ORCL 프록시 − MSFT 프록시 = 빚으로 capex를 조달하는 쪽과 '+
+    '현금으로 조달하는 쪽의 격차. 이게 벌어지면 게이트 ①이 우호여도 실행이 막힐 수 있다.<br>'+
+    '<b>CDS 헤지 활동.</b> DTCC 공개배포에서 AI capex 이름들에 붙은 단일종목 CDS 거래 건수. '+
+    '가격은 못 뽑지만 "누가 헤지되고 있나"는 읽힌다. 주 수십 건 표본이라 노이즈가 커 '+
+    '<b>레짐 판정 투표에서는 제외</b>하고 참고용으로만 표시.<br>'+
+    '<b>갱신.</b> 평일 자동 수집(GitHub Actions). 판정은 레벨이 아니라 13주 방향 — '+
+    '스프레드류는 전부 <b>하락=우호</b>. 차트에 마우스를 올리면 날짜·값 확인. · '+esc(D.note||'');
+  }
+  var s = document.createElement('script');
+  s.src = 'data.js?ts=' + Date.now();
+  s.onload = render;
+  s.onerror = function(){ var u=document.getElementById('updated'); if(u) u.textContent='data.js 로드 실패'; };
+  document.head.appendChild(s);
+})();
+</script>
+</body>
+</html>
