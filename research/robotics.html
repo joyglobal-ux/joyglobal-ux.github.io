@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>로봇 · Physical AI — Polaris 리서치</title>
+<meta name="description" content="Polaris 리서치 노트 · 로봇 · Physical AI — 핵심만 누적">
+<style>
+  :root{
+    --bg:#0b0d14; --bg2:#0f1117; --panel:#161a24; --panel2:#1d2230; --line:#272d3c;
+    --txt:#e8eaf0; --muted:#9aa3b2; --faint:#69727f;
+    --accent:#8b9bff; --accent-dim:#5b6bd6; --gold:#ffd66b;
+    --go:#22c55e; --stop:#ef4444; --cyan:#5fd0e0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;
+    background:var(--bg); color:var(--txt); line-height:1.65; -webkit-font-smoothing:antialiased; min-height:100vh;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px}
+
+  header{
+    background:
+      radial-gradient(120% 90% at 85% -10%, rgba(139,155,255,0.16), transparent 55%),
+      linear-gradient(180deg,#0c0f18,#0b0d14);
+    border-bottom:1px solid var(--line);
+  }
+  .top{padding:22px 0 0}
+  .back{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;padding:5px 13px;transition:border-color .18s,color .18s}
+  .back:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .hero{padding:26px 0 30px}
+  .kicker{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint)}
+  .htitle{display:flex;align-items:center;gap:12px;margin-top:10px}
+  .htitle .ic{font-size:27px}
+  .htitle h1{font-size:25px;font-weight:800;letter-spacing:-.3px}
+  .hsub{font-size:13px;color:var(--muted);margin-top:11px;max-width:620px}
+
+  main{padding:32px 0 10px}
+
+  .note{background:linear-gradient(180deg,var(--panel),#13161f);border:1px solid var(--line);
+    border-radius:15px;padding:22px 22px 20px;margin-bottom:20px}
+  .nmeta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:13px}
+  .nmeta .date{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums;
+    border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .nmeta .tk{font-size:11.5px;font-weight:800;letter-spacing:.4px;color:var(--accent);
+    background:rgba(139,155,255,0.08);border:1px solid rgba(139,155,255,0.22);border-radius:6px;padding:2px 9px}
+  .nmeta .tag{font-size:11px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+    border-radius:6px;padding:2px 9px}
+  .ntitle{font-size:19px;font-weight:800;letter-spacing:-.3px;margin-bottom:6px}
+  .nlede{font-size:13px;color:var(--muted);margin-bottom:6px}
+  .nlede b{color:var(--txt);font-weight:600}
+
+  /* section within note */
+  .sec{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+  .sech{display:flex;align-items:center;gap:9px;margin-bottom:14px}
+  .sech .sn{font-size:10.5px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;
+    border:1px solid rgba(139,155,255,0.3);border-radius:5px;padding:1px 6px}
+  .sech h3{font-size:14.5px;font-weight:800;letter-spacing:-.2px}
+  .p{font-size:13px;color:var(--muted);margin:10px 0}
+  .p b{color:var(--txt);font-weight:600}
+  .hl{color:var(--accent);font-weight:600}
+
+  /* 네 축 변곡 카드 */
+  .quad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 6px}
+  .quad .node{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:13px 10px;text-align:center}
+  .quad .node .e{font-size:20px}
+  .quad .node .t{font-size:12px;font-weight:800;margin-top:6px}
+  .quad .node .n{font-size:13px;font-weight:800;color:var(--accent);margin-top:6px;font-variant-numeric:tabular-nums}
+  .quad .node .d{font-size:10.5px;color:var(--faint);margin-top:5px;line-height:1.45}
+
+  /* 3-lane 미/중/한 */
+  .lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 6px}
+  .lane{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 13px}
+  .lane .le{font-size:20px}
+  .lane .lt{font-size:12.5px;font-weight:800;margin-top:7px}
+  .lane .ls{font-size:10.5px;color:var(--accent);font-weight:700;margin-top:3px}
+  .lane .ld{font-size:11px;color:var(--faint);margin-top:8px;line-height:1.5}
+  .lane .lp{font-size:11px;color:var(--muted);margin-top:9px;padding-top:8px;border-top:1px dashed var(--line);line-height:1.5}
+  .lane .lp b{color:var(--txt);font-weight:700}
+  .lane.pick{border-color:var(--gold);background:rgba(255,214,107,0.05)}
+  .lane.pick .ls{color:var(--gold)}
+
+  /* tables */
+  .tbl{width:100%;border-collapse:collapse;margin:12px 0 4px;font-size:12.5px}
+  .tbl th,.tbl td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  .tbl thead th{font-size:11px;color:var(--faint);font-weight:700;letter-spacing:.3px;border-bottom:1px solid var(--line)}
+  .tbl tbody td:first-child{font-weight:700;color:var(--txt);white-space:nowrap}
+  .tbl td b{color:var(--txt);font-weight:600}
+  .tbl .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+  .tbl tr.top-pick td:first-child{color:var(--gold)}
+  .scrollx{overflow-x:auto}
+
+  /* 병목 레이어 */
+  .bn{display:flex;flex-direction:column;gap:9px;margin:13px 0 4px}
+  .bn .lay{border-radius:11px;padding:13px 15px;border:1px solid var(--line)}
+  .bn .lay .lh{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;margin-bottom:5px}
+  .bn .lay .lb{font-size:11.5px;color:var(--muted);line-height:1.55}
+  .bn .lay .lb b{color:var(--txt);font-weight:600}
+  .bn .sys{background:rgba(239,68,68,0.05);border-color:rgba(239,68,68,0.25)}
+  .bn .sys .lh{color:var(--stop)}
+  .bn .comp{background:rgba(34,197,94,0.05);border-color:rgba(34,197,94,0.25)}
+  .bn .comp .lh{color:var(--go)}
+  .pill{font-size:10px;font-weight:800;border-radius:999px;padding:2px 9px;margin-left:auto}
+  .pill.no{color:var(--stop);background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3)}
+  .pill.yes{color:var(--go);background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3)}
+
+  /* timeline */
+  .tl{position:relative;margin:14px 0 4px;padding-left:6px}
+  .tl .ev{position:relative;padding:0 0 16px 22px;border-left:2px solid var(--line)}
+  .tl .ev:last-child{border-left-color:transparent;padding-bottom:0}
+  .tl .ev::before{content:"";position:absolute;left:-7px;top:2px;width:12px;height:12px;border-radius:50%;
+    background:var(--panel2);border:2px solid var(--accent-dim)}
+  .tl .ev.done::before{background:var(--go);border-color:var(--go)}
+  .tl .ev.future::before{background:var(--panel2);border-color:var(--gold)}
+  .tl .ev .when{font-size:11px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums}
+  .tl .ev.future .when{color:var(--gold)}
+  .tl .ev .what{font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.5}
+  .tl .ev .what b{color:var(--txt);font-weight:600}
+
+  /* label rows */
+  .rows{display:flex;flex-direction:column;gap:11px;margin-top:6px}
+  .r{display:grid;grid-template-columns:74px 1fr;gap:13px;align-items:start}
+  .r .lab{font-size:11.5px;font-weight:800;color:var(--accent);letter-spacing:.3px;padding-top:1px}
+  .r .val{font-size:13px;color:var(--muted)}
+  .r .val b{color:var(--txt);font-weight:600}
+  .r.verdict{background:rgba(255,214,107,0.05);border:1px solid rgba(255,214,107,0.22);
+    border-radius:11px;padding:13px 14px;grid-template-columns:64px 1fr}
+  .r.verdict .val{color:var(--txt)}
+  .r.verdict .lab{color:var(--gold)}
+
+  .why{background:rgba(139,155,255,0.06);border:1px solid rgba(139,155,255,0.2);border-radius:11px;
+    padding:12px 14px;margin-top:10px;font-size:12px;color:var(--muted);line-height:1.6}
+  .why b{color:var(--txt);font-weight:600}
+
+  /* 경고 박스 */
+  .fix{background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.25);border-radius:11px;
+    padding:12px 14px;margin:12px 0 4px;font-size:12px;color:var(--muted);line-height:1.6}
+  .fix b{color:var(--txt);font-weight:600}
+  .fix .fh{color:var(--stop);font-weight:800;font-size:11.5px;letter-spacing:.2px;display:block;margin-bottom:5px}
+
+  /* 체인 */
+  .chn{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:13px 0 6px}
+  .chn .cbox{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;
+    font-size:11.5px;font-weight:700;color:var(--txt);text-align:center;line-height:1.4}
+  .chn .cbox small{display:block;font-size:9.5px;color:var(--faint);font-weight:600;margin-top:2px}
+  .chn .cbox.src{border-color:var(--gold);background:rgba(255,214,107,.07);color:var(--gold)}
+  .chn .arw{color:var(--faint);font-size:13px}
+
+  .disc{font-size:11px;color:var(--faint);margin-top:18px;line-height:1.65;border-top:1px solid var(--line);padding-top:13px}
+  .disc .src{color:var(--muted)}
+
+  footer{border-top:1px solid var(--line);margin-top:18px;padding:24px 0 38px;
+    font-size:11.5px;color:var(--faint);text-align:center}
+  footer .star{color:var(--accent)}
+
+  @media(max-width:560px){
+    .htitle h1{font-size:21px}
+    .quad{grid-template-columns:1fr 1fr}
+    .lanes{grid-template-columns:1fr}
+    .r{grid-template-columns:60px 1fr;gap:10px}
+    .tbl{font-size:11.5px}
+    .tbl th,.tbl td{padding:7px 8px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap top">
+    <a class="back" href="/">← Polaris 허브</a>
+  </div>
+  <div class="wrap hero">
+    <div class="kicker">Research · 산업 노트</div>
+    <div class="htitle">
+      <span class="ic">🤖</span>
+      <h1>로봇 · Physical AI</h1>
+    </div>
+    <p class="hsub">
+      휴머노이드 · 액추에이터 · 감속기 · 머신비전 · 자동화. 결정에 영향 주는 정수만 — 테제·기술·병목·경쟁·타임라인·판정. 최신순 누적.
+    </p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- 새 노트는 이 줄 바로 아래에 추가 (최신순) -->
+
+  <article class="note">
+    <div class="nmeta">
+      <span class="date">2026.08.22</span>
+      <span class="tk">휴머노이드 · Physical AI</span>
+      <span class="tag">산업 지도</span>
+      <span class="tag">부품 밸류체인</span>
+      <span class="tag">미래에셋 박선영</span>
+      <span class="tag">커버리지 개시</span>
+    </div>
+    <div class="ntitle">휴머노이드 — 두뇌의 미국 · 몸체의 중국 · 부품의 한국</div>
+    <p class="nlede">
+      <b>한 줄:</b> 기술·원가·양산·수요 네 축이 동시에 변곡점을 지났고, 하드웨어 주도권은 중국이
+      <b>1H26 출하의 97%</b>로 사실상 굳혔다. 한국의 현실적 자리는 완제품이 아니라 <b>부품</b>이며,
+      이 섹터는 지금 <b>"멀티플 리레이팅 → 실적 검증"</b>의 문턱에 서 있다. 즉 지금 필요한 건 스토리가 아니라
+      <b>수주 공시라는 숫자</b>다.
+    </p>
+
+    <!-- 01 -->
+    <div class="sec">
+      <div class="sech"><span class="sn">01</span><h3>왜 지금인가 — 네 축이 한꺼번에 꺾였다</h3></div>
+      <p class="p">
+        휴머노이드가 "언젠가"에서 "이미 시작"으로 넘어온 근거는 감성이 아니라 네 개의 숫자다.
+        하나만 꺾이면 테마, 넷이 동시에 꺾이면 산업이다.
+      </p>
+      <div class="quad">
+        <div class="node"><div class="e">⚙️</div><div class="t">기술</div><div class="n">시연 → 현장</div>
+          <div class="d">Figure 03: BMW 라인 <b>200시간 연속</b> 자율 물류<br>AgiBot G2: 양산라인 64시간·6.5만회, 성공률 99.99%</div></div>
+        <div class="node"><div class="e">💵</div><div class="t">원가</div><div class="n">30배 ↓</div>
+          <div class="d">대당 300만$ → <b>10만$</b> (10년)<br>GS 추정 23→24년 1년 만에 −40%</div></div>
+        <div class="node"><div class="e">🏭</div><div class="t">양산</div><div class="n">+272% YoY</div>
+          <div class="d">25년 글로벌 ~1.6~2.2만대<br><b>1H26만 1.91만대</b> → 26년 5~6만대</div></div>
+        <div class="node"><div class="e">🛒</div><div class="t">수요</div><div class="n">50% → 70%+</div>
+          <div class="d">산업·상업용 출하 비중<br>(1H25 → 1H26). 교육·전시 → 제조·물류</div></div>
+      </div>
+      <p class="p">
+        특히 <b>네 번째 축(수요의 질)</b>이 핵심이다. 출하량은 전시·공연으로도 부풀릴 수 있지만,
+        산업·상업 비중이 반년 만에 50%→70%로 올라간 건 <b>돈 내고 일 시키려는 수요</b>가 열렸다는 뜻이다.
+        보행 성능도 지표가 있다 — 베이징 이좡 하프마라톤 완주율 <b>25년 30% → 26년 46%</b>,
+        참가팀의 40%가 원격조종이 아닌 <b>자율주행</b>으로 출전(25년엔 전부 원격).
+      </p>
+    </div>
+
+    <!-- 02 -->
+    <div class="sec">
+      <div class="sech"><span class="sn">02</span><h3>구조 — 두뇌 / 몸체 / 부품의 3분할</h3></div>
+      <p class="p">
+        미·중 기술 패권 경쟁이 생성형 AI·반도체를 지나 피지컬 AI로 옮겨왔고, 역할이 깔끔하게 갈렸다.
+        과거 배터리·태양광·드론·디스플레이에서 반복된 <b>"미국이 0→1, 중국이 1→100"</b> 패턴의 재현이다.
+      </p>
+      <div class="lanes">
+        <div class="lane">
+          <div class="le">🧠</div><div class="lt">미국 — 두뇌</div><div class="ls">RFM · 월드모델</div>
+          <div class="ld">OpenAI · Google DeepMind · NVIDIA. VLA(Vision-Language-Action) 파운데이션 모델과 월드모델에서 앞섬.</div>
+          <div class="lp"><b>약점:</b> 하드웨어 양산. 테슬라 Gen 3는 희토류 제약으로 26년 하반기 이연, 아틀라스는 28년.</div>
+        </div>
+        <div class="lane">
+          <div class="le">🦾</div><div class="lt">중국 — 몸체</div><div class="ls">1H26 출하 97%</div>
+          <div class="ld">산업용 로봇·EV·드론에서 쌓은 부품 생태계 + 정부 보조 + 로봇 훈련센터(데이터 인프라 국가화).</div>
+          <div class="lp"><b>강점:</b> 원가와 속도. 부품 국산화율·표준화로 BoM이 비중국 대비 구조적으로 낮음.</div>
+        </div>
+        <div class="lane pick">
+          <div class="le">🔩</div><div class="lt">한국 — 부품</div><div class="ls">양산은 28년경</div>
+          <div class="ld">완제품은 중국 대비 2~3년 지연. 아직 프로토타입·PoC 단계로, 반복 양산·외부 판매 국면이 아님.</div>
+          <div class="lp"><b>포지션:</b> 중국보다 지정학 리스크 낮고, 일본·유럽보다 싸고 양산 가능한 <b>"중간 대안"</b>.</div>
+        </div>
+      </div>
+      <div class="why">
+        <b>왜 휴머노이드 폼팩터인가</b> — ① 세상이 인간 기준으로 설계돼 있어 라인 개조 없이 투입 가능(시스템 통합비·초기 CapEx 절감 → ROI 앞당김)
+        ② 인간 동작 데이터(영상·모션캡처·시뮬레이션)가 압도적으로 많아 학습 전이가 유리(4족·바퀴형은 구조가 달라 전이 한계).
+        중국 제조 현장 기준 업무의 <b>70%는 이미 산업용 로봇이 처리</b>, 나머지 30%가 사람 몫 —
+        휴머노이드는 이 30% 중 고강도·위험 작업 약 20%를 노린다. 즉 <b>기존 로봇 시장 잠식이 아니라 TAM 확장</b>이다.
+      </div>
+    </div>
+
+    <!-- 03 -->
+    <div class="sec">
+      <div class="sech"><span class="sn">03</span><h3>중국은 이미 이긴 구간 — 그리고 영업레버리지 최초 증명</h3></div>
+      <p class="p">
+        1H26 글로벌 출하 1.91만대 중 <b>애지봇 44% + 유니트리 31% = 2사가 75%</b>.
+        중국 기업 합산 97%, 수요조차 중국이 85% 이상. 즉 현재 시장은 <b>중국 내수 순환</b>에 가깝다.
+      </p>
+      <div class="scrollx">
+      <table class="tbl">
+        <thead><tr><th>중국 OEM</th><th class="num">25년 출하</th><th>25년 실적</th><th>다음 단계</th></tr></thead>
+        <tbody>
+          <tr><td>유니트리</td><td class="num">~5,500대</td>
+            <td>매출 <b>17억위안(+335%)</b>, GPM 59%, 조정순익 5.9억위안 — <b>'양산↑ → 원가↓ → 흑자'를 가장 먼저 입증</b></td>
+            <td>26.8.19 과창판 상장(A주 1호)</td></tr>
+          <tr><td>애지봇</td><td class="num">5,168대</td>
+            <td>출하 세계 1위. AgiBot World 데이터셋(실제 궤적 100만+) 공개 — 하드웨어·데이터·모델 통합</td>
+            <td>26.6 누적 1.5만대, 홍콩 IPO 착수</td></tr>
+          <tr><td>유비테크</td><td class="num">1,079대</td>
+            <td>휴머노이드 매출 0.4 → <b>8.2억위안(+2,204%)</b>, 전사 비중 3%→40%. 25.11 첫 1천대 납품</td>
+            <td>26년 캐파 1만대, <b>2H27 영업흑전</b> 전망</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="p">
+        고객도 시연용이 아니다 — 유비테크는 BYD·Zeekr·아우디(자동차), Foxconn(전자), SF Express(물류)에 이어
+        26년 <b>Airbus</b>까지 PoC 도입. 25년 휴머노이드 주문액 14억위안 돌파.
+      </p>
+      <div class="fix">
+        <span class="fh">⚠ 유니트리 상장이 남긴 숫자</span>
+        공모가 150.8위안 → <b>상장 첫날 종가 845위안(+460%)</b>, 시총 3,418억위안(약 71조원).
+        25년 매출 기준 <b>P/S 약 201배</b>. 보고서 본인도 "실적이 기대에 못 미치면 밸류에이션 조정 가능성이 높다"고 명시.
+        이 종목은 <b>중국 휴머노이드 테마의 온도계</b>로 쓸 수 있다 — 여기가 식으면 국내 부품주 멀티플도 같이 식는다.
+      </div>
+    </div>
+
+    <!-- 04 -->
+    <div class="sec">
+      <div class="sech"><span class="sn">04</span><h3>한국 — 왜 완제품이 아니라 부품인가</h3></div>
+      <p class="p">
+        논리는 단순하고 검증 가능하다. <b>OEM은 완제품을 팔기 전부터 부품을 반복 구매한다.</b>
+        프로토타입 제작 → 성능 검증 → PoC → 파일럿 생산의 모든 단계에서 액추에이터·감속기·센서가 소모된다.
+        즉 <b>부품 수요는 완제품 매출에 선행</b>한다. 게다가 대당 탑재량 자체가 다르다.
+      </p>
+      <div class="chn">
+        <div class="cbox">산업용 로봇<small>구동부품 기준 1×</small></div>
+        <div class="arw">→</div>
+        <div class="cbox src">휴머노이드<small>5~7배 · 전신형 액추에이터 40~50개</small></div>
+        <div class="arw">→</div>
+        <div class="cbox">양산 진입 시<small>부품사 매출 레버리지</small></div>
+      </div>
+      <p class="p">
+        여기에 두 개의 외부 바람이 겹친다. <b>① 미국의 대중 규제가 완제품 → 핵심부품으로 확대</b>
+        (26.6 국방부 1260H에 유니트리 추가, 26.7 FCC가 외국산 첨단로봇 신규 장비 인증 원칙 금지)되면서
+        비중국 공급망의 가치가 올라간다. <b>② 국내 대기업이 계열사 제조 현장을 테스트베드로 개방</b>하며
+        초도 수주가 실제로 발생하고 있다.
+      </p>
+      <div class="scrollx">
+      <table class="tbl">
+        <thead><tr><th>그룹</th><th>조직 · 투자</th><th>휴머노이드 축</th></tr></thead>
+        <tbody>
+          <tr><td>삼성</td><td>대표이사 직속 <b>RX사업추진실</b>(26.7 신설). 구미에 삼성전자+삼성SDS <b>19조</b> 투자 — 양산 체계 + 데이터팩토리</td><td>자체 제조 실증 → B2B → B2C 3단계</td></tr>
+          <tr><td>현대차</td><td>보스턴다이내믹스 지분 9.65% 직접 보유 + 소프트뱅크 잔여분 인수 추진. 사업기획 TFT·로보틱스랩 재편</td><td><b>Atlas</b> — 26년 하반기 현대차·기아 라인 물류 투입, <b>28년 메타플랜트 연 3만대</b> 목표</td></tr>
+          <tr><td>LG</td><td>CEO 직속 <b>로보틱스사업센터</b>(26.6). 베어로보틱스 51% 자회사 편입, 양재 데이터팩토리</td><td>로봇용 액추에이터 브랜드 <b>'악시움(AXIUM)'</b> 공개 — 내재화 지향</td></tr>
+          <tr><td>정부</td><td>K-휴머노이드 연합 · M.AX 얼라이언스 · 피지컬 AI 글로벌 얼라이언스</td><td>26년 산업부 AI 예산 중 <b>7,000억</b>을 M.AX 중심 집행</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="why">
+        <b>주의:</b> LG가 액추에이터를 내재화하고(악시움) 삼성이 구미에 자체 양산 체계를 짓는다는 건,
+        국내 부품사에게 <b>고객이 생기는 동시에 경쟁자도 생긴다</b>는 뜻이다.
+        "대기업 밸류체인 편입 기대"는 편입이 확정되기 전까지는 양방향 베팅이다.
+      </div>
+    </div>
+
+    <!-- 05 -->
+    <div class="sec">
+      <div class="sech"><span class="sn">05</span><h3>커버리지 4종목 — 무엇을 사라고 하는가</h3></div>
+      <div class="scrollx">
+      <table class="tbl">
+        <thead><tr><th>종목</th><th class="num">TP</th><th class="num">현재가</th><th class="num">여력</th><th class="num">타겟 P/S</th><th>핵심 논리</th></tr></thead>
+        <tbody>
+          <tr class="top-pick"><td>유비테크<br><small>9880.HK · Top Pick</small></td>
+            <td class="num">HKD 120</td><td class="num">85.5</td><td class="num">+40.4%</td>
+            <td class="num">9.2× <small>(peer 7.6 +20%)</small></td>
+            <td>26–28F 매출 CAGR <b>53%</b>(peer 21%). 기존 교육·물류·가정용 로봇이 매출 60%로 캐시카우. 하드+SW+AI 풀스택. 현 주가는 27F P/S 7.1배로 1년 평균 9.4배 대비 <b>할인</b></td></tr>
+          <tr><td>로보티즈<br><small>108490 · 차선호</small></td>
+            <td class="num">356,000</td><td class="num">267,000</td><td class="num">+33.3%</td>
+            <td class="num">42.3× <small>(peer 35.3 +20%)</small></td>
+            <td>25년 수주 44만대 vs 캐파 30만대 → <b>미출하 22만대가 26~27년으로 이월</b>. 우즈벡 294억 출자(Q시리즈 20만대 + <b>모터 내재화</b> → 희토류 리스크 완화). 27F 매출 1,233억·OP 222억(OPM 18%)</td></tr>
+          <tr><td>에스피지<br><small>058610</small></td>
+            <td class="num">129,000</td><td class="num">101,500</td><td class="num">+27.1%</td>
+            <td class="num">7.3×</td>
+            <td>유성·하모닉·싸이클로이드 <b>3종 전부 자체 양산하는 국내 유일</b>. 레인보우로보틱스향 44억(25) → 100억+(26) → 200억+(27). QDD 액추에이터 'SDD' 하반기 양산. 미국 기어드모터 업체의 <b>중국산 대체 수요</b>가 본업에 붙음</td></tr>
+          <tr><td>에스비비테크<br><small>389500</small></td>
+            <td class="num">47,000</td><td class="num">37,300</td><td class="num">+26.0%</td>
+            <td class="num">15.1×</td>
+            <td>하모닉 감속기 <b>국산화 1호</b>(일본 HDS 대비 판가 70%·납기 1/4). 25.10 이후 신규 감속기 공급계약 44.2억 = <b>25년 매출의 61%</b>(휴머노이드용 22.8억 포함). 베어링 90%가 반도체향 — TSMC 첫 납품(15억)</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="p">
+        중국 부품 공급망에 대해서는 개별 종목이 아니라 <b>TIGER 차이나 휴머노이드로봇 ETF(0053L0)</b> 분산을 권고 —
+        "특정 OEM의 승패가 아니라 중국 전체 생산량 확대에 투자"하라는 논리. 다만 이건 집중 스타일과는 맞지 않는 처방이다.
+      </p>
+    </div>
+
+    <!-- 06 -->
+    <div class="sec">
+      <div class="sech"><span class="sn">06</span><h3>이 보고서를 액면 그대로 믿으면 안 되는 이유</h3></div>
+      <div class="fix">
+        <span class="fh">⚠ 목표주가 4개가 전부 P/S — 그것도 피어 +20% 할증</span>
+        이익 기반 밸류가 하나도 없다. 로보티즈 <b>42.3배</b>, 에스비비테크 <b>15.1배</b>는
+        "매출성장률이 유지된다"는 단 하나의 가정 위에 서 있다. 성장률이 한 분기만 꺾이면 배수 자체가 무너지는 구조.
+        커버리지 개시 리포트는 구조적으로 전부 매수라는 점도 감안할 것.
+      </div>
+      <div class="fix">
+        <span class="fh">⚠ 보고서가 스스로 인정한 문장</span>
+        "작년 국내 로봇 기업들의 주가 상승은 <b>실적 개선보다 밸류에이션 리레이팅이 주도</b>했다."
+        국내 로봇주 멀티플은 글로벌 피어 대비 훨씬 높은 수준. 즉 <b>기대는 이미 가격에 있다</b>.
+      </div>
+      <div class="bn">
+        <div class="lay sys"><div class="lh">🖐 기술 병목 — 아직 안 풀렸다 <span class="pill no">미해결</span></div>
+          <div class="lb">손의 정교함(덱스터러스 핸드) · 배터리 가동시간 · 장기 신뢰성. 보고서 본인이
+          <b>"소량 PoC가 대량·반복 발주로 전환되는 시점이 상용화의 2차 변곡점"</b>이라고 못박음. 아직 그 시점이 아니다.</div></div>
+        <div class="lay comp"><div class="lh">📈 대신 확인 가능한 것 <span class="pill yes">관측 가능</span></div>
+          <div class="lb">"개별 기업의 주가 향방은 기술 경쟁력이 <b>실제 휴머노이드향 수주와 매출 성장, 이익 개선</b>으로
+          연결되는지를 통해 결정된다" — 즉 이 섹터는 이제 <b>공시로 검증되는 국면</b>이다. 스토리는 끝났고 숫자 차례.</div></div>
+      </div>
+    </div>
+
+    <!-- 07 -->
+    <div class="sec">
+      <div class="sech"><span class="sn">07</span><h3>타임라인 — 2차 변곡점까지</h3></div>
+      <div class="tl">
+        <div class="ev done"><div class="when">2025</div><div class="what">초도 양산 원년. 글로벌 ~1.6~2.2만대, <b>중국이 90%+</b>. 유니트리 흑자전환</div></div>
+        <div class="ev done"><div class="when">2026.01</div><div class="what">CES에서 현대차·LG 휴머노이드 공개 → <b>국내 로봇 밸류체인 전반 리레이팅</b>(부품주가 가장 가파름)</div></div>
+        <div class="ev done"><div class="when">2026.06–07</div><div class="what">미국 규제가 부품까지 확대 — 유니트리 <b>1260H 등재</b>, FCC 외국산 첨단로봇 신규 인증 금지</div></div>
+        <div class="ev done"><div class="when">2026.08.19</div><div class="what">유니트리 과창판 상장, 첫날 <b>+460% · P/S 201배</b>. 비상장 밸류가 공개시장 가격 발견으로 전환</div></div>
+        <div class="ev future"><div class="when">2026 4Q</div><div class="what">로보티즈 <b>우즈벡 공장 완공</b>(Q시리즈 20만대 추가 → 총 50만대) · 에스피지 SDD 양산 · 테슬라 Gen 3 저율 생산</div></div>
+        <div class="ev future"><div class="when">2027</div><div class="what">유비테크 <b>2H27 영업흑전</b>(연간 BEP) · 로보티즈 OPM 18% 목표 · 27년 전방 물류·제조·자동차가 설치의 72% 전망</div></div>
+        <div class="ev future"><div class="when">2028</div><div class="what"><b>한국 양산 진입</b> · 아틀라스 메타플랜트 연 3만대 목표 · 에스비비테크 흑전 · 중국 시장 385억위안</div></div>
+        <div class="ev future"><div class="when">2030</div><div class="what">글로벌 출하 <b>50만대</b> 전망 (26년 5~6만대 대비 ~9배)</div></div>
+      </div>
+    </div>
+
+    <!-- 08 -->
+    <div class="sec">
+      <div class="sech"><span class="sn">08</span><h3>판정 · 트리거</h3></div>
+      <div class="rows">
+        <div class="r"><div class="lab">테제</div><div class="val">
+          휴머노이드는 <b>기존 로봇 시장을 잠식하는 게 아니라 자동화되지 않은 인간 노동 30%를 로봇 TAM으로 편입</b>시킨다.
+          하드웨어 주도권은 중국이 가져갔고, 한국에 남은 자리는 <b>비중국 부품 공급망</b>이다.
+          부품 수요는 완제품 매출에 선행하므로, 국내 완제품 승자를 맞히려 할 필요가 없다.</div></div>
+        <div class="r"><div class="lab">반대논리</div><div class="val">
+          ① "부품 선행 수요"는 <b>연구·테스트용 소량 발주</b>일 뿐 반복 발주가 아니다 — 매출로는 작다.
+          ② 중국 부품사는 이미 원가에서 이겼고, 한국의 'Low Cost·High Quality' 포지션은 아직 <b>가설</b>이다.
+          ③ LG 악시움·삼성 구미처럼 대기업이 <b>내재화</b>하면 국내 부품사는 고객이 아니라 경쟁자를 얻는다.
+          ④ 멀티플이 이미 P/S 40배대 — 좋은 뉴스가 나와도 주가가 안 오르는 구간일 수 있다.</div></div>
+        <div class="r verdict"><div class="lab">판정</div><div class="val">
+          <b>워치리스트 — 진입 보류.</b> 산업 방향은 맞다고 본다. 하지만 지금 사는 건
+          <b>"공부와 베팅은 별개"</b>를 어기는 것이다. 이 보고서가 주는 진짜 가치는 종목 추천이 아니라
+          <b>"무엇이 확인되면 스토리가 실적이 되는가"의 체크리스트</b>다. 아래 트리거 중
+          <b>①(수주 공시)과 ②(캐파 가동)가 실제 숫자로 확인되고, 동시에 가격 액션이 베이스를 만들 때</b> 진입을 검토한다.
+          섹터 전체를 사는 게 아니라 <b>트리거가 먼저 켜지는 1종목</b>에 집중한다.</div></div>
+        <div class="r"><div class="lab">진입조건</div><div class="val">
+          (1) 국내 부품 3사 중 <b>휴머노이드향 신규 공급계약 공시가 연매출의 30%를 넘는</b> 곳이 나올 것 ·
+          (2) 로보티즈 우즈벡 4Q 가동 후 <b>Q시리즈 초기 수율·출하가 확인</b>될 것 ·
+          (3) 진입 시점에 <b>1M/3M 상대강도 상위 + 베이스 돌파 자리</b>일 것(오닐 규칙) ·
+          (4) 손절은 구조 손절(직전 베이스 저점), 사이즈로 변동성 흡수.</div></div>
+        <div class="r"><div class="lab">KPI</div><div class="val">
+          ① 로보티즈·에스피지·에스비비테크 <b>감속기/액추에이터 신규 공급계약 공시</b>(분기 누적 금액) ·
+          ② 로보티즈 우즈벡 가동률·Q시리즈 출하 ·
+          ③ 에스피지 레인보우향 매출 26년 100억 달성 여부 ·
+          ④ 글로벌 <b>산업·상업용 출하 비중</b>(1H26 70% → 2H26) ·
+          ⑤ 테슬라 Gen 3 / 아틀라스 일정 슬립 여부 ·
+          ⑥ <b>유니트리 주가 = 테마 온도계</b>(P/S 201배 조정 시 국내 부품주 멀티플 동반 압축) ·
+          ⑦ 국내 로봇 부품주 1M/3M 상대강도.</div></div>
+        <div class="r"><div class="lab">연결</div><div class="val">
+          로봇 투자지도(2026.05)의 Tier S에 있던 <b>에스비비테크</b>가 이 보고서에서 커버리지로 등장 —
+          하모닉 국산화 1호 + 현대차 모베드 공급망 편입이라는 논리는 그때와 동일하다.
+          <b>고베타 트레이드 바구니</b> 관점에서는 로봇 부품주가 전형적인 "베타 크면서 베이스 돌파" 후보군에 해당하나,
+          코어 편입은 위 진입조건 충족 전까지 보류.</div></div>
+      </div>
+    </div>
+
+    <div class="disc">
+      출처: <span class="src">미래에셋증권 「글로벌 로보틱스 — Supernova: 휴머노이드 붐은 온다」(2026.08.21, 박선영, 120p)</span>.
+      주가·밸류에이션은 <b>2026.08.19 종가 기준</b>이며 노트 작성 시점 이후 변동됨. 출하량은 기관별 추정 편차 존재
+      (25년 글로벌: CMRA/HRAA 2.2만 · IDC 1.8만 · 카운터포인트 1.6만대). 투자권유 아님.
+    </div>
+  </article>
+
+</main>
+
+<footer>
+  <div class="wrap"><span class="star">✦</span> POLARIS — Research Notes</div>
+</footer>
+
+</body>
+</html>
