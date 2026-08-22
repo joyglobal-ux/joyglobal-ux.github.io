@@ -148,6 +148,47 @@
   .chn .cbox.src{border-color:var(--gold);background:rgba(255,214,107,.07);color:var(--gold)}
   .chn .arw{color:var(--faint);font-size:13px}
 
+  /* ── 리포트 원문 도표 캡처 ── */
+  .fig{margin:16px 0 6px;min-width:0}
+  .fig .fw{background:#fff;border:1px solid var(--line);border-radius:11px;padding:9px;overflow-x:auto}
+  .fig img{display:block;width:100%;min-width:560px;height:auto;border-radius:3px}
+  .fig.wide img{min-width:820px}
+  .fig figcaption{font-size:11px;color:var(--faint);margin-top:8px;line-height:1.6}
+  .fig figcaption b{color:var(--muted);font-weight:700}
+  .figs2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0 6px}
+  .figs2 .fig{margin:0;min-width:0}
+  .figs2 .fig img{min-width:420px}
+
+  /* ── 노트 목차 · 태그 필터 (JS 자동 생성) ── */
+  .toc{background:linear-gradient(180deg,var(--panel),#13161f);border:1px solid var(--line);
+    border-radius:15px;padding:18px 20px;margin-bottom:20px}
+  .toc .th{display:flex;align-items:baseline;gap:9px;margin-bottom:12px}
+  .toc .th b{font-size:13px;font-weight:800;letter-spacing:-.2px}
+  .toc .th span{font-size:11px;color:var(--faint)}
+  .tagbar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:13px}
+  .tagbar button{font-size:11px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+    border-radius:999px;padding:3px 11px;cursor:pointer;font-family:inherit;transition:all .15s}
+  .tagbar button:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .tagbar button.on{color:var(--accent);border-color:var(--accent-dim);background:rgba(139,155,255,0.1)}
+  .toclist{display:flex;flex-direction:column;gap:2px}
+  .toclist a{display:grid;grid-template-columns:78px 1fr;gap:11px;align-items:baseline;
+    padding:7px 9px;border-radius:8px;transition:background .15s}
+  .toclist a:hover{background:var(--panel2)}
+  .toclist a .d{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .toclist a .t{font-size:12.5px;color:var(--muted)}
+  .toclist a:hover .t{color:var(--txt)}
+  .toc .empty{font-size:12px;color:var(--faint);padding:6px 2px}
+
+  /* ── 노트 접기 ── */
+  .note.collapsed .nbody{display:none}
+  .fold{margin-left:auto;font-size:11px;color:var(--muted);background:var(--panel2);
+    border:1px solid var(--line);border-radius:999px;padding:2px 11px;cursor:pointer;font-family:inherit}
+  .fold:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .note{scroll-margin-top:18px}
+  .anch{font-size:11px;color:var(--faint);border:1px solid var(--line);border-radius:6px;
+    padding:2px 7px;cursor:pointer;font-family:inherit;background:transparent}
+  .anch:hover{border-color:var(--accent-dim);color:var(--accent)}
+
   .disc{font-size:11px;color:var(--faint);margin-top:18px;line-height:1.65;border-top:1px solid var(--line);padding-top:13px}
   .disc .src{color:var(--muted)}
 
@@ -159,6 +200,8 @@
     .htitle h1{font-size:21px}
     .quad{grid-template-columns:1fr 1fr}
     .lanes{grid-template-columns:1fr}
+    .figs2{grid-template-columns:minmax(0,1fr)}
+    .toclist a{grid-template-columns:1fr;gap:1px}
     .r{grid-template-columns:60px 1fr;gap:10px}
     .tbl{font-size:11.5px}
     .tbl th,.tbl td{padding:7px 8px}
@@ -187,7 +230,7 @@
 
   <!-- 새 노트는 이 줄 바로 아래에 추가 (최신순) -->
 
-  <article class="note">
+  <article class="note" data-id="20260822-humanoid-map">
     <div class="nmeta">
       <span class="date">2026.08.22</span>
       <span class="tk">휴머노이드 · Physical AI</span>
@@ -203,6 +246,8 @@
       이 섹터는 지금 <b>"멀티플 리레이팅 → 실적 검증"</b>의 문턱에 서 있다. 즉 지금 필요한 건 스토리가 아니라
       <b>수주 공시라는 숫자</b>다.
     </p>
+
+    <div class="nbody">
 
     <!-- 01 -->
     <div class="sec">
@@ -227,6 +272,14 @@
         보행 성능도 지표가 있다 — 베이징 이좡 하프마라톤 완주율 <b>25년 30% → 26년 46%</b>,
         참가팀의 40%가 원격조종이 아닌 <b>자율주행</b>으로 출전(25년엔 전부 원격).
       </p>
+      <figure class="fig">
+        <div class="fw"><img src="assets/robotics/20260822-china-shipment-forecast.png" alt="<b>그림 2.</b> 중국 휴머노이드 출하량 전망 25~30년 — 25년 1.82만대 → 30년 <b>25.6만대(CAGR 69.7%)</b>. 자료: 카운터포인트 리서치·미래에셋증권" loading="lazy"></div>
+        <figcaption><b>그림 2.</b> 중국 휴머노이드 출하량 전망 25~30년 — 25년 1.82만대 → 30년 <b>25.6만대(CAGR 69.7%)</b>. 자료: 카운터포인트 리서치·미래에셋증권</figcaption>
+      </figure>
+      <figure class="fig">
+        <div class="fw"><img src="assets/robotics/20260822-asp-bom-decline.png" alt="<b>그림 36·37.</b> 글로벌 휴머노이드 ASP 하락(좌: 미국 vs 중국 vs 글로벌 평균) / 중국 ASP·BoM 동반 하락(우). <b>중국선이 처음부터 아래에 깔려 있고 격차가 유지</b>되는 게 핵심. 자료: 산업 자료·미래에셋증권" loading="lazy"></div>
+        <figcaption><b>그림 36·37.</b> 글로벌 휴머노이드 ASP 하락(좌: 미국 vs 중국 vs 글로벌 평균) / 중국 ASP·BoM 동반 하락(우). <b>중국선이 처음부터 아래에 깔려 있고 격차가 유지</b>되는 게 핵심. 자료: 산업 자료·미래에셋증권</figcaption>
+      </figure>
     </div>
 
     <!-- 02 -->
@@ -259,6 +312,16 @@
         중국 제조 현장 기준 업무의 <b>70%는 이미 산업용 로봇이 처리</b>, 나머지 30%가 사람 몫 —
         휴머노이드는 이 30% 중 고강도·위험 작업 약 20%를 노린다. 즉 <b>기존 로봇 시장 잠식이 아니라 TAM 확장</b>이다.
       </div>
+      <div class="figs2">
+      <figure class="fig">
+        <div class="fw"><img src="assets/robotics/20260822-models-by-region.png" alt="<b>그림 63.</b> 지역별 휴머노이드 공개 모델 수 — 24년 중국 35종 vs 미국·캐나다 8종. 자료: 언론 종합·미래에셋증권" loading="lazy"></div>
+        <figcaption><b>그림 63.</b> 지역별 휴머노이드 공개 모델 수 — 24년 중국 35종 vs 미국·캐나다 8종. 자료: 언론 종합·미래에셋증권</figcaption>
+      </figure>
+      <figure class="fig">
+        <div class="fw"><img src="assets/robotics/20260822-auto-robot-parts-overlap.png" alt="<b>그림 65.</b> 자동차 부품 ∩ 로봇 부품 — 모터·감속기·리드스크류·IMU·라이다가 겹친다. <b>중국 EV 생태계가 그대로 이식되는 이유.</b> 자료: 카운터포인트 리서치·미래에셋증권" loading="lazy"></div>
+        <figcaption><b>그림 65.</b> 자동차 부품 ∩ 로봇 부품 — 모터·감속기·리드스크류·IMU·라이다가 겹친다. <b>중국 EV 생태계가 그대로 이식되는 이유.</b> 자료: 카운터포인트 리서치·미래에셋증권</figcaption>
+      </figure>
+      </div>
     </div>
 
     <!-- 03 -->
@@ -268,6 +331,10 @@
         1H26 글로벌 출하 1.91만대 중 <b>애지봇 44% + 유니트리 31% = 2사가 75%</b>.
         중국 기업 합산 97%, 수요조차 중국이 85% 이상. 즉 현재 시장은 <b>중국 내수 순환</b>에 가깝다.
       </p>
+      <figure class="fig">
+        <div class="fw"><img src="assets/robotics/20260822-share-2025-pies.png" alt="<b>그림 3·4.</b> 25년 글로벌(좌, 약 2.2만대) / 중국(우, 약 2만대) 휴머노이드 기업 출하 점유율. 테슬라·피규어AI·어질리티를 다 합쳐도 <b>2%대</b>다. 자료: CMRA·HRAA·미래에셋증권" loading="lazy"></div>
+        <figcaption><b>그림 3·4.</b> 25년 글로벌(좌, 약 2.2만대) / 중국(우, 약 2만대) 휴머노이드 기업 출하 점유율. 테슬라·피규어AI·어질리티를 다 합쳐도 <b>2%대</b>다. 자료: CMRA·HRAA·미래에셋증권</figcaption>
+      </figure>
       <div class="scrollx">
       <table class="tbl">
         <thead><tr><th>중국 OEM</th><th class="num">25년 출하</th><th>25년 실적</th><th>다음 단계</th></tr></thead>
@@ -284,6 +351,14 @@
         </tbody>
       </table>
       </div>
+      <figure class="fig">
+        <div class="fw"><img src="assets/robotics/20260822-china3-hockeystick.png" alt="<b>그림 41~43.</b> 유비테크 / 유니트리 / 애지봇 — 출하량(선)과 매출(막대)이 <b>25년에 동시에 꺾여 올라간다</b>. 세 회사가 같은 해 같은 모양이면 개별 이벤트가 아니라 산업 사이클이다. 자료: 각 사·미래에셋증권" loading="lazy"></div>
+        <figcaption><b>그림 41~43.</b> 유비테크 / 유니트리 / 애지봇 — 출하량(선)과 매출(막대)이 <b>25년에 동시에 꺾여 올라간다</b>. 세 회사가 같은 해 같은 모양이면 개별 이벤트가 아니라 산업 사이클이다. 자료: 각 사·미래에셋증권</figcaption>
+      </figure>
+      <figure class="fig wide">
+        <div class="fw"><img src="assets/robotics/20260822-oem-capacity-table.png" alt="<b>표 7.</b> 글로벌 주요 휴머노이드 OEM 출하 현황 및 26년 양산 계획 — <b>이 노트에서 가장 자주 다시 볼 표.</b> 미국 칸에는 계획(CAPA)이, 중국 칸에는 실적(출하)이 적혀 있다는 점에 주목. 자료: 각 사·미래에셋증권" loading="lazy"></div>
+        <figcaption><b>표 7.</b> 글로벌 주요 휴머노이드 OEM 출하 현황 및 26년 양산 계획 — <b>이 노트에서 가장 자주 다시 볼 표.</b> 미국 칸에는 계획(CAPA)이, 중국 칸에는 실적(출하)이 적혀 있다는 점에 주목. 자료: 각 사·미래에셋증권</figcaption>
+      </figure>
       <p class="p">
         고객도 시연용이 아니다 — 유비테크는 BYD·Zeekr·아우디(자동차), Foxconn(전자), SF Express(물류)에 이어
         26년 <b>Airbus</b>까지 PoC 도입. 25년 휴머노이드 주문액 14억위안 돌파.
@@ -311,6 +386,14 @@
         <div class="arw">→</div>
         <div class="cbox">양산 진입 시<small>부품사 매출 레버리지</small></div>
       </div>
+      <figure class="fig">
+        <div class="fw"><img src="assets/robotics/20260822-actuator-cost-count.png" alt="<b>그림 170·171.</b> 로봇 원가 구성(좌) — 센서 37% + 모터 20% + 스크류 20% + 감속기 13%로 <b>구동·감지계가 90%</b>. 폼팩터별 요구 액추에이터 수(우) — 산업용 4~7개 → 휴머노이드 <b>25~50개</b>. 이 두 장이 "부품에 붙어라"의 전부다. 자료: 미래에셋증권" loading="lazy"></div>
+        <figcaption><b>그림 170·171.</b> 로봇 원가 구성(좌) — 센서 37% + 모터 20% + 스크류 20% + 감속기 13%로 <b>구동·감지계가 90%</b>. 폼팩터별 요구 액추에이터 수(우) — 산업용 4~7개 → 휴머노이드 <b>25~50개</b>. 이 두 장이 "부품에 붙어라"의 전부다. 자료: 미래에셋증권</figcaption>
+      </figure>
+      <figure class="fig">
+        <div class="fw"><img src="assets/robotics/20260822-china-vs-nonchina-parts.png" alt="<b>그림 38.</b> 로봇 부품별 중국 vs 비중국 공급망 가격 — 액추에이터 <b>22 vs 58천달러</b>, 덱스터러스 핸드 <b>15 vs 46천달러</b>. 한국 부품사가 마주한 진짜 벽이자, 미국이 규제로만 뚫으려는 이유. 자료: 산업 자료·미래에셋증권" loading="lazy"></div>
+        <figcaption><b>그림 38.</b> 로봇 부품별 중국 vs 비중국 공급망 가격 — 액추에이터 <b>22 vs 58천달러</b>, 덱스터러스 핸드 <b>15 vs 46천달러</b>. 한국 부품사가 마주한 진짜 벽이자, 미국이 규제로만 뚫으려는 이유. 자료: 산업 자료·미래에셋증권</figcaption>
+      </figure>
       <p class="p">
         여기에 두 개의 외부 바람이 겹친다. <b>① 미국의 대중 규제가 완제품 → 핵심부품으로 확대</b>
         (26.6 국방부 1260H에 유니트리 추가, 26.7 FCC가 외국산 첨단로봇 신규 장비 인증 원칙 금지)되면서
@@ -365,6 +448,10 @@
         중국 부품 공급망에 대해서는 개별 종목이 아니라 <b>TIGER 차이나 휴머노이드로봇 ETF(0053L0)</b> 분산을 권고 —
         "특정 OEM의 승패가 아니라 중국 전체 생산량 확대에 투자"하라는 논리. 다만 이건 집중 스타일과는 맞지 않는 처방이다.
       </p>
+      <figure class="fig wide">
+        <div class="fw"><img src="assets/robotics/20260822-peer-valuation-table.png" alt="<b>표 3.</b> 글로벌 휴머노이드 밸류체인 Peer Valuation (8/19 종가) — <b>27F P/S 평균 20.0배</b>. 로보티즈 30.9 / 에스비비테크 16.8 / 레인보우로보틱스 158.4배. <b>P/E 칸이 대부분 비어 있다는 사실 자체</b>가 이 섹터의 상태다. 자료: Bloomberg·에프앤가이드·미래에셋증권" loading="lazy"></div>
+        <figcaption><b>표 3.</b> 글로벌 휴머노이드 밸류체인 Peer Valuation (8/19 종가) — <b>27F P/S 평균 20.0배</b>. 로보티즈 30.9 / 에스비비테크 16.8 / 레인보우로보틱스 158.4배. <b>P/E 칸이 대부분 비어 있다는 사실 자체</b>가 이 섹터의 상태다. 자료: Bloomberg·에프앤가이드·미래에셋증권</figcaption>
+      </figure>
     </div>
 
     <!-- 06 -->
@@ -389,6 +476,16 @@
           <div class="lb">"개별 기업의 주가 향방은 기술 경쟁력이 <b>실제 휴머노이드향 수주와 매출 성장, 이익 개선</b>으로
           연결되는지를 통해 결정된다" — 즉 이 섹터는 이제 <b>공시로 검증되는 국면</b>이다. 스토리는 끝났고 숫자 차례.</div></div>
       </div>
+      <div class="figs2">
+      <figure class="fig">
+        <div class="fw"><img src="assets/robotics/20260822-kr-robot-relative.png" alt="<b>그림 97.</b> 국내 주요 로봇 기업 상대주가 (25.01.01=100). 자료: 에프앤가이드·미래에셋증권" loading="lazy"></div>
+        <figcaption><b>그림 97.</b> 국내 주요 로봇 기업 상대주가 (25.01.01=100). 자료: 에프앤가이드·미래에셋증권</figcaption>
+      </figure>
+      <figure class="fig">
+        <div class="fw"><img src="assets/robotics/20260822-kr-subsector-index.png" alt="<b>그림 98.</b> 국내 로봇 <b>세부섹터별</b> 시총 상대지수 — <b>로봇 부품</b>이 26.1 고점까지 전 섹터를 압도했다. 즉 "부품에 붙어라"는 이미 시장이 먼저 반영했다." loading="lazy"></div>
+        <figcaption><b>그림 98.</b> 국내 로봇 <b>세부섹터별</b> 시총 상대지수 — <b>로봇 부품</b>이 26.1 고점까지 전 섹터를 압도했다. 즉 "부품에 붙어라"는 이미 시장이 먼저 반영했다.</figcaption>
+      </figure>
+      </div>
     </div>
 
     <!-- 07 -->
@@ -409,6 +506,10 @@
     <!-- 08 -->
     <div class="sec">
       <div class="sech"><span class="sn">08</span><h3>판정 · 트리거</h3></div>
+      <figure class="fig wide">
+        <div class="fw"><img src="assets/robotics/20260822-phase-strategy-table.png" alt="<b>표 2.</b> 휴머노이드 산업 단계별 투자 전략 — <b>지금 위치를 판정하는 자(尺)</b>. 중국 선도 OEM은 3~4단계(파일럿→본격 양산), 한국은 1~2단계(연구·프로토타입→PoC). 1~2단계의 처방은 "핵심 부품 / 검증된 부품주"이고, "선도 OEM 비중 확대"는 4단계부터다. 자료: 미래에셋증권" loading="lazy"></div>
+        <figcaption><b>표 2.</b> 휴머노이드 산업 단계별 투자 전략 — <b>지금 위치를 판정하는 자(尺)</b>. 중국 선도 OEM은 3~4단계(파일럿→본격 양산), 한국은 1~2단계(연구·프로토타입→PoC). 1~2단계의 처방은 "핵심 부품 / 검증된 부품주"이고, "선도 OEM 비중 확대"는 4단계부터다. 자료: 미래에셋증권</figcaption>
+      </figure>
       <div class="rows">
         <div class="r"><div class="lab">테제</div><div class="val">
           휴머노이드는 <b>기존 로봇 시장을 잠식하는 게 아니라 자동화되지 않은 인간 노동 30%를 로봇 TAM으로 편입</b>시킨다.
@@ -450,8 +551,138 @@
       출처: <span class="src">미래에셋증권 「글로벌 로보틱스 — Supernova: 휴머노이드 붐은 온다」(2026.08.21, 박선영, 120p)</span>.
       주가·밸류에이션은 <b>2026.08.19 종가 기준</b>이며 노트 작성 시점 이후 변동됨. 출하량은 기관별 추정 편차 존재
       (25년 글로벌: CMRA/HRAA 2.2만 · IDC 1.8만 · 카운터포인트 1.6만대). 투자권유 아님.
+      원문 도표는 보고서에서 직접 캡처해 인용(교육·기록 목적).
+    </div>
     </div>
   </article>
+
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   리서치 노트 누적 레이어 — 목차·태그 필터·접기·딥링크를 DOM에서 자동 생성.
+   새 노트는 <article class="note" data-id="YYYYMMDD-slug"> 하나만 붙이면
+   목차·태그·앵커가 전부 알아서 갱신된다. 수동 동기화 지점 없음.
+   ───────────────────────────────────────────────────────────── */
+(function () {
+  var main  = document.querySelector('main');
+  var notes = [].slice.call(document.querySelectorAll('article.note'));
+  if (!notes.length) return;
+
+  var slug = function (t) {
+    return t.trim().toLowerCase().replace(/[^\w가-힣]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+  };
+
+  var meta = notes.map(function (n, i) {
+    var date  = (n.querySelector('.nmeta .date') || {}).textContent || '';
+    var title = (n.querySelector('.ntitle')      || {}).textContent || '노트 ' + (i + 1);
+    var tags  = [].slice.call(n.querySelectorAll('.nmeta .tag, .nmeta .tk'))
+                  .map(function (e) { return e.textContent.trim(); });
+    n.id = n.dataset.id || (date.replace(/\./g, '') + '-' + slug(title));
+
+    /* 본문 래퍼가 없으면 자동 생성 — 기존 노트도 손대지 않고 접기 지원 */
+    if (!n.querySelector('.nbody')) {
+      var wrap = document.createElement('div');
+      wrap.className = 'nbody';
+      var start = n.querySelector('.nlede') || n.querySelector('.ntitle');
+      if (start) {
+        var sib = start.nextSibling, nx;
+        while (sib) { nx = sib.nextSibling; wrap.appendChild(sib); sib = nx; }
+        n.appendChild(wrap);
+      }
+    }
+
+    /* 접기 토글 — 최신 1개만 펼침 */
+    if (n.querySelector('.nbody')) {
+      var btn = document.createElement('button');
+      btn.className = 'fold';
+      btn.type = 'button';
+      var setLabel = function () { btn.textContent = n.classList.contains('collapsed') ? '펼치기 ▾' : '접기 ▴'; };
+      btn.onclick = function () { n.classList.toggle('collapsed'); setLabel(); };
+      if (i > 0) n.classList.add('collapsed');
+      setLabel();
+
+      /* 딥링크 버튼 */
+      var lnk = document.createElement('button');
+      lnk.className = 'anch';
+      lnk.type = 'button';
+      lnk.textContent = '#';
+      lnk.title = '이 노트 링크 복사';
+      lnk.onclick = function () {
+        var url = location.origin + location.pathname + '#' + n.id;
+        history.replaceState(null, '', '#' + n.id);
+        if (navigator.clipboard) navigator.clipboard.writeText(url);
+        lnk.textContent = '복사됨';
+        setTimeout(function () { lnk.textContent = '#'; }, 1200);
+      };
+      var nm = n.querySelector('.nmeta');
+      nm.appendChild(lnk);
+      nm.appendChild(btn);
+    }
+    return { el: n, date: date, title: title, tags: tags };
+  });
+
+  /* ── 목차 + 태그 필터 ── */
+  var allTags = [];
+  meta.forEach(function (m) {
+    m.tags.forEach(function (t) { if (allTags.indexOf(t) < 0) allTags.push(t); });
+  });
+
+  var toc = document.createElement('div');
+  toc.className = 'toc';
+  toc.innerHTML =
+    '<div class="th"><b>이 산업 노트</b><span>' + meta.length + '건 · 최신순</span></div>' +
+    '<div class="tagbar"></div><div class="toclist"></div>';
+  main.insertBefore(toc, main.firstElementChild);
+
+  var bar  = toc.querySelector('.tagbar');
+  var list = toc.querySelector('.toclist');
+
+  var render = function (active) {
+    list.innerHTML = '';
+    var shown = 0;
+    meta.forEach(function (m) {
+      var hit = !active || m.tags.indexOf(active) >= 0;
+      m.el.style.display = hit ? '' : 'none';
+      if (!hit) return;
+      shown++;
+      var a = document.createElement('a');
+      a.href = '#' + m.el.id;
+      a.innerHTML = '<span class="d">' + m.date + '</span><span class="t">' + m.title + '</span>';
+      a.onclick = function () { m.el.classList.remove('collapsed'); var f = m.el.querySelector('.fold'); if (f) f.textContent = '접기 ▴'; };
+      list.appendChild(a);
+    });
+    if (!shown) list.innerHTML = '<div class="empty">해당 태그의 노트가 없습니다.</div>';
+  };
+
+  var mkBtn = function (label, tag) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = label;
+    b.onclick = function () {
+      var was = b.classList.contains('on');
+      [].forEach.call(bar.children, function (c) { c.classList.remove('on'); });
+      if (!was) b.classList.add('on');
+      render(was ? null : tag);
+    };
+    return b;
+  };
+  allTags.forEach(function (t) { bar.appendChild(mkBtn(t, t)); });
+  render(null);
+
+  /* ── 해시로 들어오면 해당 노트 펼치고 이동 ── */
+  var openHash = function () {
+    var id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    var n = document.getElementById(id);
+    if (!n) return;
+    n.classList.remove('collapsed');
+    var f = n.querySelector('.fold'); if (f) f.textContent = '접기 ▴';
+    n.scrollIntoView();
+  };
+  openHash();
+  window.addEventListener('hashchange', openHash);
+})();
+</script>
 
 </main>
 

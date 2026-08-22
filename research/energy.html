@@ -58,6 +58,53 @@
   .r.verdict .lab{color:var(--gold)}
   .disc{font-size:11px;color:var(--faint);margin-top:16px;line-height:1.6;border-top:1px solid var(--line);padding-top:13px}
 
+  /* ── 리포트 원문 도표 캡처 ── */
+  .fig{margin:16px 0 6px;min-width:0}
+  .fig .fw{background:#fff;border:1px solid var(--line);border-radius:11px;padding:9px;overflow-x:auto}
+  .fig img{display:block;width:100%;min-width:560px;height:auto;border-radius:3px}
+  .fig.wide img{min-width:820px}
+  .fig figcaption{font-size:11px;color:var(--faint);margin-top:8px;line-height:1.6}
+  .fig figcaption b{color:var(--muted);font-weight:700}
+  .figs2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0 6px}
+  .figs2 .fig{margin:0;min-width:0}
+  .figs2 .fig img{min-width:420px}
+
+  /* ── 노트 목차 · 태그 필터 (JS 자동 생성) ── */
+  .toc{background:linear-gradient(180deg,var(--panel),#13161f);border:1px solid var(--line);
+    border-radius:15px;padding:18px 20px;margin-bottom:20px}
+  .toc .th{display:flex;align-items:baseline;gap:9px;margin-bottom:12px}
+  .toc .th b{font-size:13px;font-weight:800;letter-spacing:-.2px}
+  .toc .th span{font-size:11px;color:var(--faint)}
+  .tagbar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:13px}
+  .tagbar button{font-size:11px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+    border-radius:999px;padding:3px 11px;cursor:pointer;font-family:inherit;transition:all .15s}
+  .tagbar button:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .tagbar button.on{color:var(--accent);border-color:var(--accent-dim);background:rgba(139,155,255,0.1)}
+  .toclist{display:flex;flex-direction:column;gap:2px}
+  .toclist a{display:grid;grid-template-columns:78px 1fr;gap:11px;align-items:baseline;
+    padding:7px 9px;border-radius:8px;transition:background .15s}
+  .toclist a:hover{background:var(--panel2)}
+  .toclist a .d{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .toclist a .t{font-size:12.5px;color:var(--muted)}
+  .toclist a:hover .t{color:var(--txt)}
+  .toc .empty{font-size:12px;color:var(--faint);padding:6px 2px}
+
+  /* ── 노트 접기 ── */
+  .note.collapsed .nbody{display:none}
+  .fold{margin-left:auto;font-size:11px;color:var(--muted);background:var(--panel2);
+    border:1px solid var(--line);border-radius:999px;padding:2px 11px;cursor:pointer;font-family:inherit}
+  .fold:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .note{scroll-margin-top:18px}
+  .anch{font-size:11px;color:var(--faint);border:1px solid var(--line);border-radius:6px;
+    padding:2px 7px;cursor:pointer;font-family:inherit;background:transparent}
+  .anch:hover{border-color:var(--accent-dim);color:var(--accent)}
+
+
+  @media(max-width:560px){
+    .figs2{grid-template-columns:minmax(0,1fr)}
+    .toclist a{grid-template-columns:1fr;gap:1px}
+  }
+
   footer{border-top:1px solid var(--line);margin-top:18px;padding:24px 0 38px;
     font-size:11.5px;color:var(--faint);text-align:center}
   footer .star{color:var(--accent)}
@@ -113,6 +160,133 @@
   </article>
 
 </main>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   리서치 노트 누적 레이어 — 목차·태그 필터·접기·딥링크를 DOM에서 자동 생성.
+   새 노트는 <article class="note" data-id="YYYYMMDD-slug"> 하나만 붙이면
+   목차·태그·앵커가 전부 알아서 갱신된다. 수동 동기화 지점 없음.
+   ───────────────────────────────────────────────────────────── */
+(function () {
+  var main  = document.querySelector('main');
+  var notes = [].slice.call(document.querySelectorAll('article.note'));
+  if (!notes.length) return;
+
+  var slug = function (t) {
+    return t.trim().toLowerCase().replace(/[^\w가-힣]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+  };
+
+  var meta = notes.map(function (n, i) {
+    var date  = (n.querySelector('.nmeta .date') || {}).textContent || '';
+    var title = (n.querySelector('.ntitle')      || {}).textContent || '노트 ' + (i + 1);
+    var tags  = [].slice.call(n.querySelectorAll('.nmeta .tag, .nmeta .tk'))
+                  .map(function (e) { return e.textContent.trim(); });
+    n.id = n.dataset.id || (date.replace(/\./g, '') + '-' + slug(title));
+
+    /* 본문 래퍼가 없으면 자동 생성 — 기존 노트도 손대지 않고 접기 지원 */
+    if (!n.querySelector('.nbody')) {
+      var wrap = document.createElement('div');
+      wrap.className = 'nbody';
+      var start = n.querySelector('.nlede') || n.querySelector('.ntitle');
+      if (start) {
+        var sib = start.nextSibling, nx;
+        while (sib) { nx = sib.nextSibling; wrap.appendChild(sib); sib = nx; }
+        n.appendChild(wrap);
+      }
+    }
+
+    /* 접기 토글 — 최신 1개만 펼침 */
+    if (n.querySelector('.nbody')) {
+      var btn = document.createElement('button');
+      btn.className = 'fold';
+      btn.type = 'button';
+      var setLabel = function () { btn.textContent = n.classList.contains('collapsed') ? '펼치기 ▾' : '접기 ▴'; };
+      btn.onclick = function () { n.classList.toggle('collapsed'); setLabel(); };
+      if (i > 0) n.classList.add('collapsed');
+      setLabel();
+
+      /* 딥링크 버튼 */
+      var lnk = document.createElement('button');
+      lnk.className = 'anch';
+      lnk.type = 'button';
+      lnk.textContent = '#';
+      lnk.title = '이 노트 링크 복사';
+      lnk.onclick = function () {
+        var url = location.origin + location.pathname + '#' + n.id;
+        history.replaceState(null, '', '#' + n.id);
+        if (navigator.clipboard) navigator.clipboard.writeText(url);
+        lnk.textContent = '복사됨';
+        setTimeout(function () { lnk.textContent = '#'; }, 1200);
+      };
+      var nm = n.querySelector('.nmeta');
+      nm.appendChild(lnk);
+      nm.appendChild(btn);
+    }
+    return { el: n, date: date, title: title, tags: tags };
+  });
+
+  /* ── 목차 + 태그 필터 ── */
+  var allTags = [];
+  meta.forEach(function (m) {
+    m.tags.forEach(function (t) { if (allTags.indexOf(t) < 0) allTags.push(t); });
+  });
+
+  var toc = document.createElement('div');
+  toc.className = 'toc';
+  toc.innerHTML =
+    '<div class="th"><b>이 산업 노트</b><span>' + meta.length + '건 · 최신순</span></div>' +
+    '<div class="tagbar"></div><div class="toclist"></div>';
+  main.insertBefore(toc, main.firstElementChild);
+
+  var bar  = toc.querySelector('.tagbar');
+  var list = toc.querySelector('.toclist');
+
+  var render = function (active) {
+    list.innerHTML = '';
+    var shown = 0;
+    meta.forEach(function (m) {
+      var hit = !active || m.tags.indexOf(active) >= 0;
+      m.el.style.display = hit ? '' : 'none';
+      if (!hit) return;
+      shown++;
+      var a = document.createElement('a');
+      a.href = '#' + m.el.id;
+      a.innerHTML = '<span class="d">' + m.date + '</span><span class="t">' + m.title + '</span>';
+      a.onclick = function () { m.el.classList.remove('collapsed'); var f = m.el.querySelector('.fold'); if (f) f.textContent = '접기 ▴'; };
+      list.appendChild(a);
+    });
+    if (!shown) list.innerHTML = '<div class="empty">해당 태그의 노트가 없습니다.</div>';
+  };
+
+  var mkBtn = function (label, tag) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = label;
+    b.onclick = function () {
+      var was = b.classList.contains('on');
+      [].forEach.call(bar.children, function (c) { c.classList.remove('on'); });
+      if (!was) b.classList.add('on');
+      render(was ? null : tag);
+    };
+    return b;
+  };
+  allTags.forEach(function (t) { bar.appendChild(mkBtn(t, t)); });
+  render(null);
+
+  /* ── 해시로 들어오면 해당 노트 펼치고 이동 ── */
+  var openHash = function () {
+    var id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    var n = document.getElementById(id);
+    if (!n) return;
+    n.classList.remove('collapsed');
+    var f = n.querySelector('.fold'); if (f) f.textContent = '접기 ▴';
+    n.scrollIntoView();
+  };
+  openHash();
+  window.addEventListener('hashchange', openHash);
+})();
+</script>
 
 <footer>
   <div class="wrap"><span class="star">✦</span> POLARIS — Research Notes</div>
