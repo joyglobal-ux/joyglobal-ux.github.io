@@ -51,6 +51,50 @@
   /* ===== SECTION ===== */
   main{padding:42px 0 10px}
   section{margin-bottom:48px}
+  /* ── 도구 카드 실시간 상태 (JS 자동 주입) ── */
+  .st8{display:flex;align-items:flex-start;gap:9px;margin-top:13px;padding:10px 12px;
+    border:1px solid var(--line);border-radius:11px;background:var(--panel2);min-height:46px}
+  .st8 .dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex:0 0 8px;background:var(--faint)}
+  .st8.go .dot{background:var(--go)}
+  .st8.warn .dot{background:var(--gold)}
+  .st8.stop .dot{background:var(--stop)}
+  .st8.stale{opacity:.5}
+  .st8 .txt{min-width:0}
+  .st8 .rg{font-size:12.5px;font-weight:800;color:var(--txt);line-height:1.35}
+  .st8.go .rg{color:var(--go)}
+  .st8.warn .rg{color:var(--gold)}
+  .st8.stop .rg{color:var(--stop)}
+  .st8.stale .rg{color:var(--faint)}
+  .st8 .sh{display:block;font-size:11px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .foot .live.old{color:var(--stop);font-weight:700}
+  .foot .live.old .pulse{background:var(--stop);animation:none}
+
+  /* ── 지켜보는 것 보드 (노트에서 자동 수집) ── */
+  .watch{display:flex;flex-direction:column;gap:9px}
+  .wload{font-size:12.5px;color:var(--faint);padding:12px 2px}
+  .witem{border:1px solid var(--line);border-radius:13px;background:var(--panel);overflow:hidden}
+  .whead{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;
+    padding:13px 15px;cursor:pointer;transition:background .15s}
+  .whead:hover{background:var(--panel2)}
+  .whead .ci{font-size:17px}
+  .whead .wt{min-width:0}
+  .whead .wt b{display:block;font-size:13px;font-weight:800;letter-spacing:-.2px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .whead .wt span{display:block;font-size:11px;color:var(--faint);margin-top:2px}
+  .whead .vb{font-size:10.5px;font-weight:800;border-radius:999px;padding:3px 10px;white-space:nowrap;
+    border:1px solid var(--line);color:var(--muted)}
+  .whead .vb.hold{color:var(--gold);border-color:rgba(255,214,107,.35);background:rgba(255,214,107,.1)}
+  .whead .vb.live{color:var(--go);border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.1)}
+  .whead .vb.study{color:var(--accent);border-color:var(--accent-dim);background:rgba(139,155,255,.1)}
+  .wbody{display:none;padding:2px 15px 15px;border-top:1px solid var(--line)}
+  .witem.open .wbody{display:block}
+  .wbody .wl{font-size:10.5px;font-weight:800;letter-spacing:.3px;margin:13px 0 5px;color:var(--gold)}
+  .wbody .wl.k{color:var(--accent)}
+  .wbody .wv{font-size:12.5px;color:var(--muted);line-height:1.65}
+  .wbody .wv b{color:var(--txt);font-weight:600}
+  .wbody .lnk{display:inline-block;margin-top:12px;font-size:11.5px;color:var(--accent)}
+  .wbody .lnk:hover{text-decoration:underline}
+
   .shead{display:flex;align-items:baseline;gap:11px;margin-bottom:18px}
   .shead h2{font-size:15px;font-weight:800;letter-spacing:-.2px}
   .shead .num{font-size:11px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;
@@ -162,7 +206,7 @@
       포트폴리오 운용, 상대강도 스크리닝, 그리고 산업 리서치를 한 곳에서.
     </p>
     <div class="creed"><span class="dot"></span>집중과 현금 · 수익은 길게, 손실은 짧게</div>
-    <div class="updated">최종 업데이트 · <b id="upd">2026.07.05</b></div>
+    <div class="updated">최종 업데이트 · <b id="upd">—</b></div>
   </div>
 </header>
 
@@ -256,6 +300,19 @@
   <section id="research">
     <div class="shead">
       <span class="num">02</span>
+      <h2>지켜보는 것</h2>
+      <span class="sub">노트의 판정·KPI 자동 수집</span>
+    </div>
+    <div class="rnote">
+      리서치 노트에 적어둔 <b>판정</b>과 <b>확인 지표</b>를 한자리에 모읍니다.
+      노트를 새로 쓰면 자동으로 늘어납니다 — 따로 옮겨 적을 필요 없습니다.
+    </div>
+    <div class="watch" id="watch"><div class="wload">노트에서 불러오는 중…</div></div>
+  </section>
+
+  <section class="sec">
+    <div class="shead">
+      <span class="num">03</span>
       <h2>리서치 노트</h2>
       <span class="sub">산업별 정리</span>
     </div>
@@ -303,6 +360,213 @@
   </section>
 
 </main>
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   Polaris 통합 레이어 — 랜딩이 "문 목록"이 아니라 "상태판"이 되도록.
+   ① 도구 카드에 각 도구의 현재 판정을 실시간 주입 (same-origin fetch)
+   ② 리서치 노트의 판정·KPI를 긁어 "지켜보는 것" 보드로 집계
+   수동 동기화 지점 없음 — 데이터가 갱신되면 여기도 갱신된다.
+   ═══════════════════════════════════════════════════════════════ */
+(function () {
+  var esc = function (t) {
+    return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  };
+  var days = function (iso) {
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return null;
+    return Math.floor((Date.now() - d.getTime()) / 864e5);
+  };
+  var mmdd = function (iso) {
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    return ('0' + (d.getMonth() + 1)).slice(-2) + '.' + ('0' + d.getDate()).slice(-2);
+  };
+  /* headline은 길어서 첫 문장만 */
+  var firstSentence = function (t) {
+    if (!t) return '';
+    var s = String(t).split(/\.\s|\.$|\s{2,}/)[0].trim();
+    return s.length > 78 ? s.slice(0, 76) + '…' : s;
+  };
+  var getJSON = function (u) {
+    return fetch(u, { cache: 'no-store' }).then(function (r) {
+      if (!r.ok) throw new Error(r.status);
+      return r.json();
+    });
+  };
+
+  /* ── ① 도구 카드 상태 주입 ───────────────────────────────── */
+  var TOOLS = [
+    { href: '/portfolio-tracker/', kind: 'portfolio', staleDays: 12 },
+    { href: '/semiconductor-cycle/', url: '/semiconductor-cycle/data.json', staleDays: 5 },
+    { href: '/liquidity/', url: '/liquidity/data.json', staleDays: 5 },
+    { href: '/capex-gate/', url: '/capex-gate/data.json', staleDays: 5 }
+    /* RS 스크리너·ETF 트래커는 데이터가 HTML에 인라인이라 아직 제외 */
+  ];
+
+  var paint = function (card, o) {
+    if (!card) return;
+    var feat = card.querySelector('.feat');
+    var box = document.createElement('div');
+    var stale = o.age != null && o.age > o.staleDays;
+    box.className = 'st8 ' + (stale ? 'stale' : (o.tone || ''));
+    box.innerHTML =
+      '<span class="dot"></span><span class="txt"><span class="rg">' + esc(o.regime) + '</span>' +
+      (o.sub ? '<span class="sh">' + esc(o.sub) + '</span>' : '') + '</span>';
+    if (feat && feat.parentNode) feat.parentNode.insertBefore(box, feat.nextSibling);
+
+    var live = card.querySelector('.foot .live');
+    if (live && o.asOf) {
+      if (stale) {
+        live.classList.add('old');
+        live.innerHTML = '<span class="pulse"></span>' + o.age + '일째 갱신 없음';
+      } else {
+        live.innerHTML = '<span class="pulse"></span>' + mmdd(o.asOf) + ' 갱신';
+      }
+    }
+  };
+
+  TOOLS.forEach(function (t) {
+    var card = document.querySelector('.tool[href="' + t.href + '"]');
+    if (!card) return;
+
+    if (t.kind === 'portfolio') {
+      Promise.all([
+        getJSON('/portfolio-tracker/data/meta.json'),
+        getJSON('/portfolio-tracker/data/positions.json').catch(function () { return null; })
+      ]).then(function (r) {
+        var m = r[0], pos = r[1];
+        var asOf = (pos && pos.asOf) || m.lastUpdated;
+        /* 원화 금액은 노출하지 않는다 — 비중과 기조만 */
+        var regime = pos
+          ? '현금 ' + pos.cashWeight + '% · 신용 ' + pos.creditWeight + '%'
+          : '운용 중';
+        paint(card, {
+          regime: regime, sub: m.operation || '', tone: 'warn',
+          asOf: asOf, age: days(asOf), staleDays: t.staleDays
+        });
+      }).catch(function () {});
+      return;
+    }
+
+    getJSON(t.url).then(function (d) {
+      var i = d.interpretation || {};
+      paint(card, {
+        regime: i.regime || '—', sub: firstSentence(i.headline),
+        tone: i.tone, asOf: d.generatedAt,
+        age: days(d.generatedAt), staleDays: t.staleDays
+      });
+    }).catch(function () {});
+  });
+
+  /* ── ② "지켜보는 것" 보드 ─────────────────────────────────── */
+  var CATS = [
+    { f: 'semiconductor-ai', icon: '🔌', name: '반도체 · AI 인프라' },
+    { f: 'optical',          icon: '📡', name: '광통신 · 네트워크' },
+    { f: 'robotics',         icon: '🤖', name: '로봇 · Physical AI' },
+    { f: 'ai-healthcare',    icon: '🩺', name: 'AI 헬스케어' },
+    { f: 'energy',           icon: '🛢️', name: '에너지 · 정유' },
+    { f: 'security',         icon: '🛡️', name: '보안' }
+  ];
+
+  /* 상태 배지는 추론하지 않는다 — 노트가 data-status로 직접 선언한다.
+     (판정 산문을 키워드로 유추하면 "장기보유가 아니라"를 '보유'로 읽는 식의 오분류가 난다.) */
+  var STATUS = {
+    '워치':     { c: 'hold',  l: '워치 · 진입 보류' },
+    '공부':     { c: 'study', l: '공부 단계' },
+    '프레임':   { c: '',      l: '해석 프레임' },
+    '트레이드': { c: 'live',  l: '기한부 트레이드' }
+  };
+  var badge = function (st) { return STATUS[st] || { c: '', l: '기록' }; };
+
+  /* 노트 페이지의 ID 생성 규칙을 그대로 복제 — DOMParser는 스크립트를 실행하지 않으므로
+     data-id가 없는 예전 노트는 여기서 같은 방식으로 계산해야 딥링크가 맞는다. */
+  var slug = function (t) {
+    return t.trim().toLowerCase().replace(/[^\w가-힣]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+  };
+
+  var buildWatch = function () {
+    var host = document.getElementById('watch');
+    if (!host) return;
+    Promise.all(CATS.map(function (c) {
+      return fetch('/research/' + c.f + '.html', { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.text() : null; })
+        .then(function (h) { return h ? { c: c, doc: new DOMParser().parseFromString(h, 'text/html') } : null; })
+        .catch(function () { return null; });
+    })).then(function (res) {
+      var rows = [];
+      res.filter(Boolean).forEach(function (x) {
+        var notes = [].slice.call(x.doc.querySelectorAll('article.note'));
+        notes.forEach(function (n) {
+          var v = n.querySelector('.r.verdict .val');
+          if (!v) return;                       /* 판정 없는 노트는 건너뜀 */
+          var kpi = null;
+          [].slice.call(n.querySelectorAll('.r')).forEach(function (r) {
+            var lab = r.querySelector('.lab');
+            if (lab && /KPI/i.test(lab.textContent)) kpi = r.querySelector('.val');
+          });
+          var dateEl = n.querySelector('.nmeta .date');
+          var titleEl = n.querySelector('.ntitle');
+          var dt = dateEl ? dateEl.textContent.trim() : '';
+          var ti = titleEl ? titleEl.textContent.trim() : '';
+          rows.push({
+            cat: x.c,
+            id: n.dataset.id || (dt.replace(/\./g, '') + '-' + slug(ti)),
+            status: n.dataset.status || '',
+            date: dt,
+            title: ti,
+            verdictHTML: v.innerHTML,
+            kpiHTML: kpi ? kpi.innerHTML : ''
+          });
+        });
+      });
+
+      if (!rows.length) { host.innerHTML = '<div class="wload">아직 수집할 판정이 없습니다.</div>'; return; }
+      rows.sort(function (a, b) { return a.date < b.date ? 1 : -1; });   /* 최신순 */
+
+      host.innerHTML = rows.map(function (r) {
+        var b = badge(r.status);
+        return '<div class="witem">' +
+          '<div class="whead">' +
+            '<span class="ci">' + r.cat.icon + '</span>' +
+            '<span class="wt"><b>' + esc(r.title) + '</b>' +
+              '<span>' + esc(r.cat.name) + ' · ' + esc(r.date) + '</span></span>' +
+            '<span class="vb ' + b.c + '">' + b.l + '</span>' +
+          '</div>' +
+          '<div class="wbody">' +
+            '<div class="wl">판정</div><div class="wv">' + r.verdictHTML + '</div>' +
+            (r.kpiHTML ? '<div class="wl k">확인 지표</div><div class="wv">' + r.kpiHTML + '</div>' : '') +
+            '<a class="lnk" href="/research/' + r.cat.f + '.html#' + encodeURIComponent(r.id) + '">노트 열기 →</a>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+
+      [].forEach.call(host.querySelectorAll('.whead'), function (h) {
+        h.onclick = function () { h.parentNode.classList.toggle('open'); };
+      });
+    }).catch(function () {
+      host.innerHTML = '<div class="wload">노트를 불러오지 못했습니다.</div>';
+    });
+  };
+
+  /* 노트 6개를 미리 다 받지 않도록 섹션이 보일 때 로드하되,
+     IntersectionObserver는 탭이 숨겨져 있거나 레이아웃이 없으면 영영 발화하지 않는다.
+     → 타이머 폴백을 반드시 같이 건다. (한 번만 실행되도록 once 가드) */
+  var built = false;
+  var once = function () { if (built) return; built = true; buildWatch(); };
+
+  var sec = document.getElementById('watch');
+  if (sec && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) {
+      if (es[0].isIntersecting) { io.disconnect(); once(); }
+    }, { rootMargin: '400px' });
+    io.observe(sec);
+  }
+  setTimeout(once, 1200);
+})();
+</script>
+
 
 <footer>
   <div class="wrap">
