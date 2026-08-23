@@ -47,8 +47,8 @@
   .shead .ln{flex:1;height:1px;background:var(--line)}
 
   /* 게이트 3개 */
-  .gates{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-  @media(max-width:720px){.gates{grid-template-columns:1fr}}
+  .gates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  @media(max-width:720px){.gates{grid-template-columns:minmax(0,1fr)}}
   .gate{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:15px 16px}
   .gate .gn{font-size:10.5px;font-weight:800;color:var(--faint);letter-spacing:1px}
   .gate h3{font-size:14.5px;font-weight:800;margin:4px 0 7px;letter-spacing:-.2px}
@@ -105,6 +105,12 @@
   .entry:before{content:"";position:absolute;left:-5px;top:7px;width:8px;height:8px;border-radius:50%;
     background:var(--accent-dim);border:2px solid var(--bg)}
   .entry.alert:before{background:var(--stop)}
+  /* 리포트 원문 도표 인용 (research/*.html과 동일 규약) */
+  .fig{margin:12px 0 6px}
+  .fig .fw{background:#fff;border:1px solid var(--line);border-radius:11px;padding:9px;overflow-x:auto}
+  .fig img{display:block;width:100%;min-width:520px;height:auto;border-radius:3px}
+  .fig figcaption{font-size:11px;color:var(--faint);margin-top:8px;line-height:1.6}
+  .fig figcaption b{color:var(--muted);font-weight:700}
   .entry .edate{font-size:11px;color:var(--faint);font-weight:700;letter-spacing:.3px}
   .entry .etitle{font-size:14.5px;font-weight:800;margin:3px 0 8px;letter-spacing:-.2px;line-height:1.45}
   .entry ul{margin:0;padding-left:17px}
@@ -161,10 +167,18 @@
       <p>Meta 외 CSP가 인프라 외부 판매를 언급하면 경보 — 과잉구축 자백의 집단화.</p>
       <span class="st" style="color:var(--accent);background:rgba(139,155,255,.13)">미확산 · Meta 1건 유지</span>
     </div>
+    <div class="gate">
+      <div class="gn">GATE 04</div>
+      <h3>계약전력 → 가동전력 전환율</h3>
+      <p>계약한 GW 중 실제로 켜져서 청구되는 비율. <b>계약은 가능성, 가동이 매출</b>. 전환율이 정체하면
+        매출 없는 설비의 이자만 쌓인다 — 게이트 ①이 못 잡는 축.</p>
+      <span class="st" style="color:var(--gold);background:rgba(255,214,107,.13)">신설 2026-08-23 · CoreWeave 41% · 기준선 설정</span>
+    </div>
   </div>
   <div class="rule">
     <b>판정 룰.</b> 우호 2/3 이상 = "세 번째 순환 조정" 확인 → 재진입 트리거(워시아웃 리버설·팔로우스루) 대기.
-    부정 2/3 이상 = 추세 대전환 → 단계 손절선 이행 + 재진입 보류.<br>
+    부정 2/3 이상 = 추세 대전환 → 단계 손절선 이행 + 재진입 보류.
+    <b>게이트 ④는 판정 투표에 넣지 않는다</b> — 분기 공시 기반이라 후행하고, ①의 함정을 해석하는 <b>보조 축</b>으로만 쓴다.<br>
     <b>⚠ 2026-07-30 발견한 설계 한계.</b> 게이트 ①(지출 의지)이 4/4 우호인데 같은 기간 KOSPI −30%.
     <b>지출 의지가 곧 주가 우호가 아니다</b> — 지출은 선행, 회수는 후행이고 그 사이 구간에서 멀티플이 죽는다.
     향후 판정은 게이트 ②(수익화 실측)에 가중치를 더 둔다.
@@ -194,6 +208,79 @@
   </div>
   <div class="log">
     <!-- 새 엔트리는 이 줄 바로 아래에 추가 (최신순) -->
+
+    <div class="entry alert">
+      <div class="edate">2026-08-23</div>
+      <div class="etitle">장부에 안 잡힌 청구서가 <b>인식 부채의 네 배</b> — 그리고 청구서를 자본시장이 대신 내기 시작했다</div>
+      <ul>
+        <li>✅ <b>미인식 약정 $2,424bn = 인식 부채 $604bn의 4배.</b> Alphabet·Amazon·Meta·Microsoft 기준
+          인식 리스부채 $248bn + 장기차입금 $356bn인데, <b>아직 개시되지 않은 리스 $904bn + 구매약정 $1,520bn</b>이
+          장부 밖에 있다. 회계 인식 시점 규칙 때문이다 — 리스는 그 자산을 <b>실제로 쓸 수 있게 된 날</b>부터,
+          구매약정은 <b>물건이 인도된 시점</b>에 잡힌다.</li>
+        <li>🔎 <b>그래서 이게 왜 게이트 재료인가.</b> 미인식 약정의 크기는 곧 <b>"계약 서명은 끝났는데 아직 매출을
+          못 만드는 설비"의 크기</b>다. 즉 게이트 ①이 측정해 온 "지출 의지"의 실제 규모가 재무제표에서 보이던 것보다
+          훨씬 컸다는 뜻이고, 동시에 <b>게이트 ④(가동전력 전환)가 왜 필요한지</b>에 대한 근거이기도 하다.
+          <b>부채라기보다 발주서에 가깝다</b> — 취소 가능성이 있지만, 안 쓰기로 한 돈은 아니다.</li>
+      </ul>
+      <figure class="fig">
+        <div class="fw"><img src="assets/20260823-offbalance-commitments.png" alt="인식 부채 604bn 대비 미인식 약정 2424bn" loading="lazy"></div>
+        <figcaption><b>그림 8.</b> 재무상태표 인식 부채 $604bn(장기차입금 $356bn + 리스부채 $248bn) vs 미인식 약정 $2,424bn(미개시 리스 $904bn + 구매약정 $1,520bn). 자료: 각사·WSJ·미래에셋증권</figcaption>
+      </figure>
+      <ul>
+        <li>✅ <b>게이트 ① 우호 재확인, 강도는 오히려 상향.</b> 27년 합산 설비투자 전망치(상위 5개사)가
+          <b>26.1월 $527bn → 26.7월 $831bn → 26.8월 $994bn</b>. 여섯 달 만에 +58%, <b>마지막 한 달에만 +20%</b>.
+          짓겠다는 금액이 예측할 때마다 커지고 있다. 절대금액 기준으로도 25년 $404bn → 26년 $786bn →
+          27년 $1,152bn → 28년 $1,277bn 전망.</li>
+        <li>✅ <b>게이트 ② 보강 — 백로그.</b> MS 상업 RPO + Oracle RPO + AWS backlog + Google Cloud backlog 단순합산이
+          <b>2Q25 약 $1tn → 2Q26 $2.3tn</b>. 이미 쓴 돈이 아니라 <b>앞으로 쓰기로 서명한 돈</b>이 1년 만에 2.3배.</li>
+      </ul>
+      <figure class="fig">
+        <div class="fw"><img src="assets/20260823-capex-consensus-drift.png" alt="2027년 합산 설비투자 전망치 527 → 831 → 994bn" loading="lazy"></div>
+        <figcaption><b>그림 4.</b> 27년 합산 설비투자 전망치의 <b>상향 드리프트</b>. 게이트 ①은 "가이던스 상향/유지/하향"을 보는데, 이 그림은 <b>컨센서스 자체가 계속 위로 밀리고 있다</b>는 걸 보여준다. 자료: Morgan Stanley·미래에셋증권</figcaption>
+      </figure>
+      <ul>
+        <li>🆕 <b>게이트 ④ 신설 근거 — CoreWeave 2Q26.</b> 계약전력 <b>3.7GW</b> vs 실제 가동 <b>1.5GW</b> =
+          <b>가동률 41%</b>. 이자보상배율 <b>0.20배</b>(감가상각 차감 후 조정 영업이익 $128mn ÷ 순이자비용 $640mn).
+          <b>이자는 계약전력 전체에서 발생하는데 수익은 41%에서만 나온다.</b> 이익을 못 내는 게 아니라
+          <b>가동 전 설비의 이자를 먼저 부담</b>하는 구조다. 이 축이 게이트 ①의 함정
+          ("지출 의지 4/4 우호인데 주가 −30%")을 설명한다 — <b>지출과 회수 사이의 시차가 바로 이 41%</b>다.</li>
+        <li>✅ <b>크레딧 레이어 실측 앵커.</b> 크레딧 레이어는 실제 CDS를 못 구해 변동성 프록시로 돌고 있는데,
+          이 보고서가 <b>컴퓨트 담보 대출의 실제 스프레드</b>를 준다:
+          CoreWeave <b>DDTL 4.0 = SOFR+2.25%</b>(투자등급 고객 계약 담보, 비소구, $8.5bn) vs
+          <b>DDTL 5.0 = SOFR+4.50%</b>(비투자등급 고객 2곳 포함, $3.1bn, Moody's <b>Ba2</b>, 5.5년).
+          Nebius는 고객계약 기반 <b>SOFR+2.50%</b>로 $775mn. <b>등급 한 칸에 225bp</b>가 이 시장의 현재 가격이다.</li>
+        <li>🔄 <b>기존 가설 "제3시나리오"의 부분 반증.</b> 2026-07-26 반도체 노트에 적었던
+          <b>"capex는 지속되나 자본시장이 조달비용을 올린다"</b>는 시나리오가, 최소한 현재까지는 <b>반대 방향</b>으로 가고 있다.
+          조달 채널이 좁아지는 게 아니라 <b>넓어지는 중</b>이다 — 사모 대출 → 공개 신디케이트(양도·거래 가능) →
+          다음은 증권화. GPU가 담보로 인정받는 3요건(① 일정 기간 현금 창출 ② 중고가 계산 가능
+          ③ 부도 시 재임대) 중 ①②는 A100의 2029년 재계약으로, ③은 신디케이트 구조로 거의 채워졌다.
+          <b>가설을 폐기하는 게 아니라 "아직 발생하지 않았다"로 유지하고, 증권화 1호 발행 여부를 트리거로 삼는다.</b></li>
+      </ul>
+      <figure class="fig">
+        <div class="fw"><img src="assets/20260823-compute-collateral.png" alt="자동차 항공기 부동산 데이터센터를 거쳐 컴퓨트가 담보 대열에 진입" loading="lazy"></div>
+        <figcaption><b>그림 12.</b> 자동차(1980s) → 상업용 항공기(1980s) → 부동산 → 데이터센터(2010s) → <b>컴퓨트(2026, 예정)</b>. 각 자산은 <b>"기존 고객이 떠나도 계속 현금을 번다"</b>가 확인된 뒤 대출·유동화 시장이 커졌다. 자료: 엔비디아·미래에셋증권</figcaption>
+      </figure>
+      <ul>
+        <li>⚠️ <b>새 리스크 축 — 엔비디아의 신용 익스포저.</b> 8/11 BlackRock 등 6개 금융기관과
+          <b>장기 $500bn+</b> 제3자 자본 동원 플랫폼(엔비디아가 <b>GPU 예상잔존가치의 최대 25%</b>까지 지원 가능).
+          8/17 오하이오 건은 SB Energy가 짓고 OpenAI가 장기 임차, <b>엔비디아가 OpenAI의 임차료 지급을 보강</b>
+          (초기 4.25GW, 누적 상한 <b>$105bn</b>, 2028년 이후 적용). 칩 공급자가 <b>자기 대차대조표로 고객의 구매력을 만드는</b> 구조다.</li>
+        <li>🔎 <b>순환거래인가에 대한 판정 — "아직은 아니다", 단 감시 대상.</b> 실제 건설자금은 6개 금융기관이 대고,
+          이들이 <b>프로젝트별로 독립 심사</b>한다(고객 계약·칩 가동률·현금흐름·중고가·재임대 가능성).
+          엔비디아 보증만으로 심사를 통과하지 못한다는 점에서 "매출을 대출로 바꾸는" 구조와는 다르다.
+          다만 엔비디아가 떠안은 건 <b>GPU 가격과 고객 신용이 동시에 무너지는 tail-risk</b>다.
+          <b>이 보증이 실제로 발동되는 날 = 게이트 전체의 판정을 뒤집는 날</b>로 등록한다.</li>
+        <li>📌 <b>게이트 배지 변경 없음</b>(①②③). 이 엔트리는 <b>측정 대상의 크기를 재보정</b>하고
+          <b>게이트 ④를 신설</b>하는 것이 목적이다. 상환능력 쪽 산식은
+          <a href="/research/semiconductor-ai.html" style="color:var(--accent)">반도체·AI 인프라 노트</a>에 별도 기록
+          (OpenAI+Anthropic 컴퓨트 예산 $69bn ≈ 5.8GW, 9GW를 받치려면 합산 매출 1.6배 필요).</li>
+        <li>📌 다음 확인 포인트: ① <b>컴퓨트 담보 ABS 1호 발행</b> 여부(연기금·보험 자금 유입 = 조달비용 하락 확정) ·
+          ② CoreWeave·Nebius <b>분기 가동전력 증가율 vs 이자비용 증가율</b> ·
+          ③ 27년 capex 컨센서스가 <b>처음으로 하향되는 달</b> · ④ 엔비디아 보증 발동 여부.</li>
+      </ul>
+      <div class="src">소스: 미래에셋증권 「AI Focus — 은하지능전설 2부: The tokens must flow」 2026-08-21(한종목) / 원 1차 소스: 각사 공시·WSJ·Morgan Stanley·CoreWeave 2Q26 실적설명회·NVIDIA 2026-08-11·08-17 발표</div>
+    </div>
+
 
     <div class="entry">
       <div class="edate">2026-08-07</div>

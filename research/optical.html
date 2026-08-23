@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>광통신 · 네트워크 — Polaris 리서치</title>
+<meta name="description" content="Polaris 리서치 노트 · 광통신 · 네트워크 — 핵심만 누적">
+<style>
+  :root{
+    --bg:#0b0d14; --bg2:#0f1117; --panel:#161a24; --panel2:#1d2230; --line:#272d3c;
+    --txt:#e8eaf0; --muted:#9aa3b2; --faint:#69727f;
+    --accent:#8b9bff; --accent-dim:#5b6bd6; --gold:#ffd66b;
+    --go:#22c55e; --stop:#ef4444; --cyan:#5fd0e0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;
+    background:var(--bg); color:var(--txt); line-height:1.65; -webkit-font-smoothing:antialiased; min-height:100vh;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px}
+
+  header{
+    background:
+      radial-gradient(120% 90% at 85% -10%, rgba(139,155,255,0.16), transparent 55%),
+      linear-gradient(180deg,#0c0f18,#0b0d14);
+    border-bottom:1px solid var(--line);
+  }
+  .top{padding:22px 0 0}
+  .back{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;padding:5px 13px;transition:border-color .18s,color .18s}
+  .back:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .hero{padding:26px 0 30px}
+  .kicker{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint)}
+  .htitle{display:flex;align-items:center;gap:12px;margin-top:10px}
+  .htitle .ic{font-size:27px}
+  .htitle h1{font-size:25px;font-weight:800;letter-spacing:-.3px}
+  .hsub{font-size:13px;color:var(--muted);margin-top:11px;max-width:620px}
+
+  main{padding:32px 0 10px}
+
+  .note{background:linear-gradient(180deg,var(--panel),#13161f);border:1px solid var(--line);
+    border-radius:15px;padding:22px 22px 20px;margin-bottom:20px}
+  .nmeta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:13px}
+  .nmeta .date{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums;
+    border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .nmeta .tk{font-size:11.5px;font-weight:800;letter-spacing:.4px;color:var(--accent);
+    background:rgba(139,155,255,0.08);border:1px solid rgba(139,155,255,0.22);border-radius:6px;padding:2px 9px}
+  .nmeta .tag{font-size:11px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+    border-radius:6px;padding:2px 9px}
+  .ntitle{font-size:19px;font-weight:800;letter-spacing:-.3px;margin-bottom:6px}
+  .nlede{font-size:13px;color:var(--muted);margin-bottom:6px}
+  .nlede b{color:var(--txt);font-weight:600}
+
+  /* section within note */
+  .sec{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+  .sech{display:flex;align-items:center;gap:9px;margin-bottom:14px}
+  .sech .sn{font-size:10.5px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;
+    border:1px solid rgba(139,155,255,0.3);border-radius:5px;padding:1px 6px}
+  .sech h3{font-size:14.5px;font-weight:800;letter-spacing:-.2px}
+  .p{font-size:13px;color:var(--muted);margin:10px 0}
+  .p b{color:var(--txt);font-weight:600}
+  .hl{color:var(--accent);font-weight:600}
+
+  /* 네 축 변곡 카드 */
+  .quad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 6px}
+  .quad .node{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:13px 10px;text-align:center}
+  .quad .node .e{font-size:20px}
+  .quad .node .t{font-size:12px;font-weight:800;margin-top:6px}
+  .quad .node .n{font-size:13px;font-weight:800;color:var(--accent);margin-top:6px;font-variant-numeric:tabular-nums}
+  .quad .node .d{font-size:10.5px;color:var(--faint);margin-top:5px;line-height:1.45}
+
+  /* 3-lane 미/중/한 */
+  .lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 6px}
+  .lane{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 13px}
+  .lane .le{font-size:20px}
+  .lane .lt{font-size:12.5px;font-weight:800;margin-top:7px}
+  .lane .ls{font-size:10.5px;color:var(--accent);font-weight:700;margin-top:3px}
+  .lane .ld{font-size:11px;color:var(--faint);margin-top:8px;line-height:1.5}
+  .lane .lp{font-size:11px;color:var(--muted);margin-top:9px;padding-top:8px;border-top:1px dashed var(--line);line-height:1.5}
+  .lane .lp b{color:var(--txt);font-weight:700}
+  .lane.pick{border-color:var(--gold);background:rgba(255,214,107,0.05)}
+  .lane.pick .ls{color:var(--gold)}
+
+  /* tables */
+  .tbl{width:100%;border-collapse:collapse;margin:12px 0 4px;font-size:12.5px}
+  .tbl th,.tbl td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  .tbl thead th{font-size:11px;color:var(--faint);font-weight:700;letter-spacing:.3px;border-bottom:1px solid var(--line)}
+  .tbl tbody td:first-child{font-weight:700;color:var(--txt);white-space:nowrap}
+  .tbl td b{color:var(--txt);font-weight:600}
+  .tbl .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+  .tbl tr.top-pick td:first-child{color:var(--gold)}
+  .scrollx{overflow-x:auto}
+
+  /* 병목 레이어 */
+  .bn{display:flex;flex-direction:column;gap:9px;margin:13px 0 4px}
+  .bn .lay{border-radius:11px;padding:13px 15px;border:1px solid var(--line)}
+  .bn .lay .lh{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;margin-bottom:5px}
+  .bn .lay .lb{font-size:11.5px;color:var(--muted);line-height:1.55}
+  .bn .lay .lb b{color:var(--txt);font-weight:600}
+  .bn .sys{background:rgba(239,68,68,0.05);border-color:rgba(239,68,68,0.25)}
+  .bn .sys .lh{color:var(--stop)}
+  .bn .comp{background:rgba(34,197,94,0.05);border-color:rgba(34,197,94,0.25)}
+  .bn .comp .lh{color:var(--go)}
+  .pill{font-size:10px;font-weight:800;border-radius:999px;padding:2px 9px;margin-left:auto}
+  .pill.no{color:var(--stop);background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3)}
+  .pill.yes{color:var(--go);background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3)}
+
+  /* timeline */
+  .tl{position:relative;margin:14px 0 4px;padding-left:6px}
+  .tl .ev{position:relative;padding:0 0 16px 22px;border-left:2px solid var(--line)}
+  .tl .ev:last-child{border-left-color:transparent;padding-bottom:0}
+  .tl .ev::before{content:"";position:absolute;left:-7px;top:2px;width:12px;height:12px;border-radius:50%;
+    background:var(--panel2);border:2px solid var(--accent-dim)}
+  .tl .ev.done::before{background:var(--go);border-color:var(--go)}
+  .tl .ev.future::before{background:var(--panel2);border-color:var(--gold)}
+  .tl .ev .when{font-size:11px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums}
+  .tl .ev.future .when{color:var(--gold)}
+  .tl .ev .what{font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.5}
+  .tl .ev .what b{color:var(--txt);font-weight:600}
+
+  /* label rows */
+  .rows{display:flex;flex-direction:column;gap:11px;margin-top:6px}
+  .r{display:grid;grid-template-columns:74px 1fr;gap:13px;align-items:start}
+  .r .lab{font-size:11.5px;font-weight:800;color:var(--accent);letter-spacing:.3px;padding-top:1px}
+  .r .val{font-size:13px;color:var(--muted)}
+  .r .val b{color:var(--txt);font-weight:600}
+  .r.verdict{background:rgba(255,214,107,0.05);border:1px solid rgba(255,214,107,0.22);
+    border-radius:11px;padding:13px 14px;grid-template-columns:64px 1fr}
+  .r.verdict .val{color:var(--txt)}
+  .r.verdict .lab{color:var(--gold)}
+
+  .why{background:rgba(139,155,255,0.06);border:1px solid rgba(139,155,255,0.2);border-radius:11px;
+    padding:12px 14px;margin-top:10px;font-size:12px;color:var(--muted);line-height:1.6}
+  .why b{color:var(--txt);font-weight:600}
+
+  /* 경고 박스 */
+  .fix{background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.25);border-radius:11px;
+    padding:12px 14px;margin:12px 0 4px;font-size:12px;color:var(--muted);line-height:1.6}
+  .fix b{color:var(--txt);font-weight:600}
+  .fix .fh{color:var(--stop);font-weight:800;font-size:11.5px;letter-spacing:.2px;display:block;margin-bottom:5px}
+
+  /* 체인 */
+  .chn{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:13px 0 6px}
+  .chn .cbox{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;
+    font-size:11.5px;font-weight:700;color:var(--txt);text-align:center;line-height:1.4}
+  .chn .cbox small{display:block;font-size:9.5px;color:var(--faint);font-weight:600;margin-top:2px}
+  .chn .cbox.src{border-color:var(--gold);background:rgba(255,214,107,.07);color:var(--gold)}
+  .chn .arw{color:var(--faint);font-size:13px}
+
+  /* ── 리포트 원문 도표 캡처 ── */
+  .fig{margin:16px 0 6px;min-width:0}
+  .fig .fw{background:#fff;border:1px solid var(--line);border-radius:11px;padding:9px;overflow-x:auto}
+  .fig img{display:block;width:100%;min-width:560px;height:auto;border-radius:3px}
+  .fig.wide img{min-width:820px}
+  .fig figcaption{font-size:11px;color:var(--faint);margin-top:8px;line-height:1.6}
+  .fig figcaption b{color:var(--muted);font-weight:700}
+  .figs2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0 6px}
+  .figs2 .fig{margin:0;min-width:0}
+  .figs2 .fig img{min-width:420px}
+
+  /* ── 노트 목차 · 태그 필터 (JS 자동 생성) ── */
+  .toc{background:linear-gradient(180deg,var(--panel),#13161f);border:1px solid var(--line);
+    border-radius:15px;padding:18px 20px;margin-bottom:20px}
+  .toc .th{display:flex;align-items:baseline;gap:9px;margin-bottom:12px}
+  .toc .th b{font-size:13px;font-weight:800;letter-spacing:-.2px}
+  .toc .th span{font-size:11px;color:var(--faint)}
+  .tagbar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:13px}
+  .tagbar button{font-size:11px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+    border-radius:999px;padding:3px 11px;cursor:pointer;font-family:inherit;transition:all .15s}
+  .tagbar button:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .tagbar button.on{color:var(--accent);border-color:var(--accent-dim);background:rgba(139,155,255,0.1)}
+  .toclist{display:flex;flex-direction:column;gap:2px}
+  .toclist a{display:grid;grid-template-columns:78px 1fr;gap:11px;align-items:baseline;
+    padding:7px 9px;border-radius:8px;transition:background .15s}
+  .toclist a:hover{background:var(--panel2)}
+  .toclist a .d{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .toclist a .t{font-size:12.5px;color:var(--muted)}
+  .toclist a:hover .t{color:var(--txt)}
+  .toc .empty{font-size:12px;color:var(--faint);padding:6px 2px}
+
+  /* ── 노트 접기 ── */
+  .note.collapsed .nbody{display:none}
+  .fold{margin-left:auto;font-size:11px;color:var(--muted);background:var(--panel2);
+    border:1px solid var(--line);border-radius:999px;padding:2px 11px;cursor:pointer;font-family:inherit}
+  .fold:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .note{scroll-margin-top:18px}
+  .anch{font-size:11px;color:var(--faint);border:1px solid var(--line);border-radius:6px;
+    padding:2px 7px;cursor:pointer;font-family:inherit;background:transparent}
+  .anch:hover{border-color:var(--accent-dim);color:var(--accent)}
+
+  .disc{font-size:11px;color:var(--faint);margin-top:18px;line-height:1.65;border-top:1px solid var(--line);padding-top:13px}
+  .disc .src{color:var(--muted)}
+
+  footer{border-top:1px solid var(--line);margin-top:18px;padding:24px 0 38px;
+    font-size:11.5px;color:var(--faint);text-align:center}
+  footer .star{color:var(--accent)}
+
+  @media(max-width:560px){
+    .htitle h1{font-size:21px}
+    .quad{grid-template-columns:1fr 1fr}
+    .lanes{grid-template-columns:1fr}
+    .figs2{grid-template-columns:minmax(0,1fr)}
+    .toclist a{grid-template-columns:1fr;gap:1px}
+    .r{grid-template-columns:60px 1fr;gap:10px}
+    .tbl{font-size:11.5px}
+    .tbl th,.tbl td{padding:7px 8px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap top">
+    <a class="back" href="/">← Polaris 허브</a>
+  </div>
+  <div class="wrap hero">
+    <div class="kicker">Research · 산업 노트</div>
+    <div class="htitle">
+      <span class="ic">📡</span>
+      <h1>광통신 · 네트워크</h1>
+    </div>
+    <p class="hsub">
+      트랜시버 · CPO/NPO · 레이저 · InP 기판 · 데이터센터 연결. 결정에 영향 주는 정수만 — 테제·기술·병목·경쟁·타임라인·판정. 최신순 누적.
+    </p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- 새 노트는 이 줄 바로 아래에 추가 (최신순) -->
+
+  <article class="note" data-id="20260823-optical-bottleneck-stack">
+    <div class="nmeta">
+      <span class="date">2026.08.23</span>
+      <span class="tk">광네트워크 공급망</span>
+      <span class="tag">InP 기판</span>
+      <span class="tag">EML · CW 레이저</span>
+      <span class="tag">CPO</span>
+      <span class="tag">Lumentum · AAOI</span>
+      <span class="tag">미래에셋 한종목</span>
+    </div>
+    <div class="ntitle">병목이 광모듈 조립에서 레이저 칩을 거쳐 원재료 기판까지 거슬러 올라갔다</div>
+    <p class="nlede">
+      <b>한 줄:</b> AI 광통신의 제약은 더 이상 "트랜시버를 몇 개 만드느냐"가 아니다.
+      <b>DSP·TIA → 고속 EML → CW 레이저 → InP 기판</b>으로 <b>공급망 상류를 향해 거슬러 올라가는 중</b>이고,
+      상류로 갈수록 대체가 어려워 <b>물량뿐 아니라 가격과 마진까지 함께 오른다</b>.
+      그리고 CPO는 이 병목을 없애는 게 아니라 <b>고출력 레이저·외부광원이라는 새 병목을 만든다</b>.
+    </p>
+
+    <div class="nbody">
+
+    <div class="sec">
+      <div class="sech"><span class="sn">01</span><h3>왜 광통신이 지금 병목의 한 층인가</h3></div>
+      <p class="p">
+        연산칩이 빨라지자 제약이 <b>그 칩에 데이터를 넣고 꺼내는 쪽</b>으로 옮겨갔다.
+        AI 인프라의 단위는 GPU 한 장이 아니라 <b>전력에 연결된 완성형 클러스터</b>이고,
+        그 클러스터 안에서 <b>랙 내부·랙 간 통신이 연산성능의 핵심으로 이동</b>했다.
+        CPO·NPO 시장 규모 전망이 <b>2025년 약 $100mn → 2030년 $40bn</b>이라는 숫자가 그 이동의 크기다.
+      </p>
+      <figure class="fig">
+        <div class="fw"><img src="assets/optical/20260823-bottleneck-ladder.png" alt="병목 사다리: D램 → InP 기판 → 광통신 부품 → 발전터빈" loading="lazy"></div>
+        <figcaption><b>그림 5.</b> 병목 사다리에서 광통신은 <b>메모리 위, 전력 아래</b>에 있다. 광통신 부품 시장 <b>$0.1bn → $39bn 이상</b>, 그 아래 원재료인 InP 2인치 웨이퍼는 <b>$800 → $2,300~2,500(약 3배)</b>. <b>완제품보다 원재료가 먼저, 더 크게 오른 게 이 층의 성격을 말해준다.</b> 자료: 외신 종합·미래에셋증권</figcaption>
+      </figure>
+      <div class="chn">
+        <div class="cbox">광모듈 조립<small>완제품 — 캐파 문제</small></div>
+        <div class="arw">←</div>
+        <div class="cbox">DSP · TIA<small>신호처리 반도체</small></div>
+        <div class="arw">←</div>
+        <div class="cbox">EML · CW 레이저<small>수율 · 출력편차</small></div>
+        <div class="arw">←</div>
+        <div class="cbox src">InP 기판<small>원재료 — 대체 불가</small></div>
+      </div>
+      <p class="p">
+        <b>병목이 거슬러 올라가는 방향으로 읽어야 한다.</b> 아래로 내려갈수록 공급자가 적고, 증설에 시간이 더 걸리며,
+        따라서 <b>가격결정력이 세진다</b>. Lumentum이 <b>2031년까지의 공급능력을 예약하려고 AXT에 총 $87mn의 보증금</b>을
+        미리 지급했다는 사실이 이 방향성을 그대로 보여준다 — 완제품 업체가 원재료를 5년치 선점하고 있다.
+      </p>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">02</span><h3>공급망 병목 점검표 — 이 노트의 본체</h3></div>
+      <figure class="fig wide">
+        <div class="fw"><img src="assets/optical/20260823-optical-bottleneck-table.png" alt="AI 광네트워크 공급망 병목 점검: 8개 부품·공정별 수치와 의미" loading="lazy"></div>
+        <figcaption><b>표 6.</b> 부품·공정 8개의 <b>확인된 수치 · 현재 병목 · 투자 의미</b>. 이 노트에서 가장 자주 다시 볼 표. 자료: Lumentum·AAOI·미래에셋증권</figcaption>
+      </figure>
+      <div class="bn">
+        <div class="lay sys"><div class="lh">⚠ 메모리 병목이 광네트워크 매출까지 막는다 <span class="pill no">교차 병목</span></div>
+          <div class="lb">스위치용 메모리 부족으로 <b>AAOI의 3Q26 100G 매출 $20~25mn이 이연</b> 전망.
+          스위치를 못 만들면 <b>완성된 광모듈도 설치되지 못한다.</b> 병목 층끼리 서로를 막는다는 뜻 —
+          한 층만 보고 투자하면 틀린다.</div></div>
+        <div class="lay sys"><div class="lh">⚠ 레이저가 있어도 DSP·TIA가 없으면 모듈이 안 된다 <span class="pill no">조달 제약</span></div>
+          <div class="lb">AAOI는 <b>4Q26 800G·1.6T 매출 약 $330mn</b>을 달성해야 하는데, DSP·TIA 조달량이 출하량의 상단을 제한한다.</div></div>
+        <div class="lay comp"><div class="lh">✅ 희소한 부품은 가격과 마진을 함께 올린다 <span class="pill yes">가격결정력</span></div>
+          <div class="lb">Lumentum은 CW 레이저의 <b>공급부족과 수율 우위를 바탕으로 가격을 인상</b>했고
+          <b>FY4Q26 총마진 50.4%</b>를 기록했다. <b>물량만 늘어나는 병목과 가격까지 올라가는 병목은 완전히 다른 투자다.</b></div></div>
+      </div>
+      <p class="p">
+        속도 관련 숫자도 정리해둔다. AAOI 월 생산능력 <b>1Q26 말 10만 개 → 현재 20만 개 → 26년 말 65만 개+ → 27년 말 93만 개+</b>.
+        제약은 수요가 아니라 <b>자동화라인 설치·수율 안정화·인증과 최종검사</b>다.
+        Lumentum의 200G/lane 제품은 이미 <b>EML 매출의 25% 이상</b>이고 26년 말 생산능력을 전년비 50%+ 확대한다 —
+        <b>1.6T 세대교체가 레이저 단계에서 이미 진행 중</b>이라는 뜻이다.
+        OCS(광경로 전환장비)는 다음 분기 매출이 <b>처음으로 $100mn</b>을 넘을 전망 —
+        GPU가 늘수록 서버 연결뿐 아니라 <b>클러스터 내부의 광스위칭</b> 수요도 커진다.
+      </p>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">03</span><h3>CPO에 대한 흔한 오해</h3></div>
+      <div class="fix">
+        <span class="fh">⚠ "CPO가 오면 광모듈·레이저 수요가 줄어든다"는 틀렸다</span>
+        보고서의 한 줄이 정확하다 — <b>"CPO는 광학을 없애지 않고 고출력 레이저와 외부광원이라는 새 병목을 만든다."</b>
+        Lumentum은 <b>2027년 하반기 공급 확대, 2028년 CPO 본격 배치</b>를 전망하는데,
+        여기서 제약은 <b>고출력 레이저 팹과 외부광원(ELS) 패키징·수율</b>이다.
+        즉 CPO는 병목을 없애는 기술이 아니라 <b>병목을 트랜시버에서 레이저 쪽으로 옮기는 기술</b>이다.
+        <b>구조 전환을 "수요 소멸"로 읽으면 정확히 반대로 베팅하게 된다.</b>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">04</span><h3>판정 · 트리거</h3></div>
+      <div class="rows">
+        <div class="r"><div class="lab">테제</div><div class="val">
+          광통신은 <b>"어느 클라우드가 이기든 팔리는" 병목 공급자</b> 포지션이다.
+          AI 사업자가 컴퓨트를 더 만들려면 이 부품을 반드시 사야 하고, 공급이 단기간에 못 늘면
+          <b>판매량뿐 아니라 가격도 오른다</b>. 승자를 고를 필요가 없다는 게 이 층의 매력이다.</div></div>
+        <div class="r"><div class="lab">어디를 보나</div><div class="val">
+          상류일수록 좋다. <b>InP 기판 &gt; CW/EML 레이저 &gt; DSP·TIA &gt; 광모듈 조립</b> 순으로
+          대체 난이도와 가격결정력이 높다. 조립 단계는 캐파 경쟁이라 마진이 희석되기 쉽다.
+          <b>국내 밸류체인 매핑은 아직 안 했다 — 다음 노트의 과제.</b></div></div>
+        <div class="r"><div class="lab">반대논리</div><div class="val">
+          ① <b>병목의 수명이 짧다</b> — AAOI 캐파가 1년 반 만에 10만→93만 개면 27년 말엔 공급이 붙는다.
+          병목 프리미엄은 영원하지 않고, <b>가격이 오르는 구간과 물량만 늘어나는 구간은 수익률이 전혀 다르다</b>.
+          ② 메모리처럼 <b>교차 병목에 발목</b>이 잡히면 수요가 있어도 매출 인식이 밀린다(AAOI 3Q26 사례).
+          ③ 이 표는 <b>Lumentum·AAOI 두 회사 실적발표 기반</b>이라 공급자 측 낙관이 섞여 있다.</div></div>
+        <div class="r verdict"><div class="lab">판정</div><div class="val">
+          <b>공부 단계 — 카테고리 개설이 목적.</b> 병목 지도는 선명하지만 <b>이 노트에는 아직 국내 종목이 하나도 없다.</b>
+          투자 가능한 형태가 되려면 ⓐ 국내 광트랜시버·레이저·기판 밸류체인 매핑,
+          ⓑ 각 사의 <b>800G/1.6T 인증 통과 여부</b>와 고객사, ⓒ 가격 액션 확인이 필요하다.
+          그 전까지는 <a href="/research/semiconductor-ai.html" style="color:var(--accent)">반도체·AI 인프라 노트</a>의
+          병목 사다리를 읽는 <b>보조 렌즈</b>로만 쓴다.</div></div>
+        <div class="r"><div class="lab">KPI</div><div class="val">
+          ① <b>InP 2인치 기판 가격</b>(현재 $2,300~2,500) ·
+          ② AAOI 800G·1.6T 분기 매출의 가이던스 달성 여부(4Q26 $330mn) ·
+          ③ Lumentum 총마진(FY4Q26 50.4% — <b>가격결정력의 직접 지표</b>) ·
+          ④ AAOI 월 생산능력 실제 도달치 vs 계획(26년 말 65만 개) ·
+          ⑤ OCS 매출 $100mn 돌파 ·
+          ⑥ 28년 CPO 배치 일정의 전진/후퇴.</div></div>
+      </div>
+    </div>
+
+    <div class="disc">
+      출처: <span class="src">미래에셋증권 「AI Focus — 은하지능전설 2부: The tokens must flow」(2026.08.21, 한종목) 中 V장 표 6·그림 5</span>.
+      원 보고서의 산업 전체 논지는 <a href="/research/semiconductor-ai.html" style="color:var(--accent)">반도체 · AI 인프라</a> 노트에,
+      자본·신용 파트는 <a href="/capex-gate/" style="color:var(--accent)">CAPEX 게이트 워치</a>에 분리 기록했다.
+      수치는 각 사 실적발표 기준이며 공급자 측 전망이 포함돼 있다. 원문 도표는 직접 캡처해 인용(교육·기록 목적). 투자권유 아님.
+    </div>
+    </div>
+  </article>
+
+</main>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   리서치 노트 누적 레이어 — 목차·태그 필터·접기·딥링크를 DOM에서 자동 생성.
+   새 노트는 <article class="note" data-id="YYYYMMDD-slug"> 하나만 붙이면
+   목차·태그·앵커가 전부 알아서 갱신된다. 수동 동기화 지점 없음.
+   ───────────────────────────────────────────────────────────── */
+(function () {
+  var main  = document.querySelector('main');
+  var notes = [].slice.call(document.querySelectorAll('article.note'));
+  if (!notes.length) return;
+
+  var slug = function (t) {
+    return t.trim().toLowerCase().replace(/[^\w가-힣]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+  };
+
+  var meta = notes.map(function (n, i) {
+    var date  = (n.querySelector('.nmeta .date') || {}).textContent || '';
+    var title = (n.querySelector('.ntitle')      || {}).textContent || '노트 ' + (i + 1);
+    var tags  = [].slice.call(n.querySelectorAll('.nmeta .tag, .nmeta .tk'))
+                  .map(function (e) { return e.textContent.trim(); });
+    n.id = n.dataset.id || (date.replace(/\./g, '') + '-' + slug(title));
+
+    /* 본문 래퍼가 없으면 자동 생성 — 기존 노트도 손대지 않고 접기 지원 */
+    if (!n.querySelector('.nbody')) {
+      var wrap = document.createElement('div');
+      wrap.className = 'nbody';
+      var start = n.querySelector('.nlede') || n.querySelector('.ntitle');
+      if (start) {
+        var sib = start.nextSibling, nx;
+        while (sib) { nx = sib.nextSibling; wrap.appendChild(sib); sib = nx; }
+        n.appendChild(wrap);
+      }
+    }
+
+    /* 접기 토글 — 최신 1개만 펼침 */
+    if (n.querySelector('.nbody')) {
+      var btn = document.createElement('button');
+      btn.className = 'fold';
+      btn.type = 'button';
+      var setLabel = function () { btn.textContent = n.classList.contains('collapsed') ? '펼치기 ▾' : '접기 ▴'; };
+      btn.onclick = function () { n.classList.toggle('collapsed'); setLabel(); };
+      if (i > 0) n.classList.add('collapsed');
+      setLabel();
+
+      /* 딥링크 버튼 */
+      var lnk = document.createElement('button');
+      lnk.className = 'anch';
+      lnk.type = 'button';
+      lnk.textContent = '#';
+      lnk.title = '이 노트 링크 복사';
+      lnk.onclick = function () {
+        var url = location.origin + location.pathname + '#' + n.id;
+        history.replaceState(null, '', '#' + n.id);
+        if (navigator.clipboard) navigator.clipboard.writeText(url);
+        lnk.textContent = '복사됨';
+        setTimeout(function () { lnk.textContent = '#'; }, 1200);
+      };
+      var nm = n.querySelector('.nmeta');
+      nm.appendChild(lnk);
+      nm.appendChild(btn);
+    }
+    return { el: n, date: date, title: title, tags: tags };
+  });
+
+  /* ── 목차 + 태그 필터 ── */
+  var allTags = [];
+  meta.forEach(function (m) {
+    m.tags.forEach(function (t) { if (allTags.indexOf(t) < 0) allTags.push(t); });
+  });
+
+  var toc = document.createElement('div');
+  toc.className = 'toc';
+  toc.innerHTML =
+    '<div class="th"><b>이 산업 노트</b><span>' + meta.length + '건 · 최신순</span></div>' +
+    '<div class="tagbar"></div><div class="toclist"></div>';
+  main.insertBefore(toc, main.firstElementChild);
+
+  var bar  = toc.querySelector('.tagbar');
+  var list = toc.querySelector('.toclist');
+
+  var render = function (active) {
+    list.innerHTML = '';
+    var shown = 0;
+    meta.forEach(function (m) {
+      var hit = !active || m.tags.indexOf(active) >= 0;
+      m.el.style.display = hit ? '' : 'none';
+      if (!hit) return;
+      shown++;
+      var a = document.createElement('a');
+      a.href = '#' + m.el.id;
+      a.innerHTML = '<span class="d">' + m.date + '</span><span class="t">' + m.title + '</span>';
+      a.onclick = function () { m.el.classList.remove('collapsed'); var f = m.el.querySelector('.fold'); if (f) f.textContent = '접기 ▴'; };
+      list.appendChild(a);
+    });
+    if (!shown) list.innerHTML = '<div class="empty">해당 태그의 노트가 없습니다.</div>';
+  };
+
+  var mkBtn = function (label, tag) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = label;
+    b.onclick = function () {
+      var was = b.classList.contains('on');
+      [].forEach.call(bar.children, function (c) { c.classList.remove('on'); });
+      if (!was) b.classList.add('on');
+      render(was ? null : tag);
+    };
+    return b;
+  };
+  allTags.forEach(function (t) { bar.appendChild(mkBtn(t, t)); });
+  render(null);
+
+  /* ── 해시로 들어오면 해당 노트 펼치고 이동 ── */
+  var openHash = function () {
+    var id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    var n = document.getElementById(id);
+    if (!n) return;
+    n.classList.remove('collapsed');
+    var f = n.querySelector('.fold'); if (f) f.textContent = '접기 ▴';
+    n.scrollIntoView();
+  };
+  openHash();
+  window.addEventListener('hashchange', openHash);
+})();
+</script>
+
+
+<footer>
+  <div class="wrap"><span class="star">✦</span> POLARIS — Research Notes</div>
+</footer>
+
+</body>
+</html>

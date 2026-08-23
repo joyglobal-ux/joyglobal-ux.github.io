@@ -275,6 +275,187 @@
 
   <!-- 새 노트는 이 줄 바로 아래에 추가 (최신순) -->
 
+  <article class="note" data-id="20260823-tokens-must-flow">
+    <div class="nmeta">
+      <span class="date">2026.08.23</span>
+      <span class="tk">AI 인프라 사이클</span>
+      <span class="tag">제본스 역설</span>
+      <span class="tag">병목 사다리</span>
+      <span class="tag">상환능력</span>
+      <span class="tag">미래에셋 한종목</span>
+    </div>
+    <div class="ntitle">토큰은 싸졌는데 임대료는 올랐다 — 병목은 사라지지 않고 위로 올라간다</div>
+    <p class="nlede">
+      <b>한 줄:</b> AI 효율 개선이 인프라 수요를 없애지 않는다. <b>병목을 한 층 위로 밀어올릴 뿐</b>이다
+      (DRAM → InP → 광통신 → 발전터빈). 그리고 이 사이클의 진짜 전환점은 기술이 아니라
+      <b>청구서를 자본시장이 대신 내기 시작했다</b>는 것 — 즉 다음 국면의 승패는 GPU를 얼마나 사느냐가 아니라
+      <b>계약전력을 얼마나 빨리 가동전력과 매출로 바꾸느냐</b>에서 갈린다.
+    </p>
+
+    <div class="nbody">
+
+    <div class="sec">
+      <div class="sech"><span class="sn">01</span><h3>사실 확인 — 값은 내려갔는데 임대료는 올랐다</h3></div>
+      <p class="p">
+        "AI가 싸지면 반도체가 덜 필요해진다"는 명제는 <b>데이터로 이미 반증됐다.</b>
+        토큰 지출 단가 지수는 25.12 <b>$1.02</b> → 26.5 <b>$2.06</b> → 26.8.16 <b>$1.02</b>로 여덟 달 만에 제자리로 왔다.
+        그런데 같은 시점 <b>GPU 현물·즉시사용 지수는 $2.70, 다음 날 관측 최고 $3.08</b>을 찍었다.
+        <span class="hl">토큰이 8개월 만의 최저를 찍은 바로 그날 임대료는 한 달 만의 최고를 찍은 것이다.</span>
+      </p>
+      <figure class="fig">
+        <div class="fw"><img src="assets/semiconductor-ai/20260823-token-vs-rent.png" alt="토큰 지출 단가 지수 vs GPU 현물 임대료" loading="lazy"></div>
+        <figcaption><b>그림 1.</b> 두 선이 함께 올랐다가 최근에야 갈라졌다. <b>AI 서비스 가격은 모델 기업의 경쟁이 정하고, GPU 임대료는 "전력·메모리·네트워크까지 갖춘 완성형 클러스터가 얼마나 부족한지"가 정한다</b> — 애초에 다른 시장이다. 자료: Silicon Data·SemiAnalysis·미래에셋증권</figcaption>
+      </figure>
+      <div class="why">
+        <b>왜 갈라지나 — 총연산 수요 = 요청 수 × 요청당 연산량.</b>
+        추론 1회가 싸져도 두 항이 더 빨리 늘면 총수요는 안 준다. 실측이 정확히 그렇다:
+        AI 지출 기업의 <b>직원 1인당 월지출 중앙값 $2.86(24.1) → $11.95(26.7), 4.2배</b>.
+        평균 프롬프트 <b>1,500 → 6,000토큰</b>, 평균 출력 <b>150 → 400토큰</b>, 전체 시퀀스 2,000 → 5,400토큰.
+        코딩 비중 <b>11%(25초) → 50%+</b>. 긴 문맥은 KV cache를, 에이전트는 재시도·검증을 늘린다.
+        게다가 <b>상위 10% 기업군의 중앙값은 $611로 전체 중앙값의 51배</b> — 평균 기업이 선도 기업 수준으로 가는 여지가 그만큼 남아 있다.
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">02</span><h3>병목 사다리 — 이 노트의 핵심 그림</h3></div>
+      <p class="p">
+        연산칩이 빨라지자 제약이 <b>그 칩을 먹여 살리는 쪽</b>으로 옮겨갔다. 중요한 건 병목이 <b>해소되는 게 아니라 이동한다</b>는 점이다.
+        AI 인프라의 단위는 GPU 한 장이 아니라 <b>전력에 연결된 완성형 클러스터</b>다.
+      </p>
+      <figure class="fig">
+        <div class="fw"><img src="assets/semiconductor-ai/20260823-bottleneck-ladder.png" alt="병목 사다리: D램 → InP 기판 → 광통신 부품 → 발전터빈" loading="lazy"></div>
+        <figcaption><b>그림 5.</b> D램 계약가 +90~95% → +58~63% · InP 2인치 웨이퍼 $800 → <b>$2,300~2,500(약 3배)</b> · 광통신 부품 시장 $0.1bn → <b>$39bn 이상</b> · 발전터빈은 엔진이 아니라 <b>날개·단조품</b>이 병목. <b>이 사다리가 기존 노트 「Kimi K3 쇼크·메모리 곡괭이론」의 바로 다음 층이다</b> — 비용이 연산→메모리로 옮겨갔고, 이제 메모리→광통신→전력으로 한 칸 더 올라갔다. 자료: 외신 종합·미래에셋증권</figcaption>
+      </figure>
+      <figure class="fig wide">
+        <div class="fw"><img src="assets/semiconductor-ai/20260823-bottleneck-table.png" alt="병목 항목별 확인된 변화와 투자 의미" loading="lazy"></div>
+        <figcaption><b>표 1.</b> 각 병목의 "확인된 변화"와 "투자자가 읽어야 할 의미". <b>DRAM 신규 생산능력이 2027년 말 이후에 집중</b>된다는 줄이 가장 무겁다 — 가격이 내려가기까지 공급 시차가 길다는 뜻이다. 전력은 <b>계약전력과 가동전력 사이 수년의 시차</b>가 매출 시점을 정한다. 자료: TrendForce·미래에셋증권</figcaption>
+      </figure>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">03</span><h3>A100은 죽지 않았다 — 잔존가치 0 가정의 붕괴</h3></div>
+      <p class="p">
+        GPU 약세론의 핵심은 짧은 자산수명이었다. 4~5년짜리 대출로 지은 데이터센터가 만기 전에 경쟁력을 잃는다는 논리.
+        그래서 약세 모형은 <b>3~5년 뒤 잔존가치를 대개 0으로 뒀다.</b> 그 가정이 깨졌다.
+      </p>
+      <div class="bn">
+        <div class="lay comp"><div class="lh">✅ 깨진 증거 <span class="pill yes">확인</span></div>
+          <div class="lb">CoreWeave가 <b>2020년산 A100을 2029년까지 재계약</b>(출시 9년차에도 사용료). Google은
+          <b>출시 7~8년 된 TPU도 완전 가동 중</b>(이해관계가 다른 사업자의 증언). Nebius는 <b>2Q26 구형 GPU 가격이 전분기 대비 +30%</b>.
+          구형 칩은 폐기자산이 아니라 <b>가격에 따라 수요가 붙는 대체재</b>다.</div></div>
+        <div class="lay sys"><div class="lh">⚠ 그런데 이게 왜 중요한가 <span class="pill no">2차 효과</span></div>
+          <div class="lb">이건 회계 얘기가 아니라 <b>자본비용 얘기</b>다. 잔존가치 0 가정이 깨지면 → 담보가치가 생기고 →
+          조달금리가 내려가고 → <b>같은 자기자본으로 더 많은 설비를 지을 수 있다.</b>
+          구형 GPU 수명 연장은 감가상각 문제가 아니라 <b>증설능력을 키우는 금융상의 레버</b>다.
+          모든 GPU를 증명할 필요도 없다 — 신용모형의 0원 가정을 깨는 데는 계약 한 건으로 충분하다.</div></div>
+      </div>
+      <p class="p">
+        <b>구형 가속기의 연장가치 = 재계약 매출 − 전력비 − 직접 운영비 − 추가 자본비용.</b>
+        초기 투자비를 이미 회수했다면 낮아진 단가로도 현금은 남는다. 최첨단 학습은 신형이 가져가고,
+        추론·임베딩·배치·연구환경은 <b>절대성능보다 시간당 가격과 가용성</b>을 본다.
+      </p>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">04</span><h3>같은 1GW인데 매출이 8.3배 갈린다</h3></div>
+      <p class="p">
+        수요가 있다는 것과 <b>그 수요가 누구의 매출이 되느냐</b>는 다른 문제다.
+        클라우드는 <b>연산시간</b>을 팔고 모델 기업은 그 연산으로 만든 <b>대답(지능)</b>을 판다.
+        최종 고객에 가까운 층일수록 같은 전기에서 더 많은 가치를 가져간다.
+      </p>
+      <figure class="fig">
+        <div class="fw"><img src="assets/semiconductor-ai/20260823-gw-value-ladder.png" alt="1GW의 층별 연매출: 임대 12bn에서 모델·API 100bn까지" loading="lazy"></div>
+        <figcaption><b>그림 13.</b> 1GW 장기 GPU 임대 <b>$12bn</b> → 프론티어 모델·API 직판 <b>$100bn(8.3배)</b>. 오른쪽은 실현 매출이 아니라 <b>수요 포화 시 이론적 상단</b>이라는 점에 주의. 다만 Nebius 실제 계약(6개월 이하 단기 $40~50bn vs 1~3년 중기 $20~25bn)이 <b>"즉시 쓸 수 있는 연산에는 실제로 프리미엄이 붙는다"</b>를 증명한다. 자료: Nebius·SemiAnalysis·미래에셋증권</figcaption>
+      </figure>
+      <p class="p">
+        차액 $88bn이 전부 모델업체 이익은 아니다. 여기서 R&D·추론비용·클라우드 사용료·판매비를 빼야 한다.
+        <b>그 뒤 남는 총이익이 데이터센터 임차료와 이자를 갚는 재원</b>이다. 그래서 결론이 이렇게 된다 —
+        <span class="hl">모델 기업의 총마진이 AI 인프라 전체의 상환능력을 결정한다.</span>
+      </p>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">05</span><h3>상환능력 역산 — 매출이 1.6배 되면 9GW가 선다</h3></div>
+      <p class="p">
+        보고서에서 가장 유용한 계산. 추상적인 "AI 버블인가"를 <b>검증 가능한 하나의 배수</b>로 바꿔놓는다.
+      </p>
+      <figure class="fig wide">
+        <div class="fw"><img src="assets/semiconductor-ai/20260823-repay-math-table.png" alt="모델 업체 매출이 감당할 수 있는 컴퓨트 용량 역산" loading="lazy"></div>
+        <figcaption><b>표 4.</b> OpenAI $50bn + Anthropic $19bn = <b>컴퓨트 예산 $69bn</b>. ÷ $12bn/GW = <b>현재 예산은 약 5.8GW어치</b>. 두 회사 합산 연환산 매출 $115bn 대비 <b>컴퓨트 비중 60%</b>. 업계 신규 인도계획 중간값 9GW를 같은 비중으로 받치려면 합산 매출 $180bn → <b>지금의 약 1.6배</b>. 자료: 각사·SemiAnalysis·미래에셋증권</figcaption>
+      </figure>
+      <div class="why">
+        <b>이 계산을 보수적으로 읽어야 하는 이유와 그 반대.</b>
+        ⓐ <b>보수적 방향</b> — 9GW를 두 회사가 전부 부담한다고 가정했다. 실제로는 Google·Meta 등도 쓰므로 실제 문턱은 더 낮다.
+        ⓑ <b>공격적 방향</b> — $12bn/GW는 <b>장기 임대가</b>다. 공급부족 국면의 즉시사용 단가는 더 높으므로 같은 예산이 더 적은 GW를 산다.
+        어느 쪽이든 <b>"1.6배"라는 숫자 자체가 모니터링 가능한 단일 지표</b>가 된다는 게 이 표의 값어치다.
+      </div>
+      <p class="p">
+        참고 실측: 두 회사 합산 연환산 매출은 <b>25.11 $27bn → 26.7 $105bn(3분기 만에 3.9배)</b>, 최근 $115bn.
+        7월 전월비 +14%, 전년비 <b>+490%로 재가속</b>. ChatGPT Work·Codex 주간활성 <b>2,000만 명</b>(전체 10억 대비 2%, 침투율은 낮고 속도는 빨라지는 중).
+        <b>Anthropic의 $65bn은 순액 기준으로 재계산된 값</b>이라는 관측이 있고, 총액 기준이면 $80bn 초과 추정.
+      </p>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">06</span><h3>그래서 무엇을 봐야 하나 — 계약전력이 아니라 가동전력</h3></div>
+      <p class="p">
+        수요가 공급보다 빨리 늘 때 초과수익은 <b>가장 부족한 자원</b>에서 발생한다. 부족한 건 GPU만이 아니다 —
+        전력 인입 가능한 부지, 변전설비, HBM, 광통신 부품, 냉각, 발전터빈, 숙련 건설인력.
+        <b>하나라도 없으면 데이터센터는 안 돈다.</b>
+      </p>
+      <figure class="fig">
+        <div class="fw"><img src="assets/semiconductor-ai/20260823-coreweave-utilization.png" alt="CoreWeave 계약전력 3.7GW 대비 가동 1.5GW, 가동률 41%" loading="lazy"></div>
+        <figcaption><b>그림 19.</b> CoreWeave 계약전력 <b>3.7GW</b> vs 가동 <b>1.5GW = 가동률 41%</b>. 이자보상배율 <b>0.20배</b>(조정 영업이익 $128mn ÷ 순이자비용 $640mn). <b>이자는 계약전력 전체에서 발생하는데 수익은 41%에서만 나온다</b> — 이익을 못 내는 게 아니라 <b>가동 전 설비의 이자를 먼저 부담</b>하는 구조. 실행이 늦으면 그대로 신용 이슈가 된다. 자료: CoreWeave·미래에셋증권</figcaption>
+      </figure>
+      <p class="p">
+        속도가 새로운 희소자원을 만든다는 사례도 명확하다. 100MW 그린필드의 업계 "상식"이 약 2년인데
+        <b>SpaceXAI는 3~4개월</b>로 줄였다(Colossus 1 멤피스 122일, 1차 확장 92일, Colossus 2 91일 → 64일).
+        <span class="hl">남들보다 1년 먼저 켠 1GW는 같은 1GW가 아니다.</span>
+        한편 미국 26~28년 신규 가동 용량의 <b>32%·43%·38%가 기존 부지의 확장분</b> — 빅테크는 경주의 절반을 끝낸 상태에서 출발한다.
+      </p>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">07</span><h3>판정 · 반증조건</h3></div>
+      <div class="rows">
+        <div class="r"><div class="lab">테제</div><div class="val">
+          효율 개선은 인프라 수요를 없애지 않고 <b>병목을 위로 민다</b>. 따라서 AI 사이클을 파는 근거로
+          "토큰값 하락"을 쓰면 안 된다. 대신 봐야 할 것은 <b>병목 층의 가격</b>(DRAM 계약가, InP, 광부품)과
+          <b>가동전력 전환 속도</b>다. 수익은 희소자원을 <b>소유하거나 · 먼저 확보하거나 · 직접 만들어 파는</b> 쪽에 집중된다.</div></div>
+        <div class="r"><div class="lab">반증조건</div><div class="val">
+          ⓐ <b>모델 매출 성장률이 꺾여</b> 1.6배 격차가 안 좁혀질 때 (표 4를 분기마다 다시 계산) ·
+          ⓑ 컴퓨트 금융이 <b>증권화 단계로 못 넘어가고</b> 사모대출에서 멈출 때 (연기금·보험 자금 유입 실패) ·
+          ⓒ <b>NVIDIA 보증이 실제로 발동</b>되는 순간 — 그 자체가 "GPU 가격과 고객 신용이 동시에 무너졌다"는 신호다.</div></div>
+        <div class="r verdict"><div class="lab">판정</div><div class="val">
+          <b>사이클 지속 쪽에 무게. 단, 이 보고서는 강한 불(bull) 문서라는 점을 감안해서 읽는다.</b>
+          결론이 "증설을 멈출 이유보다 계속할 이유가 더 강하다"인데, <b>CAPEX 게이트에서 이미 배운 게
+          "게이트 ① 지출 의지 4/4 우호인데 같은 기간 −30%"</b>였다. <span class="hl">지출은 선행, 회수는 후행이고 그 사이에서 멀티플이 죽는다.</span>
+          그러므로 이 노트를 매수 근거로 쓰지 않는다 — <b>병목 층(메모리·광통신·전력)의 가격 지표와
+          가동전력 전환율을 추적하는 렌즈</b>로만 쓴다. 자본·신용 파트는 <a href="/capex-gate/" style="color:var(--accent)">CAPEX 게이트 워치</a>로 넘겼다.</div></div>
+        <div class="r"><div class="lab">KPI</div><div class="val">
+          ① OpenAI+Anthropic 합산 연환산 매출 (목표 $180bn까지의 거리) ·
+          ② DRAM 계약가 MoM·27년 말 신규 캐파 일정 ·
+          ③ InP 2인치 기판 가격 ·
+          ④ CoreWeave·Nebius <b>분기별 가동전력 증가율 vs 이자비용 증가율</b> ·
+          ⑤ GPU 현물·즉시사용 지수 vs 토큰 지출 단가 지수의 <b>갭</b> ·
+          ⑥ 컴퓨트 담보 증권화(ABS) 1호 발행 여부.</div></div>
+        <div class="r"><div class="lab">연결</div><div class="val">
+          <b>「Kimi K3 쇼크·메모리 곡괭이론」</b>(2026.07.18) = 비용이 연산→메모리로 이동 → <b>이 노트의 병목 사다리가 그 다음 층</b>.
+          <b>「오픈소스 vs 프론티어 3축 프레임」</b>(2026.07.26) 축① 물량=TCO 손익분기 → 토큰 지출 단가 지수가 그 축의 <b>실측 시계열</b>.
+          광통신 병목 상세는 <a href="/research/optical.html" style="color:var(--accent)">광통신 · 네트워크 노트</a>로 분리했다.</div></div>
+      </div>
+    </div>
+
+    <div class="disc">
+      출처: <span class="src">미래에셋증권 「AI Focus — 은하지능전설 2부: The tokens must flow」(2026.08.21, 한종목, 29p)</span>.
+      6월 「악마는 병목을 입는다」의 후속편. 수치는 보고서 작성 시점(2026.08) 기준.
+      보고서 목차는 "약 5GW"로, 본문·계산은 "약 5.8GW / 약 6GW"로 표기돼 있어 본문 기준을 따랐다.
+      원문 도표는 보고서에서 직접 캡처해 인용(교육·기록 목적). 투자권유 아님.
+    </div>
+    </div>
+  </article>
+
+
   <article class="note">
     <div class="nmeta">
       <span class="date">2026.07.26</span>
