@@ -231,36 +231,46 @@ def build() -> dict:
                 _log(f"  {t:6} 종가 {len(c)}일 · 126d vol {v[-1][1]:.1f}%")
         except Exception as e:  # noqa: BLE001
             _log(f"  {t:6} 수집 실패: {e}")
-    if "ORCL" not in vols or "MSFT" not in vols:
-        raise RuntimeError("ORCL/MSFT 필수 시계열 누락 — 중단")
+    # 주가 소스(Yahoo·Stooq)는 데이터센터 IP에서 자주 차단된다. 예전엔 여기서 raise 해
+    # 스크립트 전체를 죽였는데, 그러면 잘 되는 FRED 레이어까지 같이 못 쓴다(2026-08, 23일 연속 실패).
+    # → 프록시 레이어만 생략하고 나머지는 정상 갱신한다.
+    degraded: list[str] = []
+    prices_ok = "ORCL" in vols and "MSFT" in vols
+    names_out: list[dict] = []
+    prem_hist: list[dict] = []
+    prem_mom = None
+    fit = None
 
-    vols_now = {t: v[-1][1] for t, v in vols.items()}
-    a, b, fit = calibrate(vols_now)
-    _log(f"  캘리브레이션: CDS≈{math.exp(a):.4f}×vol^{fit['b']} "
-         f"R²={fit['r2']} 평균오차={fit['mae']}%")
+    if prices_ok:
+        vols_now = {t: v[-1][1] for t, v in vols.items()}
+        a, b, fit = calibrate(vols_now)
+        _log(f"  캘리브레이션: CDS≈{math.exp(a):.4f}×vol^{fit['b']} "
+             f"R²={fit['r2']} 평균오차={fit['mae']}%")
 
-    names_out = []
-    for nm in NAMES:
-        t = nm["t"]
-        if t not in vols:
-            continue
-        px = proxy_bp(a, b, vols_now[t])
-        wk = weekly_last(vols[t])
-        hist = [{"t": d_, "v": round(proxy_bp(a, b, v))} for d_, v in wk][-WEEKS:]
-        mom = momentum(hist, good_dir=-1, eps=8, lookback=13)
-        names_out.append({
-            "ticker": t, "label": nm["label"], "role": nm["role"],
-            "vol": round(vols_now[t], 1), "proxy": round(px),
-            "actual": CDS_ANCHOR.get(t), "asOf": vols[t][-1][0],
-            "history": hist, "mom": mom,
-        })
+        for nm in NAMES:
+            t = nm["t"]
+            if t not in vols:
+                continue
+            px = proxy_bp(a, b, vols_now[t])
+            wk = weekly_last(vols[t])
+            hist = [{"t": d_, "v": round(proxy_bp(a, b, v))} for d_, v in wk][-WEEKS:]
+            mom = momentum(hist, good_dir=-1, eps=8, lookback=13)
+            names_out.append({
+                "ticker": t, "label": nm["label"], "role": nm["role"],
+                "vol": round(vols_now[t], 1), "proxy": round(px),
+                "actual": CDS_ANCHOR.get(t), "asOf": vols[t][-1][0],
+                "history": hist, "mom": mom,
+            })
 
-    # 2) AI 크레딧 프리미엄 = ORCL − MSFT (공통 주차만)
-    o = {p["t"]: p["v"] for p in next(n for n in names_out if n["ticker"] == "ORCL")["history"]}
-    m = {p["t"]: p["v"] for p in next(n for n in names_out if n["ticker"] == "MSFT")["history"]}
-    prem_hist = [{"t": k, "v": o[k] - m[k]} for k in sorted(set(o) & set(m))][-WEEKS:]
-    prem_mom = momentum(prem_hist, good_dir=-1, eps=15, lookback=13)
-    _log(f"  AI 크레딧 프리미엄: {prem_hist[-1]['v']}bp {prem_mom and prem_mom['phase']}")
+        # 2) AI 크레딧 프리미엄 = ORCL − MSFT (공통 주차만)
+        o = {p["t"]: p["v"] for p in next(n for n in names_out if n["ticker"] == "ORCL")["history"]}
+        m = {p["t"]: p["v"] for p in next(n for n in names_out if n["ticker"] == "MSFT")["history"]}
+        prem_hist = [{"t": k, "v": o[k] - m[k]} for k in sorted(set(o) & set(m))][-WEEKS:]
+        prem_mom = momentum(prem_hist, good_dir=-1, eps=15, lookback=13)
+        _log(f"  AI 크레딧 프리미엄: {prem_hist[-1]['v']}bp {prem_mom and prem_mom['phase']}")
+    else:
+        degraded.append("주가 소스 차단 — AI 크레딧 프리미엄·종목별 프록시 생략")
+        _log("  ⚠ ORCL/MSFT 시계열 없음 → 프록시 레이어 생략, FRED 레이어만 갱신")
 
     # 3) FRED 크레딧 집계
     ig = weekly_last(fetch_fred("BAMLC0A0CM"))
@@ -280,14 +290,17 @@ def build() -> dict:
         _log(f"  DTCC 실패: {e}")
         act_hist, act_mom, act_asof = [], None, None
 
-    indicators = [
+    indicators = []
+    if prem_hist:
+        indicators.append(
         {"id": "ai_premium", "label": "AI 크레딧 프리미엄", "unit": "bp",
          "role": "ORCL − MSFT 프록시 · 부채조달 capex의 값", "decimals": 0,
          "source": "프록시 (126d 실현변동성 캘리브레이션)", "sourceUrl": "",
          "proxy": True,
          "value": prem_hist[-1]["v"], "asOf": prem_hist[-1]["t"],
          "history": prem_hist, "mom": prem_mom,
-         "deltaNote": "13주 Δ {dN:+.0f}bp · 직전주 {d1:+.0f}"},
+         "deltaNote": "13주 Δ {dN:+.0f}bp · 직전주 {d1:+.0f}"})
+    indicators += [
         {"id": "ig_oas", "label": "IG 회사채 스프레드", "unit": "bp",
          "role": "하이퍼스케일러가 속한 등급대 · 조달비용", "decimals": 0,
          "source": "FRED · BAMLC0A0CM",
@@ -340,13 +353,41 @@ def build() -> dict:
     headline += ("  자금조달이 조여지면 capex 의지(게이트①)가 우호여도 "
                  "실행이 막힌다 — 게이트의 조기경보 레이어.")
 
+    # 직전 판정과 비교해 "언제부터 이 판정인지"를 남긴다.
+    # (매일 들여다보지 않아도 랜딩에서 '바뀐 것'만 눈에 띄게 하려는 장치)
+    prev: dict = {}
+    try:
+        prev = json.loads((HERE / "data.json").read_text(encoding="utf-8")).get("interpretation", {})
+    except Exception:  # noqa: BLE001
+        pass
+    today_s = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    # 부분 갱신이면 판정을 새로 계산하지 않는다.
+    # AI 크레딧 프리미엄이 '크레딧 경보'를 결정하는 지표라, 주가 소스가 막혔다는
+    # 이유만으로 경보가 조용히 '혼조'로 내려앉으면 최악의 실패다.
+    # → 직전 판정을 그대로 유지하고 부분 갱신임을 명시한다.
+    if degraded and prev.get("regime"):
+        regime, regimeEn = prev["regime"], prev.get("regimeEn", regimeEn)
+        tone = prev.get("tone", tone)
+        headline = (f"⚠ 부분 갱신 — {degraded[0]}. 판정은 직전 값({regime})을 유지한다. "
+                    + headline)
+
+    if prev.get("regime") and prev["regime"] != regime:
+        regime_since, regime_prev = today_s, prev["regime"]
+        _log(f"  ⚑ 판정 변화: {prev['regime']} → {regime}")
+    else:
+        regime_since = prev.get("regimeSince") or today_s
+        regime_prev = prev.get("regimePrev")
+
     return {
         "generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "indicators": indicators,
         "names": names_out,
-        "calibration": {**fit, "anchors": CDS_ANCHOR, "volWindow": VOL_WIN},
+        "calibration": ({**fit, "anchors": CDS_ANCHOR, "volWindow": VOL_WIN} if fit else None),
+        "degraded": degraded,
         "interpretation": {
             "regime": regime, "regimeEn": regimeEn, "tone": tone,
+            "regimeSince": regime_since, "regimePrev": regime_prev,
             "headline": headline, "supportive": sup,
             "bullets": [{"label": i["label"], "value": i["value"], "unit": i["unit"],
                          "phase": i["mom"]["phase"] if i["mom"] else "",

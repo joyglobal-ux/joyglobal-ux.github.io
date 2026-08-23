@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-23T14:14:09+00:00",
+  "generatedAt": "2026-08-23T14:44:53+00:00",
   "indicators": [
     {
       "id": "ai_premium",
@@ -6071,10 +6071,13 @@
     },
     "volWindow": 126
   },
+  "degraded": [],
   "interpretation": {
     "regime": "크레딧 경보",
     "regimeEn": "Credit Stress",
     "tone": "neg",
+    "regimeSince": "2026-08-23",
+    "regimePrev": null,
     "headline": "투표 지표 3개 — 우호 0 · 중립 2 · 역풍 1 → 크레딧 경보.  ✖ 확대: AI 크레딧 프리미엄.  자금조달이 조여지면 capex 의지(게이트①)가 우호여도 실행이 막힌다 — 게이트의 조기경보 레이어.",
     "supportive": 0,
     "bullets": [

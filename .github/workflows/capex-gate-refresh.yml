@@ -2,8 +2,10 @@ name: CAPEX gate credit refresh
 
 on:
   schedule:
-    # UTC. 미국 장마감 후 — FRED 일간 갱신 + 당일 종가 반영.
-    - cron: "40 22 * * 1-5"
+    # UTC. 금요일 미국 장마감 후 주 1회.
+    # 판정 기준이 "13주 방향"이라 매일 돌릴 이유가 없다 — 매일 갱신은 노이즈이자
+    # 실패 알림의 원천이었다(2026-08 23일 연속 실패). 주 1회면 충분.
+    - cron: "40 22 * * 5"
   workflow_dispatch: {}
 
 permissions:

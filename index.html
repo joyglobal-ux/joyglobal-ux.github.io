@@ -66,6 +66,9 @@
   .st8.stop .rg{color:var(--stop)}
   .st8.stale .rg{color:var(--faint)}
   .st8 .sh{display:block;font-size:11px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .st8 .sh.chg{color:var(--gold);font-weight:700}
+  .st8 .flg{color:var(--gold)}
+  .st8.flag{border-color:rgba(255,214,107,.4)}
   .foot .live.old{color:var(--stop);font-weight:700}
   .foot .live.old .pulse{background:var(--stop);animation:none}
 
@@ -410,9 +413,14 @@
     var feat = card.querySelector('.feat');
     var box = document.createElement('div');
     var stale = o.age != null && o.age > o.staleDays;
-    box.className = 'st8 ' + (stale ? 'stale' : (o.tone || ''));
+    /* 판정이 최근(3주 내) 바뀐 도구는 깃발로 표시 — 매일 안 봐도 '바뀐 것'만 눈에 띄게 */
+    var sinceAge = o.since ? days(o.since) : null;
+    var changed = !!(o.prev && sinceAge != null && sinceAge <= 21);
+    box.className = 'st8 ' + (stale ? 'stale' : (o.tone || '')) + (changed ? ' flag' : '');
     box.innerHTML =
-      '<span class="dot"></span><span class="txt"><span class="rg">' + esc(o.regime) + '</span>' +
+      '<span class="dot"></span><span class="txt"><span class="rg">' +
+        (changed ? '<span class="flg">⚑</span> ' : '') + esc(o.regime) + '</span>' +
+      (changed ? '<span class="sh chg">' + esc(mmdd(o.since)) + '부터 · 이전 ' + esc(o.prev) + '</span>' : '') +
       (o.sub ? '<span class="sh">' + esc(o.sub) + '</span>' : '') + '</span>';
     if (feat && feat.parentNode) feat.parentNode.insertBefore(box, feat.nextSibling);
 
@@ -455,6 +463,7 @@
       paint(card, {
         regime: i.regime || '—', sub: firstSentence(i.headline),
         tone: i.tone, asOf: d.generatedAt,
+        since: i.regimeSince, prev: i.regimePrev,
         age: days(d.generatedAt), staleDays: t.staleDays
       });
     }).catch(function () {});
