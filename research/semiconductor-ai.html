@@ -275,6 +275,164 @@
 
   <!-- 새 노트는 이 줄 바로 아래에 추가 (최신순) -->
 
+  <article class="note" data-id="20260825-memory-cycle-payability" data-status="프레임">
+    <div class="nmeta">
+      <span class="date">2026.08.25</span>
+      <span class="tk">메모리 사이클</span>
+      <span class="tag">1d 지연</span>
+      <span class="tag">CPU Content</span>
+      <span class="tag">지불능력</span>
+      <span class="tag">중국 답사</span>
+      <span class="tag">LS 정우성 · 미래에셋</span>
+    </div>
+    <div class="ntitle">공급은 Wafer가 아니라 Bit, 가격은 수급이 아니라 지불능력</div>
+    <p class="nlede">
+      <b>한 줄:</b> 메모리 공급은 <b>Wafer가 늘어도 Bit가 안 는다</b>(1d 지연으로 Tech Migration 기여가 반토막).
+      수요는 <b>CPU 출하량이 아니라 CPU당 탑재량</b>이 끌고 간다. 그리고 가격 상단은 공급 부족이 아니라
+      <b>NVIDIA GPM과 CSP Cloud 마진이라는 고객의 지불능력</b>이 정한다.
+      같은 날 나온 중국 답사기는 <b>"중국이 물량을 밀어낸다"는 통념의 정반대</b> 결론을 낸다.
+    </p>
+
+    <div class="nbody">
+
+    <div class="sec">
+      <div class="sech"><span class="sn">01</span><h3>공급 — Wafer는 느는데 Bit가 안 는다</h3></div>
+      <p class="p">
+        DRAM Bit Growth = <b>Wafer Growth × Tech Migration</b>인데 뒤쪽 항이 죽고 있다.
+        셀은 계속 작아지지만 <b>커패시터는 전하량을 유지해야 해서 같은 속도로 못 줄고</b>,
+        주변회로(Sense Amp·디코더·I/O)도 동작 안정성 때문에 따라 줄지 못한다.
+        1a→1b +21.8%, 1b→1c +24.0%였던 Cell 밀도 개선이 <b>1c→1d에선 +16~23%로 둔화</b>된다.
+      </p>
+      <p class="p">
+        여기에 <b>1d 지연</b>이 겹친다. 삼성은 초도양산이 2026년 전후 → <b>2027년 말까지 밀릴 가능성</b>,
+        마이크론 1δ는 2H27. 즉 26~27년 증설은 1c·1γ 중심이고 1d 효과는 2028년부터다.
+        <span class="hl">2028년 Wafer Growth 16.1%인데 Tech Migration 기여는 6.5%</span> — 여기서 HBM 우선 배분까지 빼면
+        Conventional DRAM에 남는 몫은 더 줄어든다.
+      </p>
+      <figure class="fig">
+        <div class="fw"><img src="assets/semiconductor-ai/20260825-wafer-vs-bit.png" alt="메모리 3사 DRAM Wafer Growth와 Bit Growth" loading="lazy"></div>
+        <figcaption><b>LS 그림.</b> Tech Migration 기여(회색)가 26년 13.8% → <b>28년 6.5%로 저점</b>. 성장이 효율(미세화)에서 <b>증설(자본)</b>로 넘어간다는 뜻 — 돈을 써야만 Bit가 늘어나는 구간. 자료: LS증권</figcaption>
+      </figure>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">02</span><h3>수요 — CPU Q가 아니라 CPU당 Content</h3></div>
+      <p class="p">
+        서버 CPU 공급은 막혀 있다. TSMC 선단 CAPA 증가율이 38%→34%→17%→16~18%로 둔화되는데
+        그 웨이퍼를 AI GPU·ASIC과 경쟁해야 하고, Intel은 Intel 7이 줄어드는 만큼 Intel 3·18A가 늘어
+        전체 선단 CAPA가 사실상 정체다. <b>Intel 서버 CPU 출하는 2028년 flat.</b>
+      </p>
+      <p class="p">
+        그런데 <b>메모리 채널이 8→12→16ch, DIMM이 64→128GB 이상</b>으로 가면서 CPU당 잠재 DRAM이
+        0.5TB에서 <b>2~4TB</b>로 뛴다. 그래서 <span class="hl">Server DRAM Bit 수요는 +37%(26) · +31%(27) · +18%(28)</span>로
+        CPU 출하를 크게 상회한다. <b>CPU가 한 대도 더 안 팔려도 수요가 는다.</b>
+      </p>
+      <figure class="fig wide">
+        <div class="fw"><img src="assets/semiconductor-ai/20260825-demand-fill-rate.png" alt="최신 고용량 서버 기준 DRAM 수요충족률" loading="lazy"></div>
+        <figcaption><b>LS 표.</b> 2028년 평균 1.3TB를 쓰는데 플랫폼 물리 한계는 3TB — <b>충족률 43%</b>. 미충족 1.70TB가 남는다. 가격이 올라도 탑재량을 줄이기 어려운 이유. 자료: Intel·AMD·LS증권</figcaption>
+      </figure>
+      <p class="p">
+        Agentic AI가 이걸 밀어올린다. 다만 병목의 성격이 중요하다 —
+        <b>HBM-DRAM Stall은 2028년에도 전체 연산시간의 약 2%</b>에 불과하다.
+        즉 <b>대역폭이 아니라 "이 많은 걸 어디에 둘 것인가"의 용량 문제</b>다.
+        → HBM → Local DRAM → CXL → Storage 계층화.
+      </p>
+      <figure class="fig wide">
+        <div class="fw"><img src="assets/semiconductor-ai/20260825-agentic-memory-footprint.png" alt="Agentic AI의 Memory Footprint 변화" loading="lazy"></div>
+        <figcaption><b>LS 표.</b> Total Agent State 500GB → <b>2TB</b>, HBM Capacity 192 → 576GB. <b>State/HBM = 2.6x → 3.5x</b> — HBM으로는 못 담는다. NVIDIA도 Vera Rubin에서 CPU Memory/HBM을 1.3x→2.6x로 올렸다(단, 54TB→28TB 하향 보도 있음). 자료: LS증권 추정</figcaption>
+      </figure>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">03</span><h3>가격 — 지불능력이 상단을 정한다</h3></div>
+      <p class="p">
+        이 보고서가 다른 메모리 리포트와 갈라지는 지점. <b>가격 상단을 수급이 아니라 고객이 얼마까지 낼 수 있는가로 역산한다.</b>
+        NVIDIA Q는 선단·CoWoS에 막혀 +10~15%인데 FY2028 컨센 매출은 +43% → <b>P·Mix가 +24~30% 올라야 한다.</b>
+        그런데 HBM은 이미 NVIDIA 매출원가의 <b>41%</b>(FY2027 146조 중 60조)를 차지한다.
+      </p>
+      <figure class="fig wide">
+        <div class="fw"><img src="assets/semiconductor-ai/20260825-hbm-goldilocks.png" alt="HBM ASP 변화가 각 Player에 미치는 영향" loading="lazy"></div>
+        <figcaption><b>LS 표44.</b> <b>+40~60%가 Goldilocks</b> — 메모리 이익 증가와 NVIDIA GPM 방어가 동시에 가능한 유일한 구간. +60~80%부터 GPM 압박, +80% 이상은 규격·용량 변화 없이는 지속 불가. 자료: LS증권</figcaption>
+      </figure>
+      <p class="p">
+        Conventional DRAM은 <b>CSP 지불능력</b>으로 역산한다. AI 대체가능 Payroll $9.1T → 연 10% Release ×
+        40% 재투자 = <b>AI 지출 여력 $360bn</b> → CSP Capture 50% + Non-AI 가격전이 = 증분 Cloud 매출 $200~210bn →
+        <b>증분 영업이익 $80~105bn</b>. 이 Profit Pool에서 메모리가 가져갈 몫이 상단이다.
+      </p>
+      <div class="why">
+        <b>이 노트에서 가장 오래 쓸 문장:</b> <b>"메모리 가격의 Peak는 공급 부족이 해소되는 시점보다,
+        공급망 하단의 고객이 추가 비용을 더 이상 감당하기 어려워지는 시점에 먼저 나타난다."</b>
+        → Peak를 보려면 DRAM 수급이 아니라 <b>NVIDIA GPM · CSP Cloud 마진 · CAPEX/FCF</b>를 봐야 한다.
+        이건 <a href="/capex-gate/" style="color:var(--accent)">CAPEX 게이트</a> 게이트 ②(수익화 실측)와 같은 질문이고,
+        비로소 <b>관측 가능한 숫자로 바뀌었다</b>.
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">04</span><h3>중국 반론 점검 — 통념과 정반대</h3></div>
+      <p class="p">
+        미래에셋(강민희·김영건)이 8/17~22 중국 현지 7개사를 답사했다. 통념은 "중국이 자립하면 물량이 밀려나와
+        가격이 깨진다"인데, <b>결론이 정반대</b>였다.
+      </p>
+      <p class="p">
+        ① 가속기 3사 공통 화두가 <b>HBM</b>이었다(Moore Threads는 GDDR→HBM 전환, 홍콩 상장 조달 목적 자체가 HBM 공급망).
+        ② 그런데 <b>사용자들이 체감하는 HBM3급 국산화 시점은 "약 2년 뒤"</b> — CXMT 1H26 양산이라는 보도보다 훨씬 보수적이다.
+        <b>자기에게 불리한 증언이라 신뢰도가 높다.</b>
+        ③ 그리고 CXMT가 HBM으로 Capa를 돌릴수록 <b>전환비율이 컨벤셔널 대비 4배</b>라 잠식이 크다.
+      </p>
+      <figure class="fig">
+        <div class="fw"><img src="assets/semiconductor-ai/20260825-cxmt-capa-cannibalization.png" alt="CXMT DRAM 웨이퍼 Capa 추이 및 전망" loading="lazy"></div>
+        <figcaption><b>미래에셋 그림 9.</b> Wafer Capa(회색)는 계속 느는데 <b>Effective Capa(주황)는 27년 들어 오히려 감소</b>. 27년말 10%를 HBM에 할당하면 <b>실질 Capa가 25년보다 낮아진다</b>. 자료: Trendforce·미래에셋증권</figcaption>
+      </figure>
+      <div class="why">
+        <b>결론이 LS와 겹친다.</b> LS는 3사 기준으로(HBM 우선배분+1d 지연), 미래에셋은 CXMT 기준으로(HBM 잠식 4배)
+        <b>Conventional DRAM 공급이 안 는다</b>는 같은 결론에 독립적으로 도달했다.
+        미래에셋 표현: <b>"중국발 공급 물량 경쟁 심화보다 중국내 자립에 따른 공급 역량 소모가 크다."</b>
+        곁가지로 <b>장비 국산화율 20~30%(식각 40%), 수주가 PO→PA로 전환</b>, 노광은 최선단 5nm·수율 30%로 여전히 병목.
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">05</span><h3>판정 · 확인 지표</h3></div>
+      <div class="rows">
+        <div class="r"><div class="lab">테제</div><div class="val">
+          메모리 부족은 <b>수급이 아니라 구조</b>다 — 공급은 Tech Migration이 죽어서, 수요는 CPU당 Content가 늘어서,
+          중국은 HBM 잠식 때문에 오히려 공급이 준다. <b>세 경로가 전부 같은 방향.</b></div></div>
+        <div class="r"><div class="lab">반대논리</div><div class="val">
+          ① LS 수요모델은 <b>Intel 서버 CPU 하나로</b> 전체 Server DRAM을 추정 — 정작 본문은 AMD가 더 공격적(16ch)이라고 쓴다.
+          ② <b>Agentic AI 파라미터가 전부 자체 가정</b>(Agents 4→8, Calls 75→250)이고 여기서 KV Cache 폭증 결론이 나온다.
+          ③ Payroll→AI예산 체인은 <b>5단 곱하기</b>라 $360bn의 정밀도는 낮다.
+          ④ 미래에셋은 답사기 = <b>회사 측 자기신고</b>가 1차 소스.
+          ⑤ 둘 다 강세론이고 LS는 <b>커버리지 개시</b>(솔브레인 TP 50만 등)라 구조적으로 매수다.</div></div>
+        <div class="r verdict"><div class="lab">판정</div><div class="val">
+          <b>사이클 읽는 렌즈로 채택. 매수 근거로는 쓰지 않는다.</b>
+          가장 값어치 있는 건 종목이 아니라 <b>"Peak를 어디서 보는가"를 바꾼 것</b> —
+          DRAM 수급표가 아니라 <b>NVIDIA GPM 75%와 CSP Cloud 마진</b>을 봐야 한다.
+          <span class="hl">이번 주에만 강세 문서가 네 개째다</span>(한종목·Stripe·LS·미래에셋).
+          논리가 맞는 것과 지금 사이즈를 키워도 되는 것은 별개.</div></div>
+        <div class="r"><div class="lab">KPI</div><div class="val">
+          ① <b>1d·1δ 양산 시점</b>(삼성 2027년 말? / 마이크론 2H27) — 앞당겨지면 부족 완화 ·
+          ② <b>NVIDIA GPM 75% 유지</b> 여부 ·
+          ③ CSP Cloud OPM(AWS 37.8 / Google 35.6 / MS 41%) ·
+          ④ <b>HBM Mixed Price YoY</b>가 +60% 넘어가는지 ·
+          ⑤ CXMT의 HBM Capa 할당률 ·
+          ⑥ CPU당 DRAM 실측 탑재량(가정 1.3TB).</div></div>
+        <div class="r"><div class="lab">연결</div><div class="val">
+          <b>「The tokens must flow」</b>(2026.08.23)의 병목 사다리 첫 칸이 D램이었는데, <b>LS가 그 칸을 80쪽으로 확대</b>한 셈.
+          한종목의 <i>"DRAM 신규 공급은 27년 말 이후 집중"</i> 한 줄이 여기선 1d 지연 메커니즘으로 풀린다.
+          Stripe 서한의 토큰 물량 폭증도 KV Cache·Agent State 폭증과 같은 현상의 지출 측면.</div></div>
+      </div>
+    </div>
+
+    <div class="disc">
+      출처: <span class="src">LS증권 「2030년에도 메모리 부족 — CPU Content와 지불능력으로 읽는 메모리 사이클」(2026.08.25, 정우성, 80p)</span> ·
+      <span class="src">미래에셋증권 「중국 반도체 — 반도체 기업 답사기」(2026.08.25, 강민희·김영건, 57p)</span>.
+      원문 도표는 직접 캡처해 인용(교육·기록 목적). 투자권유 아님.
+    </div>
+    </div>
+  </article>
+
+
   <article class="note" data-id="20260823-tokens-must-flow" data-status="프레임">
     <div class="nmeta">
       <span class="date">2026.08.23</span>
