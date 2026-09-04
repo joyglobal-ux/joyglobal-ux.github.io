@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-03T00:32:07+00:00",
+  "generatedAt": "2026-09-04T00:17:32+00:00",
   "indicators": [
     {
       "id": "net_liquidity",
@@ -23,13 +23,9 @@
           "url": "https://fred.stlouisfed.org/series/RRPONTSYD"
         }
       ],
-      "value": 5.779,
-      "asOf": "2026-08-26",
+      "value": 5.769,
+      "asOf": "2026-09-02",
       "history": [
-        {
-          "t": "2023-09-06",
-          "v": 6.024
-        },
         {
           "t": "2023-09-13",
           "v": 6.031
@@ -649,17 +645,21 @@
         {
           "t": "2026-08-26",
           "v": 5.779
+        },
+        {
+          "t": "2026-09-02",
+          "v": 5.769
         }
       ],
       "mom": {
         "phase": "역풍",
         "tone": "neg",
-        "d1": -0.013,
-        "dN": -0.093,
+        "d1": -0.01,
+        "dN": -0.065,
         "lookback": 13
       },
       "alert": null,
-      "momLine": "13주 Δ -0.09$T · 직전주 -0.01"
+      "momLine": "13주 Δ -0.07$T · 직전주 -0.01"
     },
     {
       "id": "m2_yoy",
@@ -834,8 +834,8 @@
       "decimals": 0,
       "source": "FRED · BAMLH0A0HYM2",
       "sourceUrl": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2",
-      "value": 265,
-      "asOf": "2026-09-01",
+      "value": 266,
+      "asOf": "2026-09-02",
       "history": [
         {
           "t": "2023-09-15",
@@ -1458,18 +1458,18 @@
           "v": 260
         },
         {
-          "t": "2026-09-01",
-          "v": 265
+          "t": "2026-09-02",
+          "v": 266
         }
       ],
       "mom": {
         "phase": "중립",
         "tone": "neutral",
-        "d1": 5,
-        "dN": -11,
+        "d1": 6,
+        "dN": -10,
         "lookback": 13
       },
-      "momLine": "13주 Δ -11bp · 직전주 +5"
+      "momLine": "13주 Δ -10bp · 직전주 +6"
     },
     {
       "id": "nfci",
@@ -2127,7 +2127,7 @@
     "bullets": [
       {
         "label": "Fed 순유동성",
-        "value": 5.779,
+        "value": 5.769,
         "unit": "$T",
         "phase": "역풍",
         "tone": "neg"
@@ -2141,7 +2141,7 @@
       },
       {
         "label": "하이일드 스프레드",
-        "value": 265,
+        "value": 266,
         "unit": "bp",
         "phase": "중립",
         "tone": "neutral"
