@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-18T00:42:53+00:00",
+  "generatedAt": "2026-09-19T00:31:35+00:00",
   "indicators": [
     {
       "id": "net_liquidity",
@@ -835,7 +835,7 @@
       "source": "FRED · BAMLH0A0HYM2",
       "sourceUrl": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2",
       "value": 270,
-      "asOf": "2026-09-16",
+      "asOf": "2026-09-17",
       "history": [
         {
           "t": "2023-09-30",
@@ -1458,7 +1458,7 @@
           "v": 265
         },
         {
-          "t": "2026-09-16",
+          "t": "2026-09-17",
           "v": 270
         }
       ],
