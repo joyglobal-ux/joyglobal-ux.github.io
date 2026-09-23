@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-22T01:03:22+00:00",
+  "generatedAt": "2026-09-23T00:52:04+00:00",
   "indicators": [
     {
       "id": "net_liquidity",
@@ -669,13 +669,9 @@
       "decimals": 1,
       "source": "FRED · M2SL",
       "sourceUrl": "https://fred.stlouisfed.org/series/M2SL",
-      "value": 5.41,
-      "asOf": "2026-07",
+      "value": 5.66,
+      "asOf": "2026-08",
       "history": [
-        {
-          "t": "2023-08",
-          "v": -3.97
-        },
         {
           "t": "2023-09",
           "v": -3.66
@@ -718,7 +714,7 @@
         },
         {
           "t": "2024-07",
-          "v": 1.47
+          "v": 1.48
         },
         {
           "t": "2024-08",
@@ -726,7 +722,7 @@
         },
         {
           "t": "2024-09",
-          "v": 2.51
+          "v": 2.52
         },
         {
           "t": "2024-10",
@@ -815,16 +811,20 @@
         {
           "t": "2026-07",
           "v": 5.41
+        },
+        {
+          "t": "2026-08",
+          "v": 5.66
         }
       ],
       "mom": {
         "phase": "우호 지속",
         "tone": "pos",
-        "d1": 0.07,
-        "dN": 0.88,
+        "d1": 0.25,
+        "dN": 0.27,
         "lookback": 3
       },
-      "momLine": "3개월 Δ +0.9%p · 직전월 +0.1"
+      "momLine": "3개월 Δ +0.3%p · 직전월 +0.2"
     },
     {
       "id": "hy_oas",
@@ -834,13 +834,9 @@
       "decimals": 0,
       "source": "FRED · BAMLH0A0HYM2",
       "sourceUrl": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2",
-      "value": 268,
-      "asOf": "2026-09-18",
+      "value": 266,
+      "asOf": "2026-09-21",
       "history": [
-        {
-          "t": "2023-09-30",
-          "v": 403
-        },
         {
           "t": "2023-10-06",
           "v": 433
@@ -1460,16 +1456,20 @@
         {
           "t": "2026-09-18",
           "v": 268
+        },
+        {
+          "t": "2026-09-21",
+          "v": 266
         }
       ],
       "mom": {
-        "phase": "중립",
-        "tone": "neutral",
-        "d1": 3,
-        "dN": 2,
+        "phase": "우호 지속",
+        "tone": "pos",
+        "d1": -2,
+        "dN": -17,
         "lookback": 13
       },
-      "momLine": "13주 Δ +2bp · 직전주 +3"
+      "momLine": "13주 Δ -17bp · 직전주 -2"
     },
     {
       "id": "nfci",
@@ -2118,11 +2118,11 @@
     }
   ],
   "interpretation": {
-    "regime": "혼조",
-    "regimeEn": "Mixed",
-    "tone": "warn",
-    "headline": "지표 4개 중 우호 2개 → 혼조.",
-    "supportive": 2,
+    "regime": "유동성 순풍",
+    "regimeEn": "Tailwind",
+    "tone": "pos",
+    "headline": "지표 4개 중 우호 3개 → 유동성 순풍.",
+    "supportive": 3,
     "alerts": [],
     "bullets": [
       {
@@ -2134,17 +2134,17 @@
       },
       {
         "label": "M2 통화량",
-        "value": 5.41,
+        "value": 5.66,
         "unit": "% YoY",
         "phase": "우호 지속",
         "tone": "pos"
       },
       {
         "label": "하이일드 스프레드",
-        "value": 268,
+        "value": 266,
         "unit": "bp",
-        "phase": "중립",
-        "tone": "neutral"
+        "phase": "우호 지속",
+        "tone": "pos"
       },
       {
         "label": "금융여건지수 NFCI",
