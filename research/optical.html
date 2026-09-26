@@ -189,6 +189,20 @@
     padding:2px 7px;cursor:pointer;font-family:inherit;background:transparent}
   .anch:hover{border-color:var(--accent-dim);color:var(--accent)}
 
+
+  /* ── ANET 노트 전용: 정적 SVG 차트 (다크 테마 변수 사용) ── */
+  .chartfig .cw{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:12px 10px 8px}
+  .chartfig svg{display:block;width:100%;height:auto;overflow:visible}
+  .chartfig text{font-family:inherit;font-size:10.5px;fill:var(--faint)}
+  .chartfig text.nm{font-size:11.5px;fill:var(--muted)} .chartfig text.nm.me{fill:var(--txt);font-weight:700}
+  .chartfig text.vl{font-size:11px;fill:var(--txt)} .chartfig text.ttl{font-size:11px;fill:var(--muted);font-weight:700}
+  .chartfig text.bl{font-size:10.5px;fill:#f0a37a;font-weight:700}
+  .chartfig .gr{stroke:#232838;stroke-width:1} .chartfig .axl{stroke:#3a4152;stroke-width:1}
+  .chartfig .band{fill:rgba(217,89,38,.10)}
+  .chartfig .ln{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round}
+  .chartfig .dot{fill:var(--accent);stroke:var(--panel2);stroke-width:2}
+  .chartfig .b1{fill:var(--accent)} .chartfig .b0{fill:#4a5163} .chartfig .b3{fill:#d95926}
+  .chartfig .bar2{fill:var(--cyan);opacity:.85}
   .disc{font-size:11px;color:var(--faint);margin-top:18px;line-height:1.65;border-top:1px solid var(--line);padding-top:13px}
   .disc .src{color:var(--muted)}
 
@@ -229,6 +243,175 @@
 <main class="wrap">
 
   <!-- 새 노트는 이 줄 바로 아래에 추가 (최신순) -->
+
+  <article class="note" data-id="20260926-anet-system-layer" data-status="워치">
+    <div class="nmeta">
+      <span class="date">2026.09.26</span>
+      <span class="tk">ANET</span>
+      <span class="tag">Arista Networks</span>
+      <span class="tag">AI 네트워킹</span>
+      <span class="tag">scale-across</span>
+      <span class="tag">셀레스티카 · 화이트박스</span>
+      <span class="tag">Spectrum-X</span>
+      <span class="tag">부품 부족 사이클</span>
+      <span class="tag">LITE 페어</span>
+    </div>
+    <div class="ntitle">ANET은 병목의 렌트를 먹는 종목이 아니라, 병목이 풀릴 때 마진과 물량이 동시에 풀리는 종목이다</div>
+    <p class="nlede">
+      <b>한 줄:</b> 수요·가시성·해자는 최상급(가이던스 $10.5B→$12.6B, 영업이익률 49.9%, 구매약정 $9.7B)이지만,
+      지금은 <b>부품 부족의 비용을 떠안는 쪽</b>(GM 피크 65.6%→63.4%)이고 밸류는 피어 최고(Fwd P/E 44.5x).
+      2022→23 사이클에서 이미 한 번 검증된 <b>"공급 주도 완화"</b> 국면이 ANET의 가장 강한 구간 — 그 전까지는 병목을 쥔 <b>LITE가 이익 풀을 가져간다</b>.
+    </p>
+
+    <div class="nbody">
+
+    <div class="sec">
+      <div class="sech"><span class="sn">01</span><h3>숫자 — 성장이 재가속 중</h3></div>
+      <div class="quad">
+        <div class="node"><div class="e">📈</div><div class="t">2Q26 매출</div><div class="n">$3.04B</div><div class="d">+37.7% YoY · 첫 $3B 분기<br>2024년 16% 저점에서 재가속</div></div>
+        <div class="node"><div class="e">🎯</div><div class="t">FY26 가이던스</div><div class="n">$12.6B</div><div class="d">+40% · 올해 3번째 상향<br>AI ≥$3.5B · 캠퍼스 ≥$1.25B</div></div>
+        <div class="node"><div class="e">⚙️</div><div class="t">영업이익률</div><div class="n">49.9%</div><div class="d">GM 63.4% · G&amp;A 0.8%<br>회사 전체가 P&amp;L 하나</div></div>
+        <div class="node"><div class="e">📦</div><div class="t">구매약정</div><div class="n">$9.7B</div><div class="d">1년 전 $3.6B의 약 2.7배<br>이연매출 $6.9B</div></div>
+      </div>
+      <p class="p">
+        주가 반응은 차갑다. <b>1Q 실적·가이던스를 모두 올렸는데도 −12.6%</b>(GM 하락, "부족 1~2년" 발언), 2Q는 장전 +13% → 종가 +5.2%.
+        CEO는 8/12 약 $1억 매도(10b5-1). FY26 EPS 컨센 $4.11, <b>Fwd P/E 44.5x</b> — CSCO 21.9x · CLS 24.4x · NVDA ~25x · CIEN 32.4x 대비 가장 비싸다.
+        기대가 이미 높은 종목이라는 뜻이다.
+      </p>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">02</span><h3>해자 — 칩이 아니라 "하나의 OS"</h3></div>
+      <p class="p">ANET은 창업 이래 <b>머천트 실리콘(브로드컴)만</b> 쓴다. 칩은 누구나 산다. 해자는 그 위의 EOS·시스템 엔지니어링·고객 레퍼런스다.</p>
+      <div class="lanes">
+        <div class="lane"><div class="le">🧬</div><div class="lt">EOS 단일 바이너리</div><div class="ls">DC·AI·라우팅·캠퍼스 = 같은 코드</div>
+          <div class="ld">경쟁사는 사업부마다 OS가 다르다. <b>SSU(무중단 업그레이드)</b>로 재부팅 없이 패치 → XPU 가동시간 손실 0.</div>
+          <div class="lp">CVE 경쟁사 대비 <b>약 1/30</b>(회사 주장)</div></div>
+        <div class="lane pick"><div class="le">🛡️</div><div class="lt">AI 시대에 해자가 깊어진다</div><div class="ls">Mythos · 보안 교체 수요</div>
+          <div class="ld">AI가 취약점을 찾는 속도가 빨라져 "패치 쳇바퀴"가 생겼다 → 한 번 패치로 끝나는 EOS로 <b>교체 주기 전 신규 로고 유입</b>.</div>
+          <div class="lp">GPU가 가장 비싼 자산 → <b>네트워크 신뢰성 = TCO</b>. CRWD·PANW를 끌어올린 테마와 같은 줄기</div></div>
+        <div class="lane"><div class="le">🔁</div><div class="lt">운영 레버리지 · 공급 유연성</div><div class="ls">같은 스위치를 모든 고객군에</div>
+          <div class="ld">부품을 하이퍼스케일러·네오클라우드·엔터프라이즈에 <b>전용 가능</b> → 재고 진부화 위험이 낮아 약정을 공격적으로 늘릴 수 있다.</div>
+          <div class="lp">CloudVision: 네트워크+서버 RDMA를 한 화면에 → 인력 없는 네오클라우드가 CapEx 더 내고 OpEx로 회수</div></div>
+      </div>
+      <div class="scrollx"><table class="tbl">
+        <thead><tr><th>영역</th><th>핵심 제품 · 경쟁력</th><th class="num">규모 · 타이밍</th></tr></thead>
+        <tbody>
+          <tr><td>Scale-out</td><td>Etherlink, <b>7800 AI 스파인</b>(모듈러·고Radix → 티어 없이 확장). MRC(멀티패스)+SRv6로 해시 충돌 제거</td><td class="num">AI 고객 4~5곳(’24) → 100곳+</td></tr>
+          <tr><td>Scale-across</td><td>7800R 딥버퍼 라우팅 + ZR/ZR+ + 회선속도 암호화. <b>"scale-out을 먼저 이긴 벤더만 가져간다"</b> — 라우팅SW·HW·AI클러스터 경험 3개를 다 가진 경쟁사 없음(CFO)</td><td class="num">AI의 ~30% ≈ $1.2B<br>TAM $3~4B → $15~20B(’30)</td></tr>
+          <tr><td>Scale-up</td><td>ESUN(이더넷 스케일업) — Arista가 OCP 워킹그룹 공동의장. NVLink 독점 구간에 비엔비디아 XPU 진영으로 진입</td><td class="num">매출 0 → 볼륨 ’28 · TAM ~$20B</td></tr>
+          <tr><td>차세대</td><td>7060XE7(1.6T), 수랭, <b>XPO</b>(MSA 100개사+), Open CPO — 광모듈은 직접 안 만든다 → 광학 사이클과 분리</td><td class="num">1.6T 볼륨 ’27 · XPO ’28</td></tr>
+          <tr><td>캠퍼스</td><td>점유율 5%의 share-gain. 데이터센터 없이 캠퍼스로 먼저 들어오는 신규 고객 증가</td><td class="num">$0.8B → $1.25B+(+50%)</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">03</span><h3>경쟁 — 셀레스티카 1위의 진짜 의미, 진짜 적은 엔비디아</h3></div>
+      <div class="figs2">
+        <figure class="fig chartfig">
+          <div class="cw"><svg viewBox="0 0 360 170" role="img"><path d="M100,3H178.5Q182.5,3 182.5,7V23Q182.5,27 178.5,27H100Z" class="b0"/><text x="92.0" y="19.0" text-anchor="end" class="nm">NVIDIA</text><text x="188.5" y="19.0" text-anchor="start" class="vl">20.4%</text><path d="M100,38H171.6Q175.6,38 175.6,42V58Q175.6,62 171.6,62H100Z" class="b1"/><text x="92.0" y="54.0" text-anchor="end" class="nm me">Arista</text><text x="181.6" y="54.0" text-anchor="start" class="vl">18.7%</text><path d="M100,73H169.6Q173.6,73 173.6,77V93Q173.6,97 169.6,97H100Z" class="b0"/><text x="92.0" y="89.0" text-anchor="end" class="nm">Cisco (DC)</text><text x="179.6" y="89.0" text-anchor="start" class="vl">18.2%</text><path d="M100,108H107.3Q111.3,108 111.3,112V128Q111.3,132 107.3,132H100Z" class="b0"/><text x="92.0" y="124.0" text-anchor="end" class="nm">HPE·Juniper</text><text x="117.3" y="124.0" text-anchor="start" class="vl">2.8%</text><path d="M100,143H257.4Q261.4,143 261.4,147V163Q261.4,167 257.4,167H100Z" class="b0"/><text x="92.0" y="159.0" text-anchor="end" class="nm">기타·ODM 등</text><text x="267.4" y="159.0" text-anchor="start" class="vl">39.9%</text><line x1="100" x2="100" y1="0" y2="170" class="axl"/></svg></div>
+          <figcaption><b>그림 1.</b> IDC 2Q26 데이터센터 이더넷 점유율(시장 $12.3B, +64.5%). <b>엔비디아가 1Q24 4% 미만에서 1위로</b> — ANET은 20.7%→18.7%로 인식 기준 정체. IDC는 ODM을 따로 공개하지 않아 "기타"에 포함, ANET은 이연매출 때문에 과소 계상. 자료: IDC(Next Platform·KAD 인용)</figcaption>
+        </figure>
+        <figure class="fig chartfig">
+          <div class="cw"><svg viewBox="0 0 360 190" role="img"><line x1="34" x2="352" y1="162.0" y2="162.0" class="gr"/><text x="29.0" y="166.0" text-anchor="end" class="lb">0%</text><line x1="34" x2="352" y1="119.7" y2="119.7" class="gr"/><text x="29.0" y="123.7" text-anchor="end" class="lb">20%</text><line x1="34" x2="352" y1="77.4" y2="77.4" class="gr"/><text x="29.0" y="81.4" text-anchor="end" class="lb">40%</text><line x1="34" x2="352" y1="35.1" y2="35.1" class="gr"/><text x="29.0" y="39.1" text-anchor="end" class="lb">60%</text><path d="M66.5,162V32.0Q66.5,28.0 70.5,28.0H108.5Q112.5,28.0 112.5,32.0V162Z" class="b1"/><text x="89.5" y="22.0" text-anchor="middle" class="vl">63.4%</text><path d="M114.5,162V141.7Q114.5,137.7 118.5,137.7H156.5Q160.5,137.7 160.5,141.7V162Z" class="b3"/><text x="137.5" y="131.7" text-anchor="middle" class="vl">11.5%</text><text x="113.5" y="180.0" text-anchor="middle" class="nm">매출총이익률</text><path d="M225.5,162V60.5Q225.5,56.5 229.5,56.5H267.5Q271.5,56.5 271.5,60.5V162Z" class="b1"/><text x="248.5" y="50.5" text-anchor="middle" class="vl">49.9%</text><path d="M273.5,162V148.7Q273.5,144.7 277.5,144.7H315.5Q319.5,144.7 319.5,148.7V162Z" class="b3"/><text x="296.5" y="138.7" text-anchor="middle" class="vl">8.2%</text><text x="272.5" y="180.0" text-anchor="middle" class="nm">영업이익률</text><line x1="34" x2="352" y1="162" y2="162" class="axl"/></svg></div>
+          <figcaption><b>그림 2.</b> 2Q26 Arista(보라) vs <b>Celestica(주황)</b>. 같은 스위치 시장, <b>이익 구조는 5~6배</b> 차이 — 셀레스티카는 하드웨어만 파는 조립(ODM)이고, ANET은 OS·지원까지 판다. 자료: 각사 8-K(ANET 8/4, CLS 7/27)</figcaption>
+        </figure>
+      </div>
+      <div class="bn">
+        <div class="lay comp"><div class="lh">셀레스티카 1위 ≠ ANET 패배 <span class="pill yes">시장이 다르다</span></div>
+          <div class="lb">Dell'Oro AI 백엔드 순위 ① 셀레스티카 ② 엔비디아 ③ 아리스타. 셀레스티카 1위는 <b>OS를 직접 만드는 3~4개 하이퍼스케일러</b>(구글·AWS·메타 FBOSS·MSFT SONiC)의 조달 선택이다 —
+          GM 11.5%·OPM 8.2%, 상위 3개 고객이 매출 63%. ANET 창업 이전부터 화이트박스를 쓰던 고객이다. ANET은 그 외 전부 + 하이퍼스케일러의 라우팅·scale-across처럼 난도 높은 계층을 가져간다.</div></div>
+        <div class="lay sys"><div class="lh">⚠ 진짜 점유율 위협은 엔비디아 번들 <span class="pill no">상대 점유율 ↓</span></div>
+          <div class="lb">Spectrum-X가 <b>xAI·OpenAI(Stargate)·오라클·코어위브 백엔드를 장악</b>했고, MSFT Fairwater와 메타(2026.2 계약)에도 들어갔다. GPU 배정과 묶어 팔 수 있다는 게 무기 —
+          경영진도 "구매 레버리지가 없는 고객은 턴키로 간다"고 인정했다. ANET 매출 +38% vs 시장 +64.5%.</div></div>
+      </div>
+      <p class="p"><b>하이퍼스케일러별 공급 지도</b> — 하이퍼스케일러 세그먼트만 떼어낸 공개 점유율은 없다(Dell'Oro는 순위만 공개). 대신 고객별로 누가 어디를 가져가는지는 꽤 선명하다.</p>
+      <div class="scrollx"><table class="tbl">
+        <thead><tr><th>고객</th><th>프론트엔드 DC</th><th>AI 백엔드</th><th>NOS</th><th>ANET 위치</th></tr></thead>
+        <tbody>
+          <tr><td>Microsoft</td><td>Arista EOS + 화이트박스(SONiC)</td><td>Spectrum-X (Fairwater)</td><td>SONiC · EOS</td><td><b>ANET 매출 26%</b> · 프론트엔드·scale-across 핵심</td></tr>
+          <tr><td>Meta</td><td>자체설계 ODM(Minipack3) + Cisco 8501 + Arista</td><td>Arista 7700R4(DSF) + Spectrum-X</td><td>FBOSS · EOS</td><td><b>ANET 매출 16%</b> · 경쟁 가장 치열</td></tr>
+          <tr><td>Oracle</td><td>Juniper QFX·PTX</td><td>Spectrum-X + Arista + Juniper</td><td>벤더 NOS</td><td>멀티벤더 · 10% 고객 후보</td></tr>
+          <tr><td>Google</td><td colspan="2">자체 설계(Jupiter) + ODM 제작(셀레스티카 유력) + OCS</td><td>자체</td><td>작음 · 10% 고객 후보(추정)</td></tr>
+          <tr><td>AWS</td><td colspan="2">자체 설계 + ODM(Accton·셀레스티카) · Trainium NeuronSwitch</td><td>자체</td><td>거의 없음</td></tr>
+          <tr><td>xAI·OpenAI·CoreWeave</td><td>호스트 클라우드</td><td>Spectrum-X / InfiniBand</td><td>Cumulus 등</td><td>엔비디아 장악</td></tr>
+        </tbody>
+      </table></div>
+      <div class="why"><b>두 층으로 봐야 한다.</b> 하드웨어 점유율(누가 박스를 파나)과 OS 점유율(누구 소프트웨어가 도나)은 다르다. EOS는 Arista 박스에서만 돌기 때문에 <b>ODM 점유율 ≈ 비(非)EOS 점유율</b>이다.
+        Dell'Oro는 SONiC 기반 AI 스위치 매출이 2030년 $10B+로 연 50%+ 성장한다고 본다 — 하이퍼스케일러의 "자체 OS화"는 계속되고, ANET의 성장 여지는 <b>OS 팀이 없는 네오클라우드·엔터프라이즈·소버린</b>과 <b>난도 높은 라우팅 계층</b>에 있다.
+        시스코도 웹스케일 AI 주문이 FY26 $9.3B(4.5배)로 작은 기반에서 빠르게 늘고 있다.</div>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">04</span><h3>왜 "부품 부족 완화 국면"이 ANET의 구간인가</h3></div>
+      <figure class="fig chartfig wide">
+        <div class="cw"><svg viewBox="0 0 760 330" role="img" aria-label="ANET 매출총이익률과 구매약정 2021-2026"><rect x="161.1" y="14" width="211.9" height="286" class="band"/><text x="165.1" y="26.0" text-anchor="start" class="bl">1차 부족기</text><rect x="615.2" y="14" width="90.8" height="286" class="band"/><text x="619.2" y="26.0" text-anchor="start" class="bl">2차 부족기 (현재)</text><line x1="40" x2="706" y1="133.5" y2="133.5" class="gr"/><text x="34.0" y="137.5" text-anchor="end" class="lb">60%</text><line x1="40" x2="706" y1="100.5" y2="100.5" class="gr"/><text x="34.0" y="104.5" text-anchor="end" class="lb">62%</text><line x1="40" x2="706" y1="67.5" y2="67.5" class="gr"/><text x="34.0" y="71.5" text-anchor="end" class="lb">64%</text><line x1="40" x2="706" y1="34.5" y2="34.5" class="gr"/><text x="34.0" y="38.5" text-anchor="end" class="lb">66%</text><text x="40.0" y="12.0" text-anchor="start" class="ttl">Non-GAAP 매출총이익률</text><path d="M55.1,55.9L85.4,47.7L115.7,52.6L146.0,62.6L176.2,69.2L206.5,102.2L236.8,113.7L267.0,117.0L297.3,128.6L327.6,112.1L357.9,82.3L388.1,44.4L418.4,64.2L448.7,44.4L479.0,57.6L509.2,64.2L539.5,65.9L569.8,41.1L600.0,47.7L630.3,77.4L660.6,93.9L690.9,77.4" class="ln"/><circle cx="85.4" cy="47.7" r="4" class="dot"/><text x="85.4" y="38.7" text-anchor="middle" class="vl">65.2%</text><circle cx="297.3" cy="128.6" r="4" class="dot"/><text x="297.3" y="144.6" text-anchor="middle" class="vl">60.3% 저점</text><circle cx="388.1" cy="44.4" r="4" class="dot"/><text x="388.1" y="35.4" text-anchor="middle" class="vl">65.4% 회복</text><circle cx="690.9" cy="77.4" r="4" class="dot"/><text x="698.9" y="81.4" text-anchor="start" class="vl">63.4%</text><line x1="40" x2="706" y1="300.0" y2="300.0" class="gr"/><text x="34.0" y="304.0" text-anchor="end" class="lb">$0B</text><line x1="40" x2="706" y1="245.0" y2="245.0" class="gr"/><text x="34.0" y="249.0" text-anchor="end" class="lb">$5B</text><line x1="40" x2="706" y1="190.0" y2="190.0" class="gr"/><text x="34.0" y="194.0" text-anchor="end" class="lb">$10B</text><text x="40.0" y="184.0" text-anchor="start" class="ttl">구매약정 (Purchase commitments)</text><path d="M46.1,300V294.8Q46.1,291.8 49.1,291.8H61.2Q64.2,291.8 64.2,294.8V300Z" class="bar2"/><text x="55.1" y="315.0" text-anchor="middle" class="ax">Q1'21</text><path d="M76.3,300V291.3Q76.3,288.3 79.3,288.3H91.5Q94.5,288.3 94.5,291.3V300Z" class="bar2"/><path d="M106.6,300V279.4Q106.6,276.4 109.6,276.4H121.8Q124.8,276.4 124.8,279.4V300Z" class="bar2"/><text x="115.7" y="315.0" text-anchor="middle" class="ax">Q3'21</text><path d="M136.9,300V275.1Q136.9,272.1 139.9,272.1H152.0Q155.0,272.1 155.0,275.1V300Z" class="bar2"/><path d="M167.1,300V255.5Q167.1,252.5 170.1,252.5H182.3Q185.3,252.5 185.3,255.5V300Z" class="bar2"/><text x="176.2" y="315.0" text-anchor="middle" class="ax">Q1'22</text><path d="M197.4,300V253.8Q197.4,250.8 200.4,250.8H212.6Q215.6,250.8 215.6,253.8V300Z" class="bar2"/><path d="M227.7,300V255.7Q227.7,252.7 230.7,252.7H242.9Q245.9,252.7 245.9,255.7V300Z" class="bar2"/><text x="236.8" y="315.0" text-anchor="middle" class="ax">Q3'22</text><path d="M258.0,300V262.3Q258.0,259.3 261.0,259.3H273.1Q276.1,259.3 276.1,262.3V300Z" class="bar2"/><path d="M288.2,300V271.1Q288.2,268.1 291.2,268.1H303.4Q306.4,268.1 306.4,271.1V300Z" class="bar2"/><text x="297.3" y="315.0" text-anchor="middle" class="ax">Q1'23</text><path d="M318.5,300V278.8Q318.5,275.8 321.5,275.8H333.7Q336.7,275.8 336.7,278.8V300Z" class="bar2"/><path d="M348.8,300V281.0Q348.8,278.0 351.8,278.0H363.9Q366.9,278.0 366.9,281.0V300Z" class="bar2"/><text x="357.9" y="315.0" text-anchor="middle" class="ax">Q3'23</text><path d="M379.1,300V285.5Q379.1,282.5 382.1,282.5H394.2Q397.2,282.5 397.2,285.5V300Z" class="bar2"/><path d="M409.3,300V286.9Q409.3,283.9 412.3,283.9H424.5Q427.5,283.9 427.5,286.9V300Z" class="bar2"/><text x="418.4" y="315.0" text-anchor="middle" class="ax">Q1'24</text><path d="M439.6,300V279.9Q439.6,276.9 442.6,276.9H454.8Q457.8,276.9 457.8,279.9V300Z" class="bar2"/><path d="M469.9,300V276.6Q469.9,273.6 472.9,273.6H485.0Q488.0,273.6 488.0,276.6V300Z" class="bar2"/><text x="479.0" y="315.0" text-anchor="middle" class="ax">Q3'24</text><path d="M500.1,300V268.9Q500.1,265.9 503.1,265.9H515.3Q518.3,265.9 518.3,268.9V300Z" class="bar2"/><path d="M530.4,300V264.5Q530.4,261.5 533.4,261.5H545.6Q548.6,261.5 548.6,264.5V300Z" class="bar2"/><text x="539.5" y="315.0" text-anchor="middle" class="ax">Q1'25</text><path d="M560.7,300V263.4Q560.7,260.4 563.7,260.4H575.9Q578.9,260.4 578.9,263.4V300Z" class="bar2"/><path d="M591.0,300V250.2Q591.0,247.2 594.0,247.2H606.1Q609.1,247.2 609.1,250.2V300Z" class="bar2"/><text x="600.0" y="315.0" text-anchor="middle" class="ax">Q3'25</text><path d="M621.2,300V228.2Q621.2,225.2 624.2,225.2H636.4Q639.4,225.2 639.4,228.2V300Z" class="bar2"/><path d="M651.5,300V205.1Q651.5,202.1 654.5,202.1H666.7Q669.7,202.1 669.7,205.1V300Z" class="bar2"/><text x="660.6" y="315.0" text-anchor="middle" class="ax">Q1'26</text><path d="M681.8,300V196.3Q681.8,193.3 684.8,193.3H696.9Q699.9,193.3 699.9,196.3V300Z" class="bar2"/><text x="206.5" y="244.8" text-anchor="middle" class="vl">$4.47B 피크</text><text x="388.1" y="276.5" text-anchor="middle" class="vl">$1.59B</text><text x="703.0" y="203.3" text-anchor="start" class="vl">$9.7B</text><line x1="40" x2="706" y1="300" y2="300" class="axl"/></svg></div>
+        <figcaption><b>그림 3.</b> ANET 매출총이익률(위)과 구매약정(아래), Q1'21~Q2'26. <b>1차 부족기에 GM이 490bp 빠졌다가, 약정이 풀리며 1년 만에 전부 회복</b>(60.3%→65.4%). 지금이 두 번째 음영 — GM은 −220bp, 약정은 사상 최고. 자료: SEC XBRL·8-K</figcaption>
+      </figure>
+      <div class="chn">
+        <div class="cbox">① 원가↑ 가격은 늦게<small>신규 PO만·마진 중립까지만</small></div><div class="arw">→</div>
+        <div class="cbox">② 매출도 공급이 캡<small>가이던스 = 확보 가능 공급</small></div><div class="arw">→</div>
+        <div class="cbox src">③ 완화: 원가↓ 가격 유지<small>GM 회복</small></div><div class="arw">→</div>
+        <div class="cbox">④ 물량·현금 동시 해방<small>약정 → 재고 → 매출 → 현금</small></div>
+      </div>
+      <p class="p">
+        ANET은 칩·메모리·PCB를 <b>사는 쪽</b>이다. CEO는 메모리 가격을 "끔찍하다, 몇 배나 올랐다"고 했고 "2025년엔 비용을 많이 흡수했다"고 인정했다.
+        가격 인상은 <b>한 번만, 새 주문에만, 마진 중립까지만</b> — 백로그는 옛 가격으로 출하되고 인상 효과는 "연말~내년"에 나온다.
+        부족이 풀리면 네 가지가 동시에 일어난다: <b>인상한 가격은 남고 원가는 내려가 GM 회복</b>, 공급 캡이 풀려 백로그 출하(CFO: "공급이 더 풀리면 가이던스를 넘을 수 있다"),
+        약정이 현금으로 전환, 그리고 LITE·메모리 같은 부품사의 가격결정력이 시스템사로 이동.
+      </p>
+      <div class="scrollx"><table class="tbl">
+        <thead><tr><th>연간 총수익률</th><th class="num">2022 (부족기)</th><th class="num">2023 (완화기)</th></tr></thead>
+        <tbody>
+          <tr class="top-pick"><td>ANET</td><td class="num">−15.6%</td><td class="num"><b>+94.1%</b></td></tr>
+          <tr><td>LITE</td><td class="num">−50.7%</td><td class="num">+0.5%</td></tr>
+          <tr><td>COHR</td><td class="num">−48.6%</td><td class="num">+24.0%</td></tr>
+          <tr><td>MU</td><td class="num">−45.9%</td><td class="num">+71.9%</td></tr>
+          <tr><td>SOXX</td><td class="num">−35.1%</td><td class="num">+67.1%</td></tr>
+        </tbody>
+      </table></div>
+      <div class="fix">
+        <span class="fh">⚠ "완화"라고 다 같은 완화가 아니다</span>
+        <b>공급 주도 완화</b>(메모리 증설, COHR 6인치 InP 2배→2027 말 4배, 중국 CW 진입, LITE 그린즈버러 2028) + 수요 유지 → <b>ANET 최선</b>. 2023년이 이 경우.
+        <b>수요 주도 완화</b>(하이퍼스케일러 capex 삭감) → 원가 하락보다 물량 감소가 커서 <b>ANET도 같이 빠진다</b>.
+        또 2023년 GM 회복 때도 경영진은 <b>"공급망 비용 + 엔터프라이즈 믹스"</b>를 함께 꼽았고, 2023년 +94%에는 AI 리레이팅이 섞여 있다 — 전부 마진 효과로 읽으면 과대평가다.
+        CEO 시계는 "업계가 <b>2028년까지는</b> 못 빠져나온다".
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">05</span><h3>판정 · 트리거</h3></div>
+      <div class="rows">
+        <div class="r"><div class="lab">테제</div><div class="val">
+          AI 백엔드 3단계(scale-out → scale-across → scale-up) + 엔터프라이즈·캠퍼스 + 보안 교체 수요까지 <b>수요 동인이 가장 넓은 AI 하드웨어</b>.
+          해자는 칩이 아니라 EOS·신뢰성이고, AI·보안 시대에 오히려 깊어진다. 가장 방어력 높은 곳은 <b>scale-across</b>.</div></div>
+        <div class="r"><div class="lab">LITE 페어</div><div class="val">
+          같은 변수("부족이 얼마나 오래 가나")에 <b>반대로 반응</b>한다. 부족 지속 → 병목을 쥔 LITE(GM 50.4%, FY27 EPS +150%, 43x)가 이익 풀을 가져간다.
+          공급 주도 완화 → ANET GM 회복 + 물량 해방. <b>둘을 같이 들기보다 스위치 타이밍을 관리</b>하는 게 핵심.</div></div>
+        <div class="r"><div class="lab">반대논리</div><div class="val">
+          ① AI 백엔드 3위, 엔비디아 번들로 <b>상대 점유율 정체~하락</b>(IDC 20.7%→18.7%) ② 피어 최고 밸류(44.5x)라 비트앤레이즈에도 빠진다
+          ③ MSFT 26%·META 16% 집중, 메타는 Spectrum-X 병행 ④ "마진 중립" 철학 — 원가가 내려갈 때 가격을 되돌려줄 수도 ⑤ 구매약정 $9.7B vs 구속력 있는 고객계약 ~$0.9B 주장(2차 출처, 미확인).</div></div>
+        <div class="r verdict"><div class="lab">판정</div><div class="val">
+          <b>워치 — 지금은 진입 보류.</b> 좋은 회사지만 현재 국면(부족 지속)의 이익은 부품 병목(LITE·메모리)에 있고, ANET은 가장 비싼 가격에 부족 비용을 떠안는 중이다.
+          추세 품질은 AI 하드웨어 최상위(RS 스코어 95, R² 0.70, 3M +27%)라 가격 액션은 우호적 — <b>진입 신호는 아래 KPI ①②가 동시에 켜질 때</b>(2023 패턴 재현).
+          그 전에는 AI 인프라 심리 지표(시스템 레이어 대표)로 쓴다.</div></div>
+        <div class="r"><div class="lab">KPI</div><div class="val">
+          ① <b>Non-GAAP GM 64% 상단 돌파</b>(현재 63.4%) · ② <b>구매약정 고점 후 감소 + 매출 가이던스 유지</b>(= 공급 주도 완화) ·
+          ③ 이연매출 연말 잔액 &gt; 전년(CFO 예고) · ④ 3·4번째 10% 고객(구글·오라클 추정) · ⑤ IDC 점유율 18.7% 방어 여부 ·
+          ⑥ LITE의 "EML 부족 30%+" 표현 변화 — 페어 스위치 신호. 다음 이벤트: <b>3Q26 실적 11/2~3</b>(가이던스 $3.3B), 연내 TAM 재산정.</div></div>
+      </div>
+    </div>
+
+    <div class="disc">
+      출처: <span class="src">Arista 2Q26 실적 발표자료·실적콜 전사(2026.08.04), Rosenblatt Age of AI(08.18)·Goldman Sachs Communacopia(09.08)·Citi Global TMT(09.10) 컨퍼런스 전사</span>,
+      SEC XBRL·8-K(ANET Q1'21~Q2'26, Celestica 2Q26), IDC 데이터센터 이더넷 트래커(4Q25~2Q26, Next Platform·KAD 인용), Dell'Oro AI 백엔드(2026.03·06·09),
+      Meta·Microsoft·NVIDIA 공식 블로그, 경영진 2022~23 발언(Motley Fool 전사). 고객별 공급 지도 일부 칸은 업계 보도(미확인) 포함.
+      상세 원페이저(차트 7종)는 로컬 <span class="src">기업별 정리/해외/ANET/ANET_thesis_2026-09.html</span>. 투자권유 아님.
+    </div>
+    </div>
+  </article>
+
 
   <article class="note" data-id="20260823-optical-bottleneck-stack" data-status="공부">
     <div class="nmeta">
