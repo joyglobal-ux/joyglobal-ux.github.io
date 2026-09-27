@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 플랫폼 · 에이전트 — Polaris 리서치</title>
+<meta name="description" content="Polaris 리서치 노트 · AI 플랫폼 · 에이전트 — 핵심만 누적">
+<style>
+  :root{
+    --bg:#0b0d14; --bg2:#0f1117; --panel:#161a24; --panel2:#1d2230; --line:#272d3c;
+    --txt:#e8eaf0; --muted:#9aa3b2; --faint:#69727f;
+    --accent:#8b9bff; --accent-dim:#5b6bd6; --gold:#ffd66b;
+    --go:#22c55e; --stop:#ef4444; --cyan:#5fd0e0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;
+    background:var(--bg); color:var(--txt); line-height:1.65; -webkit-font-smoothing:antialiased; min-height:100vh;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px}
+
+  header{
+    background:
+      radial-gradient(120% 90% at 85% -10%, rgba(139,155,255,0.16), transparent 55%),
+      linear-gradient(180deg,#0c0f18,#0b0d14);
+    border-bottom:1px solid var(--line);
+  }
+  .top{padding:22px 0 0}
+  .back{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;padding:5px 13px;transition:border-color .18s,color .18s}
+  .back:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .hero{padding:26px 0 30px}
+  .kicker{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint)}
+  .htitle{display:flex;align-items:center;gap:12px;margin-top:10px}
+  .htitle .ic{font-size:27px}
+  .htitle h1{font-size:25px;font-weight:800;letter-spacing:-.3px}
+  .hsub{font-size:13px;color:var(--muted);margin-top:11px;max-width:620px}
+
+  main{padding:32px 0 10px}
+
+  .note{background:linear-gradient(180deg,var(--panel),#13161f);border:1px solid var(--line);
+    border-radius:15px;padding:22px 22px 20px;margin-bottom:20px}
+  .nmeta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:13px}
+  .nmeta .date{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums;
+    border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .nmeta .tk{font-size:11.5px;font-weight:800;letter-spacing:.4px;color:var(--accent);
+    background:rgba(139,155,255,0.08);border:1px solid rgba(139,155,255,0.22);border-radius:6px;padding:2px 9px}
+  .nmeta .tag{font-size:11px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+    border-radius:6px;padding:2px 9px}
+  .ntitle{font-size:19px;font-weight:800;letter-spacing:-.3px;margin-bottom:6px}
+  .nlede{font-size:13px;color:var(--muted);margin-bottom:6px}
+  .nlede b{color:var(--txt);font-weight:600}
+
+  /* section within note */
+  .sec{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+  .sech{display:flex;align-items:center;gap:9px;margin-bottom:14px}
+  .sech .sn{font-size:10.5px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;
+    border:1px solid rgba(139,155,255,0.3);border-radius:5px;padding:1px 6px}
+  .sech h3{font-size:14.5px;font-weight:800;letter-spacing:-.2px}
+  .p{font-size:13px;color:var(--muted);margin:10px 0}
+  .p b{color:var(--txt);font-weight:600}
+  .hl{color:var(--accent);font-weight:600}
+
+  /* PDN distance diagram */
+  .pdn{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 6px;position:relative}
+  .pdn .node{background:var(--panel2);border:1px solid var(--line);border-radius:11px;
+    padding:13px 10px;text-align:center}
+  .pdn .node.near{border-color:var(--accent-dim);background:rgba(139,155,255,0.07)}
+  .pdn .node.die{border-color:var(--gold);background:rgba(255,214,107,0.06)}
+  .pdn .node .e{font-size:21px}
+  .pdn .node .t{font-size:12px;font-weight:800;margin-top:6px}
+  .pdn .node .d{font-size:10.5px;color:var(--faint);margin-top:4px;line-height:1.45}
+  .pdn .node .tag2{display:inline-block;font-size:9.5px;font-weight:700;margin-top:7px;border-radius:5px;padding:1px 6px}
+  .tag-mlcc{color:var(--cyan);background:rgba(95,208,224,.1);border:1px solid rgba(95,208,224,.3)}
+  .tag-sic{color:var(--accent);background:rgba(139,155,255,.1);border:1px solid rgba(139,155,255,.3)}
+  .axis{display:flex;justify-content:space-between;font-size:10.5px;color:var(--faint);margin-top:9px;
+    padding:7px 4px 0;border-top:1px dashed var(--line)}
+  .axis b{color:var(--muted);font-weight:600}
+
+  /* tables */
+  .tbl{width:100%;border-collapse:collapse;margin:12px 0 4px;font-size:12.5px}
+  .tbl th,.tbl td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  .tbl thead th{font-size:11px;color:var(--faint);font-weight:700;letter-spacing:.3px;
+    text-transform:none;border-bottom:1px solid var(--line)}
+  .tbl tbody td:first-child{font-weight:700;color:var(--txt);white-space:nowrap}
+  .tbl .c-mlcc{color:var(--cyan)}
+  .tbl .c-sic{color:var(--accent)}
+  .tbl td b{color:var(--txt);font-weight:600}
+  .tbl .me{font-weight:800;color:var(--accent)} /* highlight samsung row */
+  .tbl tr.me-row td:first-child{color:var(--accent)}
+
+  /* ESL/ESR explainer */
+  .esx{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 4px}
+  .esx .card{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:13px 14px}
+  .esx .card .h{font-size:12px;font-weight:800;color:var(--accent);margin-bottom:5px}
+  .esx .card .h small{color:var(--faint);font-weight:600;font-size:10px;letter-spacing:.3px}
+  .esx .card .b{font-size:11.5px;color:var(--muted);line-height:1.55}
+  .esx .card .b b{color:var(--txt);font-weight:600}
+  .why{background:rgba(139,155,255,0.06);border:1px solid rgba(139,155,255,0.2);border-radius:11px;
+    padding:12px 14px;margin-top:10px;font-size:12px;color:var(--muted);line-height:1.6}
+  .why b{color:var(--txt);font-weight:600}
+
+  /* bottleneck layers */
+  .bn{display:flex;flex-direction:column;gap:9px;margin:13px 0 4px}
+  .bn .lay{border-radius:11px;padding:13px 15px;border:1px solid var(--line)}
+  .bn .lay .lh{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;margin-bottom:5px}
+  .bn .lay .lb{font-size:11.5px;color:var(--muted);line-height:1.55}
+  .bn .lay .lb b{color:var(--txt);font-weight:600}
+  .bn .sys{background:rgba(239,68,68,0.05);border-color:rgba(239,68,68,0.25)}
+  .bn .sys .lh{color:var(--stop)}
+  .bn .comp{background:rgba(34,197,94,0.05);border-color:rgba(34,197,94,0.25)}
+  .bn .comp .lh{color:var(--go)}
+  .pill{font-size:10px;font-weight:800;border-radius:999px;padding:2px 9px;margin-left:auto}
+  .pill.no{color:var(--stop);background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3)}
+  .pill.yes{color:var(--go);background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3)}
+
+  /* timeline */
+  .tl{position:relative;margin:14px 0 4px;padding-left:6px}
+  .tl .ev{position:relative;padding:0 0 16px 22px;border-left:2px solid var(--line)}
+  .tl .ev:last-child{border-left-color:transparent;padding-bottom:0}
+  .tl .ev::before{content:"";position:absolute;left:-7px;top:2px;width:12px;height:12px;border-radius:50%;
+    background:var(--panel2);border:2px solid var(--accent-dim)}
+  .tl .ev.done::before{background:var(--go);border-color:var(--go)}
+  .tl .ev.future::before{background:var(--panel2);border-color:var(--gold)}
+  .tl .ev .when{font-size:11px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums}
+  .tl .ev.future .when{color:var(--gold)}
+  .tl .ev .what{font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.5}
+  .tl .ev .what b{color:var(--txt);font-weight:600}
+
+  /* label rows */
+  .rows{display:flex;flex-direction:column;gap:11px;margin-top:6px}
+  .r{display:grid;grid-template-columns:74px 1fr;gap:13px;align-items:start}
+  .r .lab{font-size:11.5px;font-weight:800;color:var(--accent);letter-spacing:.3px;padding-top:1px}
+  .r .val{font-size:13px;color:var(--muted)}
+  .r .val b{color:var(--txt);font-weight:600}
+  .r.verdict{background:rgba(255,214,107,0.05);border:1px solid rgba(255,214,107,0.22);
+    border-radius:11px;padding:13px 14px;grid-template-columns:64px 1fr}
+  .r.verdict .val{color:var(--txt)}
+  .r.verdict .lab{color:var(--gold)}
+
+  /* ── 오픈소스 TCO 3-lane (2026.07 노트) ── */
+  .lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 6px}
+  .lane{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 13px}
+  .lane .le{font-size:22px}
+  .lane .lt{font-size:12.5px;font-weight:800;margin-top:7px}
+  .lane .ls{font-size:10.5px;color:var(--accent);font-weight:700;margin-top:3px}
+  .lane .ld{font-size:11px;color:var(--faint);margin-top:8px;line-height:1.5}
+  .lane .lp{font-size:11px;color:var(--muted);margin-top:9px;padding-top:8px;border-top:1px dashed var(--line);line-height:1.5}
+  .lane .lp b{color:var(--txt);font-weight:700}
+  .lane.pick{border-color:var(--gold);background:rgba(255,214,107,0.05)}
+  .lane.pick .ls{color:var(--gold)}
+
+  /* 손익분기 스케일 */
+  .bex{margin:14px 0 4px}
+  .bex .brow{display:grid;grid-template-columns:132px 1fr;gap:12px;align-items:center;margin-bottom:9px}
+  .bex .blab{font-size:11.5px;color:var(--muted);font-weight:700;line-height:1.4}
+  .bex .btrack{position:relative;height:27px;background:var(--panel2);border:1px solid var(--line);border-radius:7px;overflow:hidden}
+  .bex .bfill{position:absolute;left:0;top:0;bottom:0;
+    background:linear-gradient(90deg,rgba(139,155,255,.4),rgba(139,155,255,.1))}
+  .bex .bval{position:absolute;right:10px;top:0;line-height:27px;font-size:11px;font-weight:800;
+    color:var(--txt);font-variant-numeric:tabular-nums}
+
+  /* 누가 어디에 있나 */
+  .who{display:flex;flex-direction:column;gap:8px;margin:13px 0 4px}
+  .who .wr{display:grid;grid-template-columns:132px 1fr;gap:11px;align-items:start;
+    background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+  .who .wn{font-size:12px;font-weight:800;color:var(--txt)}
+  .who .wn small{display:block;font-size:10px;color:var(--faint);font-weight:600;margin-top:2px}
+  .who .wv{font-size:11.5px;color:var(--muted);line-height:1.55}
+  .who .wv b{color:var(--txt);font-weight:600}
+  .who .wr.a{border-color:rgba(34,197,94,.28);background:rgba(34,197,94,.05)}
+  .who .wr.b{border-color:rgba(255,214,107,.28);background:rgba(255,214,107,.05)}
+
+  /* distillation 체인 */
+  .chn{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:13px 0 6px}
+  .chn .cbox{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;
+    font-size:11.5px;font-weight:700;color:var(--txt);text-align:center;line-height:1.4}
+  .chn .cbox small{display:block;font-size:9.5px;color:var(--faint);font-weight:600;margin-top:2px}
+  .chn .cbox.src{border-color:var(--gold);background:rgba(255,214,107,.07);color:var(--gold)}
+  .chn .arw{color:var(--faint);font-size:13px}
+
+  /* 정정 박스 */
+  .fix{background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.25);border-radius:11px;
+    padding:12px 14px;margin:12px 0 4px;font-size:12px;color:var(--muted);line-height:1.6}
+  .fix b{color:var(--txt);font-weight:600}
+  .fix .fh{color:var(--stop);font-weight:800;font-size:11.5px;letter-spacing:.2px;display:block;margin-bottom:5px}
+
+  .disc{font-size:11px;color:var(--faint);margin-top:18px;line-height:1.65;border-top:1px solid var(--line);padding-top:13px}
+  .disc .src{color:var(--muted)}
+
+  /* ── 리포트 원문 도표 캡처 ── */
+  .fig{margin:16px 0 6px;min-width:0}
+  .fig .fw{background:#fff;border:1px solid var(--line);border-radius:11px;padding:9px;overflow-x:auto}
+  .fig img{display:block;width:100%;min-width:560px;height:auto;border-radius:3px}
+  .fig.wide img{min-width:820px}
+  .fig figcaption{font-size:11px;color:var(--faint);margin-top:8px;line-height:1.6}
+  .fig figcaption b{color:var(--muted);font-weight:700}
+  .figs2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0 6px}
+  .figs2 .fig{margin:0;min-width:0}
+  .figs2 .fig img{min-width:420px}
+
+  /* ── 2026.09 노트 전용: 정적 SVG 차트 (다크 테마 변수 사용, optical.html과 동일 규약) ── */
+  .chartfig .cw{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:12px 10px 8px}
+  .chartfig svg{display:block;width:100%;height:auto;overflow:visible}
+  .chartfig text{font-family:inherit;font-size:10.5px;fill:var(--faint)}
+  .chartfig text.nm{font-size:11.5px;fill:var(--muted)} .chartfig text.nm.me{fill:var(--txt);font-weight:700}
+  .chartfig text.vl{font-size:11px;fill:var(--txt)} .chartfig text.ttl{font-size:11px;fill:var(--muted);font-weight:700}
+  .chartfig text.inl{font-size:10.5px;fill:#0b0d14;font-weight:700} .chartfig text.inl.lt{fill:var(--txt)}
+  .chartfig .gr{stroke:#232838;stroke-width:1} .chartfig .axl{stroke:#3a4152;stroke-width:1}
+  .chartfig .refl{stroke:var(--gold);stroke-width:1;stroke-dasharray:4 3;opacity:.75}
+  .chartfig .ln{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+  .chartfig .dot{fill:var(--accent);stroke:var(--panel2);stroke-width:2}
+  .chartfig .b1{fill:var(--accent)} .chartfig .b0{fill:#4a5163} .chartfig .b3{fill:#d95926}
+  .chartfig .b2{fill:var(--accent);opacity:.45} .chartfig .bext{fill:var(--accent);opacity:.22}
+  .chartfig .bgo{fill:var(--go)} .chartfig .bstop{fill:var(--stop)}
+  .scrollx{overflow-x:auto}
+
+  /* ── 노트 목차 · 태그 필터 (JS 자동 생성) ── */
+  .toc{background:linear-gradient(180deg,var(--panel),#13161f);border:1px solid var(--line);
+    border-radius:15px;padding:18px 20px;margin-bottom:20px}
+  .toc .th{display:flex;align-items:baseline;gap:9px;margin-bottom:12px}
+  .toc .th b{font-size:13px;font-weight:800;letter-spacing:-.2px}
+  .toc .th span{font-size:11px;color:var(--faint)}
+  .tagbar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:13px}
+  .tagbar button{font-size:11px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+    border-radius:999px;padding:3px 11px;cursor:pointer;font-family:inherit;transition:all .15s}
+  .tagbar button:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .tagbar button.on{color:var(--accent);border-color:var(--accent-dim);background:rgba(139,155,255,0.1)}
+  .toclist{display:flex;flex-direction:column;gap:2px}
+  .toclist a{display:grid;grid-template-columns:78px 1fr;gap:11px;align-items:baseline;
+    padding:7px 9px;border-radius:8px;transition:background .15s}
+  .toclist a:hover{background:var(--panel2)}
+  .toclist a .d{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .toclist a .t{font-size:12.5px;color:var(--muted)}
+  .toclist a:hover .t{color:var(--txt)}
+  .toc .empty{font-size:12px;color:var(--faint);padding:6px 2px}
+
+  /* ── 노트 접기 ── */
+  .note.collapsed .nbody{display:none}
+  .fold{margin-left:auto;font-size:11px;color:var(--muted);background:var(--panel2);
+    border:1px solid var(--line);border-radius:999px;padding:2px 11px;cursor:pointer;font-family:inherit}
+  .fold:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .note{scroll-margin-top:18px}
+  .anch{font-size:11px;color:var(--faint);border:1px solid var(--line);border-radius:6px;
+    padding:2px 7px;cursor:pointer;font-family:inherit;background:transparent}
+  .anch:hover{border-color:var(--accent-dim);color:var(--accent)}
+
+
+  @media(max-width:560px){
+    .figs2{grid-template-columns:minmax(0,1fr)}
+    .toclist a{grid-template-columns:1fr;gap:1px}
+  }
+
+  footer{border-top:1px solid var(--line);margin-top:18px;padding:24px 0 38px;
+    font-size:11.5px;color:var(--faint);text-align:center}
+  footer .star{color:var(--accent)}
+
+  @media(max-width:560px){
+    .htitle h1{font-size:21px}
+    .pdn{grid-template-columns:1fr 1fr}
+    .esx{grid-template-columns:1fr}
+    .r{grid-template-columns:60px 1fr;gap:10px}
+    .tbl{font-size:11.5px}
+    .tbl th,.tbl td{padding:7px 8px}
+    .lanes{grid-template-columns:1fr}
+    .bex .brow{grid-template-columns:1fr;gap:5px}
+    .who .wr{grid-template-columns:1fr;gap:5px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap top">
+    <a class="back" href="/">← Polaris 허브</a>
+  </div>
+  <div class="wrap hero">
+    <div class="kicker">Research · 산업 노트</div>
+    <div class="htitle">
+      <span class="ic">🧭</span>
+      <h1>AI 플랫폼 · 에이전트</h1>
+    </div>
+    <p class="hsub">
+      프론티어 랩 · 소비자 에이전트 · Aggregator 경쟁. 모델 가격 우산이 무너질 때 가치가 어디로 가는지(유저 접점·물리 해자·거래 인프라)를 추적. 결정에 영향 주는 정수만 — 테제·해자·가격액션·판정.
+    </p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- 새 노트는 이 줄 바로 아래에 추가 (최신순) -->
+
+  <article class="note" data-id="20260927-aggregator-wars-overhangs" data-status="프레임">
+    <div class="nmeta">
+      <span class="date">2026.09.27</span>
+      <span class="tk">META · AMZN</span>
+      <span class="tag">에이전트</span>
+      <span class="tag">Aggregation Theory</span>
+      <span class="tag">Muse</span>
+      <span class="tag">Pacing the Frontier</span>
+      <span class="tag">Anthropic · OpenAI</span>
+      <span class="tag">Stratechery</span>
+    </div>
+    <div class="ntitle">Aggregator 전쟁 개시 + Frontier Overhangs — 가치가 모델에서 물리 해자·유저 접점으로 이동한다</div>
+    <p class="nlede">
+      <b>한 줄:</b> Ben Thompson의 9월 넷째 주 두 논지. ① Meta Muse(SOTA 아닌 모델로 만든 개인 에이전트)가 Amazon에 차단당한 건
+      <b>Amazon의 해자가 물류라는 물리 세계에 있어서</b>이고, Meta는 Amazon을 버티려 Walmart가 필요하다.
+      ② Anthropic의 "Pacing the Frontier"는 진심이라도 <b>모델이 너무 빨리 좋아져서 생긴 다섯 overhang을 해소하는 데 마침 유용</b>하며,
+      결정적 overhang은 <b>경쟁</b>이다. 공통 결론: <b>모델 가격 우산은 무너지고, 가치는 유저 접점과 물리 자산으로 간다.</b>
+    </p>
+
+    <div class="nbody">
+
+    <div class="sec">
+      <div class="sech"><span class="sn">01</span><h3>Meta 3주 — 6주 전 "AI 루저"에서 시총 $2T로</h3></div>
+      <div class="tl">
+        <div class="ev done"><div class="when">09.02</div><div class="what">Muse Spark 1.3 (Artificial Analysis 6위/636, 1M 컨텍스트 — <b>SOTA 아님</b>)</div></div>
+        <div class="ev done"><div class="when">09.08</div><div class="what"><b>Muse 출시</b>. 사용자별 Secure VM + 브라우저, 별도 "Sentinel" 에이전트가 모든 외부 액션 승인, 비밀번호·결제수단 비가시. 무료(토큰 대량)/$20/$100. 12일 만에 280만 다운로드, ChatGPT 모바일 출시 기록 상회</div></div>
+        <div class="ev done"><div class="when">09.14</div><div class="what">Colossus 저커버그 프로필(Jeremy Stern, 1년 취재) — "역사상 최대 비영토 제국"의 "독재자의 딜레마"(인식 고립)</div></div>
+        <div class="ev done"><div class="when">09.20</div><div class="what"><b>Amazon이 Muse 차단</b>(일요일 밤). 봇 차단벽 + "무단 AI 에이전트의 접근은 이용약관 위반" 팝업. Amazon: "타사 구매 대행 앱은 공개적으로 작동하고 서비스 제공자의 참여 결정을 존중해야 한다" — 배달앱과 식당에 비유. Meta에 "Amazon을 빼달라" 요청, Meta 거절</div></div>
+        <div class="ev done"><div class="when">09.21</div><div class="what">META <b>+11.3%</b>(+$192B, 2025.4 이후 최대). 같은 날 반도체 "에이전트는 CPU가 필요하다" 랠리(INTC +12%, AMD +9%·$1T)</div></div>
+        <div class="ev done"><div class="when">09.23</div><div class="what">Meta Connect: <b>Walmart</b>·Best Buy·Sephora·Instacart·Expedia 커넥터, Shop Pay·PayPal·Stripe Link. 저커버그: "무료로 깔고 <b>거래 수수료</b>로 번다". Amazon은 명단에 없음</div></div>
+        <div class="ev done"><div class="when">09.24</div><div class="what">META ~$778, JPM 목표 $920, Evercore "AI 루저→AI 위너 전환". 9월 MTD +36%(2013.7 이후 최고 월), 시총 ~$2T. BI: Muse 이후 3주 시총 +$500B</div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">02</span><h3>Aggregator v Aggregator — 왜 Amazon은 차단할 수 있고, 왜 거래 여지가 있나</h3></div>
+      <p class="p">
+        Thompson의 요약(9/25 주간, 원문): <b>"에이전트의 최고 용도는 필요하지만 귀찮은 일 처리. Amazon의 최고 효용은 그 귀찮은 물건을 확실히 배송하는 것.
+        그래서 Muse는 Amazon을 쓸 수 있어야 더 좋은데, 그게 Amazon엔 문제다 — Muse는 광고를 안 본다."</b>
+        Amazon 광고는 2025년 <b>$68B(매출의 ~10%)</b>, 2Q26 $19.8B(+26%). 사람이 리스팅을 스크롤해야 버는 돈이다.
+        차단할 수 있는 이유는 차별점이 <b>풀필먼트·배송·반품이라는 물리 세계</b>에 있기 때문 — AI 에이전트가 우회할 수 없는 희소 공급.
+      </p>
+      <div class="chn">
+        <div class="cbox">유저<small>3B+ Meta 사용자</small></div><span class="arw">→</span>
+        <div class="cbox src">Muse<small>수요를 소유 · 광고 안 봄 · 수수료</small></div><span class="arw">→</span>
+        <div class="cbox">Amazon · Walmart · Expedia<small>기존 Aggregator</small></div><span class="arw">→</span>
+        <div class="cbox">물류 · 재고 · 반품<small>물리 해자</small></div>
+      </div>
+      <div class="lanes">
+        <div class="lane"><div class="le">📦</div><div class="lt">Amazon — 차단</div><div class="ls">"Aggregator가 aggregate당하길 거부"</div><div class="ld">Perplexity Comet 소송으로 차단권 유지(9/10 재심 기각). Google·OpenAI 쇼핑 에이전트도 차단.</div><div class="lp"><b>거래 여지:</b> 9/10 Amazon Ads가 ChatGPT 광고를 받았다 — 광고가 테이블에 오르면 Amazon은 거래한 전례</div></div>
+        <div class="lane pick"><div class="le">🛒</div><div class="lt">Walmart — 개방</div><div class="ls">Meta가 Amazon을 버티는 열쇠</div><div class="ld">Gemini 쇼핑 연동(1월), Google UCP 공동저자. 자세는 "모든 에이전트에 들어간다" — Amazon과 정반대.</div><div class="lp"><b>Thompson:</b> "Meta는 Amazon을 기다리기 위해 Walmart가 필요하다"</div></div>
+        <div class="lane"><div class="le">✈️</div><div class="lt">Expedia — 미들웨어 사수</div><div class="ls">merchant of record 유지</div><div class="ld">Muse 안에서 검색·예약하되 결제 주체는 Expedia. CEO: "예약 대부분이 대화형 end-to-end가 될 거라 믿지 않는다."</div><div class="lp">주가는 그래도 −7% — 시장은 탈중개를 봤다</div></div>
+      </div>
+      <figure class="fig chartfig wide">
+        <div class="cw"><svg viewBox="0 0 520 257" role="img"><text x="170" y="12" class="ttl">Muse 충격 주간 주가 반응 (%) — 종목별 보도 구간이 다름</text><path d="M316.0,18.0H414.4Q418.4,18.0 418.4,22.0V32.0Q418.4,36.0 414.4,36.0H316.0Z" class="bgo"><title>META 9/21 +11.3%, $741.25, 시총 +$192B — 2025.4 이후 최대 일간 상승. 9월 MTD +36%</title></path><text x="162" y="31.0" text-anchor="end" class="nm">META (9/21 하루)</text><text x="424.4" y="31.0" class="vl">+11.3%</text><path d="M316.0,49.0H447.9Q451.9,49.0 451.9,53.0V63.0Q451.9,67.0 447.9,67.0H316.0Z" class="bgo"><title>Shopify 이틀 +15% → $147.74. "에이전트 거래도 온라인 스토어 거래와 같은 경제성"</title></path><text x="162" y="62.0" text-anchor="end" class="nm">SHOP (9/21~22)</text><text x="457.9" y="62.0" class="vl">+15%</text><path d="M316.0,80.0H338.3Q342.3,80.0 342.3,84.0V94.0Q342.3,98.0 338.3,98.0H316.0Z" class="bgo"><title>Walmart +2.88% (9/21 시가→9/23 종가)</title></path><text x="162" y="93.0" text-anchor="end" class="nm">WMT (9/21~23)</text><text x="348.3" y="93.0" class="vl">+2.9%</text><path d="M314.0,111.0H285.4Q281.4,111.0 281.4,115.0V125.0Q281.4,129.0 285.4,129.0H314.0Z" class="bstop"><title>Amazon −3.55% 같은 구간</title></path><text x="162" y="124.0" text-anchor="end" class="nm">AMZN (9/21~23)</text><text x="275.4" y="124.0" text-anchor="end" class="vl">-3.6%</text><path d="M314.0,142.0H272.7Q268.7,142.0 268.7,146.0V156.0Q268.7,160.0 272.7,160.0H314.0Z" class="bstop"><title>Alphabet 이틀 −5%, 한 달 최악. 9/24 Gemini 4 "연말보다 훨씬 이르게" 발언으로 반등</title></path><text x="162" y="155.0" text-anchor="end" class="nm">GOOGL (9/22~23)</text><text x="262.7" y="155.0" text-anchor="end" class="vl">-5%</text><path d="M314.0,173.0H272.7Q268.7,173.0 268.7,177.0V187.0Q268.7,191.0 272.7,191.0H314.0Z" class="bstop"><title>Booking −5% → $156</title></path><text x="162" y="186.0" text-anchor="end" class="nm">BKNG (9/23~24)</text><text x="262.7" y="186.0" text-anchor="end" class="vl">-5%</text><path d="M314.0,204.0H263.6Q259.6,204.0 259.6,208.0V218.0Q259.6,222.0 263.6,222.0H314.0Z" class="bstop"><title>Airbnb −6% → $151.66</title></path><text x="162" y="217.0" text-anchor="end" class="nm">ABNB (9/23~24)</text><text x="253.6" y="217.0" text-anchor="end" class="vl">-6%</text><path d="M314.0,235.0H254.6Q250.6,235.0 250.6,239.0V249.0Q250.6,253.0 254.6,253.0H314.0Z" class="bstop"><title>Expedia −7% → $260.33 — Muse 연동 발표에도 탈중개 우려</title></path><text x="162" y="248.0" text-anchor="end" class="nm">EXPE (9/23~24)</text><text x="244.6" y="248.0" text-anchor="end" class="vl">-7%</text><line x1="315.0" x2="315.0" y1="16" y2="254" class="axl"/></svg></div>
+        <figcaption><b>그림 1.</b> 시장이 읽은 승자·패자. <b>거래 인프라(Shopify)와 개방 리테일(Walmart)은 수혜, 광고·중개 마진(Amazon·Google·OTA)은 피해.</b> Goldman 트레이딩 데스크: "반복 청구·추가 요금·고객 수동성 위에 세운 산업"이 노출(Planet Fitness −17%, NYT −10%). 자료: Yahoo Finance(9/23), Motley Fool(9/23~24), 24/7 Wall St(9/23)</figcaption>
+      </figure>
+      <div class="why">
+        <b>"Whither Google?"</b> — Google은 검색·Gemini·UCP·Walmart를 다 갖고도 이 서사에 없다. Muse가 앱 차트 1위인 이틀 GOOGL은 −5%였고, DeepMind 신임 수장은 "Gemini 4를 연말보다 훨씬 이르게"로 답했다.
+        신뢰가 Muse의 천장이다: Oppenheimer 설문에서 Meta에 비밀번호를 맡기겠다는 미국인은 <b>8%</b>(Google 30%).
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">03</span><h3>Frontier Overhangs — 페이싱이 "마침" 풀어주는 다섯 가지</h3></div>
+      <p class="p">
+        트리거는 Dario Amodei의 9/12 에세이 「We Must Pace the Frontier」(1~2년 벌어 정렬·해석가능성 진전, 임베디드 제3자 평가자, 민주국가 랩 공통 기준, 대중국 칩 통제 강화).
+        Thompson의 핵심 문장: <b>"페이싱은 안전 동기가 진심이라 믿지만, 모델이 너무 빨리 좋아져서 생긴 여러 overhang을 해소하는 데도 마침 유용하다. 감속하면 overhang이 줄어든다."</b>
+      </p>
+      <div class="who">
+        <div class="wr"><div class="wn">① Capability<small>능력 ≠ 해자</small></div><div class="wv">Microsoft Copilot Cowork가 멀티모델 하네스로 감(Nadella 인터뷰). Anthropic Fable의 <b>30일 데이터 보존 조항이 고객 반발로 Fable 5.1에서 빠짐</b> — 고객이 성능 아닌 다른 기준으로 모델을 고른다는 크리스텐슨 "충분히 좋아지면 모듈화"의 증거.</div></div>
+        <div class="wr"><div class="wn">② Product<small>Muse = 약세 신호</small></div><div class="wv">"내가 써본 가장 좋고 접근하기 쉬운 개인 에이전트"인데 모델은 SOTA가 아니다. 개인 에이전트는 챗봇보다 훨씬 끈끈하다. 코딩 에이전트는 코드가 GitHub에 있어 갈아타기 쉽지만 개인 에이전트는 아니다.</div></div>
+        <div class="wr"><div class="wn">③ Pricing<small>가격 우산</small></div><div class="wv">고가는 컴퓨트 부족의 산물. 훈련·RL·R&amp;D에 쓰는 컴퓨트를 추론으로 돌리면 시장을 다 먹을 수 있다. 7월 「Who's Afraid of Chinese Models」의 연장.</div></div>
+        <div class="wr"><div class="wn">④ Capital<small>자본의 한계</small></div><div class="wv">"외부 자본에는 한계가 있고, 그 한계를 찾는 순간 외부 자본에 기댄 모두가 험한 꼴을 본다." 8월 「Nvidia's Risky Business」: 하이퍼스케일러 부채 $194B(7월까지, 2025 연간 $108B). Anthropic 흑자에 SBC·훈련비 제외를 지적했다가 <b>"훈련비 포함해도 흑자라고 들었다" 정정</b>.</div></div>
+        <div class="wr"><div class="wn">⑤ Safety<small>공격 사이버</small></div><div class="wv">진짜 위험은 정렬이 아니라 공격 자동화(한 번만 성공하면 됨). 방어는 완전 자동화가 필요하니 <b>"페이싱은 오히려 나쁜 일이 벌어질 창을 넓힌다."</b></div></div>
+        <div class="wr b"><div class="wn">⑥ 경쟁<small>가장 중요한 overhang</small></div><div class="wv">"페이싱 요구가 하필 <b>OpenAI가 오랜만에 프론티어를 잡은 시점</b>(GPT-6 Astra 9/3)에 나왔다는 게 우연은 아닐 것 … Anthropic은 Anthropic이 선두인 건 괜찮고, 다른 누군가가 선두면 정부 개입이 필요하다."</div></div>
+      </div>
+      <p class="p"><b>왜 단독 감속이 불가능한가</b>(Sharp Tech 9/22): 재귀적 자기개선 = 승자독식 이륙이라는 신념 + 샌프란시스코 인재시장의 종교성("이단은 채용되지도, 채용하지도 못한다"). Altman·Musk가 몇 시간 만에 동조한 이유. METR 같은 "독립" 평가기관은 독립적이지 않다.</p>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">04</span><h3>외부 기록 — "무슨 감속?"</h3></div>
+      <div class="tl">
+        <div class="ev done"><div class="when">07.28</div><div class="what">OpenAI·Anthropic·Meta·Google 직원 1,178명 「Pacing the Frontier」 서한 — "어느 회사·국가도 단독 감속 불가"</div></div>
+        <div class="ev done"><div class="when">09.03</div><div class="what">OpenAI <b>GPT-6 Astra</b> — 7월 Hugging Face 침입 사고(GPT-5.6 Sol이 샌드박스 탈출) 후 안전장치 추가해 출시. 프론티어가 OpenAI로</div></div>
+        <div class="ev done"><div class="when">09.12~14</div><div class="what">Amodei 에세이 → Altman "동의, 우리도 평가자 상주", Musk "Dario가 옳다", Nadella 조건부 환영, 저커버그 "각 랩이 알아서". <b>Trump: "AI를 이기는 자가 이긴다"</b>, Sacks: "이타적인 척 그만·카르텔용 반독점 면제 없다", FTC: 면제는 기득권 고착. <b>9/14 SOX −5.2%</b>(NVDA −3, MU −5, ASML −6, SoftBank −10)</div></div>
+        <div class="ev done"><div class="when">09.19</div><div class="what">Anthropic·OpenAI·SpaceXAI·Google 상대 <b>담합 집단소송</b>(N.D. Cal.) — "경쟁이 만들 속도보다 느리게" 합의 주장</div></div>
+        <div class="ev done"><div class="when">09.22</div><div class="what">에세이 10일 뒤 Anthropic <b>Opus 5.5</b>(Fable급, $4/$20, ~20% 인하) + 같은 날 OpenAI GPT-6 Sol/Luna(Astra 대비 −50%). Fortune "무슨 감속? 가격전쟁 가열". Anthropic 출시 주기 분기→월</div></div>
+        <div class="ev done"><div class="when">09.26</div><div class="what">트럼프–시진핑 워싱턴 정상회담: <b>페이싱 합의 없음</b>. AI 사고 통보 채널·11월 AI 대화만. Trump "브레이크 안 밟는다, 1년~1년 반 앞서 있다"</div></div>
+      </div>
+      <div class="fix"><span class="fh">컴퓨트 수요에 대한 오독 주의</span> 9/14 반도체 급락은 "느린 모델 = 적은 capex"라는 순진한 독해. Thompson 본인은 <b>컴퓨트 버블을 부정</b>("우리는 정말 그 컴퓨트가 다 필요하다")하고, 페이싱은 총수요가 아니라 <b>훈련→추론 믹스와 가격 우산</b>을 바꾼다고 본다. Anthropic은 SpaceX와 월 ~$1.25B 컴퓨트 계약(2029.5까지), Nvidia 가이던스·하이퍼스케일러 capex 불변. 남는 리스크는 <b>자본 타이밍</b>(부채로 짓는 빌드아웃 vs 매출 도착) — <a href="/capex-gate/">CAPEX 게이트</a>의 제3시나리오.</div>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">05</span><h3>판정</h3></div>
+      <div class="rows">
+        <div class="r"><div class="lab">프레임</div><div class="val">두 글의 교집합 = <b>"모델 API는 커모디티, 해자는 유저 접점(에이전트)과 물리 자산(물류·전력·건물)"</b>. <a href="/research/semiconductor-ai.html">오픈소스 vs 프론티어 3축(2026.07.26 노트)</a>의 축②(레이어)와 같은 결론이 소비자 쪽에서 재확인됨.</div></div>
+        <div class="r"><div class="lab">가격액션</div><div class="val">META 9월 +36%는 3년 만의 "쿨함"에 시장이 준 프리미엄. 6주 전 YTD −18%였다는 게 핵심 — <b>내러티브 전환 종목은 전환 초입 3주가 수익의 대부분</b>. 추격 진입은 원칙(피봇 돌파·타이트 손절) 밖. 광고·OTA 숏 테마는 이틀 만에 반영 끝.</div></div>
+        <div class="r verdict"><div class="lab">판정</div><div class="val"><b>직접 매매 없음, 프레임 노트.</b> 볼 것 세 가지: ① Amazon–Meta 광고 딜 성사 여부(= Aggregator 전쟁의 1차 종전) ② Anthropic 10월 IPO 서류의 훈련비 포함 마진(overhang ④ 검증) ③ 토큰 가격 인하 속도 — 우산이 무너지는 속도가 곧 <b>추론 수요 탄력성</b>이고, 그게 메모리·전력 수요의 다음 변수.</div></div>
+      </div>
+    </div>
+
+    <p class="disc">
+      <span class="src">자료:</span> Stratechery 「Begun, the Aggregator Wars Have」(2026.09.25 주간, 전문) · 「Frontier Overhangs」(9/21, 무료 전문) · 「Amazon Blocks Muse, Amazon's Moat, Aggregator v Aggregator」(9/22)·「More on Muse, Amazon, and Walmart; Muse and Expedia; Whither Google?」(9/23)는 <b>유료 본문 미열람 — 공식 티저·주간 요약·Sharp Tech 쇼노트로 재구성</b> · Sharp Tech 영상 「Why Can't Anthropic or OpenAI Unilaterally Slow Down?」(9/22 자막) ·
+      Meta Newsroom(9/8, 9/23) · Bloomberg·GeekWire·The Register(9/21) · Forbes(9/23) · Skift(9/23) · CNBC(9/24, 9/26) · PBS(9/19) · TechCrunch(9/22) · Fortune(9/22) · darioamodei.com(9/12).
+      GM CarPlay 건은 주간 정리에 "무릎 꿇었다"로 실렸지만 GM이 9/21 "EV엔 안 돌아간다"고 정정 — 실제 번복은 2027 가솔린 픽업 한정.
+    </p>
+
+    </div>
+  </article>
+
+</main>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   리서치 노트 누적 레이어 — 목차·태그 필터·접기·딥링크를 DOM에서 자동 생성.
+   새 노트는 <article class="note" data-id="YYYYMMDD-slug"> 하나만 붙이면
+   목차·태그·앵커가 전부 알아서 갱신된다. 수동 동기화 지점 없음.
+   ───────────────────────────────────────────────────────────── */
+(function () {
+  var main  = document.querySelector('main');
+  var notes = [].slice.call(document.querySelectorAll('article.note'));
+  if (!notes.length) return;
+
+  var slug = function (t) {
+    return t.trim().toLowerCase().replace(/[^\w가-힣]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+  };
+
+  var meta = notes.map(function (n, i) {
+    var date  = (n.querySelector('.nmeta .date') || {}).textContent || '';
+    var title = (n.querySelector('.ntitle')      || {}).textContent || '노트 ' + (i + 1);
+    var tags  = [].slice.call(n.querySelectorAll('.nmeta .tag, .nmeta .tk'))
+                  .map(function (e) { return e.textContent.trim(); });
+    n.id = n.dataset.id || (date.replace(/\./g, '') + '-' + slug(title));
+
+    /* 본문 래퍼가 없으면 자동 생성 — 기존 노트도 손대지 않고 접기 지원 */
+    if (!n.querySelector('.nbody')) {
+      var wrap = document.createElement('div');
+      wrap.className = 'nbody';
+      var start = n.querySelector('.nlede') || n.querySelector('.ntitle');
+      if (start) {
+        var sib = start.nextSibling, nx;
+        while (sib) { nx = sib.nextSibling; wrap.appendChild(sib); sib = nx; }
+        n.appendChild(wrap);
+      }
+    }
+
+    /* 접기 토글 — 최신 1개만 펼침 */
+    if (n.querySelector('.nbody')) {
+      var btn = document.createElement('button');
+      btn.className = 'fold';
+      btn.type = 'button';
+      var setLabel = function () { btn.textContent = n.classList.contains('collapsed') ? '펼치기 ▾' : '접기 ▴'; };
+      btn.onclick = function () { n.classList.toggle('collapsed'); setLabel(); };
+      if (i > 0) n.classList.add('collapsed');
+      setLabel();
+
+      /* 딥링크 버튼 */
+      var lnk = document.createElement('button');
+      lnk.className = 'anch';
+      lnk.type = 'button';
+      lnk.textContent = '#';
+      lnk.title = '이 노트 링크 복사';
+      lnk.onclick = function () {
+        var url = location.origin + location.pathname + '#' + n.id;
+        history.replaceState(null, '', '#' + n.id);
+        if (navigator.clipboard) navigator.clipboard.writeText(url);
+        lnk.textContent = '복사됨';
+        setTimeout(function () { lnk.textContent = '#'; }, 1200);
+      };
+      var nm = n.querySelector('.nmeta');
+      nm.appendChild(lnk);
+      nm.appendChild(btn);
+    }
+    return { el: n, date: date, title: title, tags: tags };
+  });
+
+  /* ── 목차 + 태그 필터 ── */
+  var allTags = [];
+  meta.forEach(function (m) {
+    m.tags.forEach(function (t) { if (allTags.indexOf(t) < 0) allTags.push(t); });
+  });
+
+  var toc = document.createElement('div');
+  toc.className = 'toc';
+  toc.innerHTML =
+    '<div class="th"><b>이 산업 노트</b><span>' + meta.length + '건 · 최신순</span></div>' +
+    '<div class="tagbar"></div><div class="toclist"></div>';
+  main.insertBefore(toc, main.firstElementChild);
+
+  var bar  = toc.querySelector('.tagbar');
+  var list = toc.querySelector('.toclist');
+
+  var render = function (active) {
+    list.innerHTML = '';
+    var shown = 0;
+    meta.forEach(function (m) {
+      var hit = !active || m.tags.indexOf(active) >= 0;
+      m.el.style.display = hit ? '' : 'none';
+      if (!hit) return;
+      shown++;
+      var a = document.createElement('a');
+      a.href = '#' + m.el.id;
+      a.innerHTML = '<span class="d">' + m.date + '</span><span class="t">' + m.title + '</span>';
+      a.onclick = function () { m.el.classList.remove('collapsed'); var f = m.el.querySelector('.fold'); if (f) f.textContent = '접기 ▴'; };
+      list.appendChild(a);
+    });
+    if (!shown) list.innerHTML = '<div class="empty">해당 태그의 노트가 없습니다.</div>';
+  };
+
+  var mkBtn = function (label, tag) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = label;
+    b.onclick = function () {
+      var was = b.classList.contains('on');
+      [].forEach.call(bar.children, function (c) { c.classList.remove('on'); });
+      if (!was) b.classList.add('on');
+      render(was ? null : tag);
+    };
+    return b;
+  };
+  allTags.forEach(function (t) { bar.appendChild(mkBtn(t, t)); });
+  render(null);
+
+  /* ── 해시로 들어오면 해당 노트 펼치고 이동 ── */
+  var openHash = function () {
+    var id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    var n = document.getElementById(id);
+    if (!n) return;
+    n.classList.remove('collapsed');
+    var f = n.querySelector('.fold'); if (f) f.textContent = '접기 ▴';
+    n.scrollIntoView();
+  };
+  openHash();
+  window.addEventListener('hashchange', openHash);
+})();
+</script>
+
+<footer>
+  <div class="wrap"><span class="star">✦</span> POLARIS — Research Notes</div>
+</footer>
+
+</body>
+</html>

@@ -200,6 +200,22 @@
   .figs2 .fig{margin:0;min-width:0}
   .figs2 .fig img{min-width:420px}
 
+  /* ── 2026.09 노트 전용: 정적 SVG 차트 (다크 테마 변수 사용, optical.html과 동일 규약) ── */
+  .chartfig .cw{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:12px 10px 8px}
+  .chartfig svg{display:block;width:100%;height:auto;overflow:visible}
+  .chartfig text{font-family:inherit;font-size:10.5px;fill:var(--faint)}
+  .chartfig text.nm{font-size:11.5px;fill:var(--muted)} .chartfig text.nm.me{fill:var(--txt);font-weight:700}
+  .chartfig text.vl{font-size:11px;fill:var(--txt)} .chartfig text.ttl{font-size:11px;fill:var(--muted);font-weight:700}
+  .chartfig text.inl{font-size:10.5px;fill:#0b0d14;font-weight:700} .chartfig text.inl.lt{fill:var(--txt)}
+  .chartfig .gr{stroke:#232838;stroke-width:1} .chartfig .axl{stroke:#3a4152;stroke-width:1}
+  .chartfig .refl{stroke:var(--gold);stroke-width:1;stroke-dasharray:4 3;opacity:.75}
+  .chartfig .ln{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+  .chartfig .dot{fill:var(--accent);stroke:var(--panel2);stroke-width:2}
+  .chartfig .b1{fill:var(--accent)} .chartfig .b0{fill:#4a5163} .chartfig .b3{fill:#d95926}
+  .chartfig .b2{fill:var(--accent);opacity:.45} .chartfig .bext{fill:var(--accent);opacity:.22}
+  .chartfig .bgo{fill:var(--go)} .chartfig .bstop{fill:var(--stop)}
+  .scrollx{overflow-x:auto}
+
   /* ── 노트 목차 · 태그 필터 (JS 자동 생성) ── */
   .toc{background:linear-gradient(180deg,var(--panel),#13161f);border:1px solid var(--line);
     border-radius:15px;padding:18px 20px;margin-bottom:20px}
@@ -274,6 +290,271 @@
 <main class="wrap">
 
   <!-- 새 노트는 이 줄 바로 아래에 추가 (최신순) -->
+
+  <article class="note" data-id="20260927-china-dc-boom" data-status="프레임">
+    <div class="nmeta">
+      <span class="date">2026.09.27</span>
+      <span class="tk">중국 AI 인프라</span>
+      <span class="tag">데이터센터</span>
+      <span class="tag">BATB capex</span>
+      <span class="tag">바이트댄스</span>
+      <span class="tag">EDWC</span>
+      <span class="tag">서버 DRAM</span>
+      <span class="tag">SemiAnalysis</span>
+    </div>
+    <div class="ntitle">중국 AI 인프라 붐 — 24GW, 두 속도 시장, 그리고 칩 게이트</div>
+    <p class="nlede">
+      <b>한 줄:</b> "중국은 크다 / 중국은 비어 있다"는 두 가정을 건물 단위 데이터로 깬 리포트.
+      중국 데이터센터는 <b>24GW+로 EMEA·아시아(중국 제외)보다 크고</b>, 2Q26 BAT capex <b>$20B(2배↑)에 셋 다 사상 첫 동시 FCF 마이너스</b>.
+      "빈 데이터센터"와 "AI 용량 부족"이 동시에 참인 이유는 <b>레거시 소매 랙과 도매 AI 건물이 다른 시장</b>이기 때문.
+      미국은 전력 게이트, 중국은 <b>칩 게이트</b>.
+    </p>
+
+    <div class="nbody">
+
+    <div class="sec">
+      <div class="sech"><span class="sn">01</span><h3>규모 — 세계 2위, 그리고 이제 막 인플렉션</h3></div>
+      <p class="p">
+        SemiAnalysis가 <b>1,000개+ 시설·60개+ 사업자</b>를 추적해 처음 국경을 넘었다. 발표 용량 추정치가 업체마다 15배씩 차이 나던 시장에
+        건물 단위 실측이 들어온 셈. 최대 테넌트(바이트댄스)는 10-K를 안 내고, 최대 임대인 여럿은 비상장이며, 1차 자료는 중국어라
+        시장이 "게으른 가정"에 안주해 왔다는 게 리포트의 출발점.
+      </p>
+      <div class="figs2">
+        <figure class="fig chartfig">
+          <div class="cw"><svg viewBox="0 0 360 179" role="img"><text x="100" y="11" class="ttl">지역별 데이터센터 용량, 2026년 말 (GW)</text><path d="M100.0,16.0H273.3Q277.3,16.0 277.3,20.0V32.0Q277.3,36.0 273.3,36.0H100.0Z" class="b0"><title>미국 56GW (2026YE, SemiAnalysis Datacenter Model)</title></path><text x="92" y="30.0" text-anchor="end" class="nm">미국</text><text x="283.3" y="30.0" class="vl">56GW</text><path d="M100.0,51.0H172.0Q176.0,51.0 176.0,55.0V67.0Q176.0,71.0 172.0,71.0H100.0Z" class="b1"><title>중국 24GW+ 인도 완료 (2026YE, China Datacenter Model) — 뒤에 이어진 옅은 막대 = 착공·일정 확정 파이프라인 ~20GW</title></path><path d="M178.0,51.0H237.3Q241.3,51.0 241.3,55.0V67.0Q241.3,71.0 237.3,71.0H178.0Z" class="bext"><title>중국 파이프라인 ~20GW (일정 확정). 별도로 발표만 된 프로젝트 ~30GW는 미표시</title></path><text x="92" y="65.0" text-anchor="end" class="nm me">중국</text><text x="247.3" y="65.0" class="vl">24GW+</text><path d="M100.0,86.0H143.5Q147.5,86.0 147.5,90.0V102.0Q147.5,106.0 143.5,106.0H100.0Z" class="b0"><title>APAC(중국 제외) ~15GW</title></path><text x="92" y="100.0" text-anchor="end" class="nm">APAC ex-China</text><text x="153.5" y="100.0" class="vl">15GW</text><path d="M100.0,121.0H140.3Q144.3,121.0 144.3,125.0V137.0Q144.3,141.0 140.3,141.0H100.0Z" class="b0"><title>EMEA ~14GW</title></path><text x="92" y="135.0" text-anchor="end" class="nm">EMEA</text><text x="150.3" y="135.0" class="vl">14GW</text><path d="M100.0,156.0H102.3Q106.3,156.0 106.3,160.0V172.0Q106.3,176.0 102.3,176.0H100.0Z" class="b0"><title>남미 ~2GW</title></path><text x="92" y="170.0" text-anchor="end" class="nm">남미</text><text x="112.3" y="170.0" class="vl">2GW</text><line x1="100" x2="100" y1="16" y2="176" class="axl"/></svg></div>
+          <figcaption><b>그림 1.</b> 중국 인도 완료 용량이 <b>EMEA·APAC(중국 제외)보다 크다</b>. 옅은 막대는 일정 확정 파이프라인(~20GW), 발표만 된 ~30GW는 별도. 자료: SemiAnalysis Datacenter Model / China Datacenter Model (2026.09.25)</figcaption>
+        </figure>
+        <figure class="fig chartfig">
+          <div class="cw"><svg viewBox="0 0 360 200" role="img"><text x="44" y="12" class="ttl">BATB 합산 capex (십억달러)</text><line x1="44" x2="352" y1="170.0" y2="170.0" class="gr"/><text x="38" y="174.0" text-anchor="end" class="lb">$0B</text><line x1="44" x2="352" y1="137.3" y2="137.3" class="gr"/><text x="38" y="141.3" text-anchor="end" class="lb">$25B</text><line x1="44" x2="352" y1="104.5" y2="104.5" class="gr"/><text x="38" y="108.5" text-anchor="end" class="lb">$50B</text><line x1="44" x2="352" y1="71.8" y2="71.8" class="gr"/><text x="38" y="75.8" text-anchor="end" class="lb">$75B</text><line x1="44" x2="352" y1="39.1" y2="39.1" class="gr"/><text x="38" y="43.1" text-anchor="end" class="lb">$100B</text><path d="M83.3,170.0V128.2Q83.3,124.2 87.3,124.2H103.3Q107.3,124.2 107.3,128.2V170.0Z" class="b1"><title>BATB(바이트댄스·알리바바·텐센트·바이두) 합산 capex 2024 ≈ $35B</title></path><text x="95.3" y="117.2" text-anchor="middle" class="vl">$35B</text><text x="95.3" y="187" text-anchor="middle" class="nm">2024</text><path d="M186.0,170.0V108.5Q186.0,104.5 190.0,104.5H206.0Q210.0,104.5 210.0,108.5V170.0Z" class="b1"><title>2025 > $50B</title></path><text x="198.0" y="97.5" text-anchor="middle" class="vl">$50B</text><text x="198.0" y="187" text-anchor="middle" class="nm">2025</text><path d="M288.7,170.0V43.1Q288.7,39.1 292.7,39.1H308.7Q312.7,39.1 312.7,43.1V170.0Z" class="b2"><title>2026 궤도 ~$100B (SemiAnalysis). 추정치라 옅은 색</title></path><text x="300.7" y="32.1" text-anchor="middle" class="vl">$100B</text><text x="300.7" y="187" text-anchor="middle" class="nm">2026E</text><line x1="44" x2="352" y1="170" y2="170" class="axl"/></svg></div>
+          <figcaption><b>그림 2.</b> BATB 합산 capex는 <b>2년 만에 3배 궤도</b>. 2026E는 SemiAnalysis 추정(옅은 색). 여기에 안 잡힌 비상장 바이트댄스가 실제 최대 지출자. 자료: SemiAnalysis</figcaption>
+        </figure>
+      </div>
+      <p class="p"><b>2Q26 상장 3사 실적으로 교차 확인</b> (1차 자료: 각사 6-K·실적 발표):</p>
+      <div class="scrollx"><table class="tbl">
+        <thead><tr><th>회사</th><th>2Q26 capex</th><th>FCF</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td>알리바바</td><td>¥67.7B (+75% YoY)</td><td><b>−¥44.7B</b></td><td>¥380B 3개년 계획 18개월 만에 절반 소진, CEO "초과할 것". 클라우드·AI 매출 +45%(22분기 최고)</td></tr>
+          <tr><td>텐센트</td><td>¥51.8B (+190%)</td><td><b>−¥13.8B</b></td><td>별도로 <b>컴퓨트 선급금 ¥51.4B</b> → 분기 AI 지출 ¥100B+. CSO: "컴퓨트를 빌려주면 감가상각을 바로 회수할 수 있지만 다른 게임을 한다"</td></tr>
+          <tr><td>바이두</td><td>¥11.4B (+201%)</td><td><b>≈ −¥8.3B</b></td><td>매출 −4%인데 GPU 클라우드 매출 +283%. 광고 부진을 AI 클라우드로 상쇄</td></tr>
+        </tbody>
+      </table></div>
+      <div class="why">
+        <b>왜 지금인가.</b> 소비자 인터넷이 성장을 멈췄기 때문이다 — 위챗 MAU +2%, 바이두 2025 매출 −3%, 알리 CMR −7%, 콰이쇼우 DAU +2.7%.
+        게다가 중국 클라우드는 거의 내수(알리 클라우드 해외 비중 ~20%, 통신사 클라우드 100% 내수)라 "addressable GDP"가 미국 빅테크보다 작다.
+        <b>AI가 유일하게 남은 성장 엔진이라 FCF 마이너스를 감수하는 것</b>이지, 미국처럼 광고·클라우드 현금이 넘쳐서가 아니다.
+        → 이 차이가 <a href="/capex-gate/">CAPEX 게이트</a>에서 "지출 의지 ≠ 주가 우호"를 중국판으로 다시 물어야 하는 이유.
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">02</span><h3>두 속도 시장 — "빈 데이터센터"와 "AI 용량 부족"이 동시에 참인 이유</h3></div>
+      <p class="p">
+        4단계 역사가 오늘의 모순을 설명한다. <b>① 통신사 호스팅(~2015)</b>: 3대 국영 통신사가 60~70% 점유, 랙당 2kW 미만 소매 랙이 90%.
+        <b>② 클라우드 땅따먹기(2015~21)</b>: 알리 클라우드 매출 CAGR 110%, 12개월 17회 가격 인하. <b>③ 소화기(2022~23)</b>: 텐센트 capex 반토막,
+        도매 전력전용 단가 <span class="hl">~$80/kW/월에서 절반</span>으로. <b>④ AI 슈퍼사이클(2024~)</b>: 도매 주문이 사상 최대로 복귀.
+      </p>
+      <div class="bex">
+        <div class="brow"><div class="blab">도매 AI 건물 (2023~)</div><div class="btrack"><div class="bfill" style="width:72%"></div><span class="bval">70%+ 가동</span></div></div>
+        <div class="brow"><div class="blab">레거시 소매 랙</div><div class="btrack"><div class="bfill" style="width:60%;opacity:.55"></div><span class="bval">~60%</span></div></div>
+        <div class="brow"><div class="blab">전국 헤드라인 가동률</div><div class="btrack"><div class="bfill" style="width:50%;opacity:.35"></div><span class="bval">~50%</span></div></div>
+      </div>
+      <p class="p">
+        선도 코로케이션 업체의 가동률은 2010년 70%대 중반에서 2022년 50%대 중반까지 미끄러졌다가, 2023년부터 세그먼트 공시에서 갈라진다.
+        <b>헤드라인 50%는 1기 유산의 기념비</b>이고, H20·Ascend 서버 밀도에 맞지 않는 옛 랙은 부분 점유·고비용 때문에 개조도 안 된다.
+        GDS·VNET이 1H26에 도매 <b>1.3GW</b>(470MW + 862MW)를 수주하는 동안 소매 주문은 10MW 미만이었다. <span class="hl">AI 시대는 도매다. 레거시 소매는 참여하지 않는다.</span>
+      </p>
+      <div class="who">
+        <div class="wr a"><div class="wn">반론 ① <small>ChinaTalk 2026.07</small></div><div class="wv">"EDWC는 가짜" — 칩은 여전히 허베이·광둥·장쑤에 있고, 서부 智算中心 서버 가동률 30% 미만. 텐센트 클라우드 임원: 국내 AI 컴퓨팅센터 평균 GPU 가동률 <b>30% 미만</b>.</div></div>
+        <div class="wr b"><div class="wn">SemiAnalysis의 답</div><div class="wv">둘 다 맞다. 그것은 지방정부·민간이 지은 소형 컴퓨팅센터 <b>롱테일</b>이고, 상위 5개 하이퍼스케일러 수요는 공급 제약이다. 알리 CEO 우융밍(5/14): <b>"서버에 노는 카드가 거의 없다"</b>. VNET: "총량이 곧 유효 공급은 아니다."</div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">03</span><h3>EDWC의 진짜 전달 메커니즘 — 정책 문서가 아니라 에너지 쿼터</h3></div>
+      <p class="p">
+        "Eastern Data, Western Compute"는 많이 다뤄졌지만 <b>어떻게 작동하는지</b>는 빠져 있었다. 중국에서 데이터센터 개발자가 부지 확보 후 첫 번째로 받는 허가는
+        지방 발개위의 <b>에너지 소비 심사</b>이고, 10MW(석탄환산 1만 톤) 이상은 이 심사 없이 착공이 불법이다. 2022년 EDWC가 오자
+        <span class="hl">쿼터를 내주는 사무실이 곧 EDWC를 집행하는 사무실</span>이 되면서 비허브 지역 건설이 멈췄다.
+      </p>
+      <div class="chn">
+        <div class="cbox src">광둥 쿼터 중단<small>2021~22</small></div><span class="arw">→</span>
+        <div class="cbox">사오관 허브만 재개<small>¥4B 광망 투자 · 광저우 1.3ms</small></div><span class="arw">→</span>
+        <div class="cbox">텐센트 칭위안 적발<small>승인의 13~14배 운영 · 6개월 시정</small></div><span class="arw">→</span>
+        <div class="cbox">텐센트 후속 용량 → 사오관</div>
+      </div>
+      <p class="p">
+        처음 2년은 느렸다(클라우드·게임·이커머스는 저지연이 필요). 그걸 바꾼 건 <b>통신사 광망 투자</b>(사오관 랙이 "선전 랙"이 됨)와
+        <b>AI 학습 수요</b>(지연은 상관없고 전력비가 중요)다. 내몽골은 중국 유일의 독립 성급 전력망(멍시)으로 <b>전력비가 1선 도시의 절반</b>,
+        그래서 <b>"중국의 조호르"</b>가 됐다. 반면 청두·충칭은 전력비·계통 유연성 경쟁에서 밀렸고, 허브 밖 산시성은 값싼 석탄 전력·베이징 인접으로
+        바이트댄스·바이두·JD가 <b>2GW 가까이</b> 몰렸다. <span class="hl">쿼터가 건설을 유도하지만 전자와 지리가 최종 입지를 정한다.</span>
+      </p>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">04</span><h3>속도와 비용 — 미국은 전력 게이트, 중국은 칩 게이트</h3></div>
+      <figure class="fig chartfig wide">
+        <div class="cw"><svg viewBox="0 0 560 112" role="img"><rect x="150" y="4" width="11" height="11" rx="2" class="b0"/><text x="165" y="13.5" class="nm">허가</text><rect x="204.0" y="4" width="11" height="11" rx="2" class="b1"/><text x="219.0" y="13.5" class="nm">건설</text><path d="M150.0,24H269.2V46H150.0Z" class="b0"><title>허가 12~13개월 (건설과 겹칠 수 없음)</title></path><text x="209.6" y="39.0" text-anchor="middle" class="inl lt">허가 12~13</text><path d="M271.2,24.0H412.7Q416.7,24.0 416.7,28.0V42.0Q416.7,46.0 412.7,46.0H271.2Z" class="b1"><title>건설 12~18개월 (풀 모듈러 최선 사례)</title></path><text x="343.9" y="39.0" text-anchor="middle" class="inl">건설 12~18</text><text x="142" y="39.0" text-anchor="end" class="nm me">미국 (풀 모듈러 최선)</text><text x="423.7" y="39.0" class="vl">≈ 24~31개월</text><path d="M150.0,64H191.6V86H150.0Z" class="b0"><title>허가 3~6개월, EDWC 허브는 더 짧음</title></path><text x="170.8" y="79.0" text-anchor="middle" class="inl lt">허가 3~6</text><path d="M193.6,64.0H306.0Q310.0,64.0 310.0,68.0V82.0Q310.0,86.0 306.0,86.0H193.6Z" class="b1"><title>100MW 시설 건설 ~12개월 (클라우드 시대 18개월에서 단축)</title></path><text x="251.8" y="79.0" text-anchor="middle" class="inl">건설 ~12</text><text x="142" y="79.0" text-anchor="end" class="nm me">중국 (AI 시대 표준)</text><text x="317.0" y="79.0" class="vl">≈ 15~18개월</text><line x1="150.0" x2="150.0" y1="90" y2="94" class="axl"/><text x="150.0" y="106" text-anchor="middle" class="lb">0개월</text><line x1="208.2" x2="208.2" y1="90" y2="94" class="axl"/><text x="208.2" y="106" text-anchor="middle" class="lb">6</text><line x1="266.4" x2="266.4" y1="90" y2="94" class="axl"/><text x="266.4" y="106" text-anchor="middle" class="lb">12</text><line x1="324.5" x2="324.5" y1="90" y2="94" class="axl"/><text x="324.5" y="106" text-anchor="middle" class="lb">18</text><line x1="382.7" x2="382.7" y1="90" y2="94" class="axl"/><text x="382.7" y="106" text-anchor="middle" class="lb">24</text><line x1="440.9" x2="440.9" y1="90" y2="94" class="axl"/><text x="440.9" y="106" text-anchor="middle" class="lb">30</text><line x1="150" x2="150" y1="22" y2="90" class="axl"/></svg></div>
+        <figcaption><b>그림 3.</b> 100MW급 시설 착공 전 허가 + 건설. 미국은 허가·건설이 겹칠 수 없어 최선(풀 모듈러)이 2년+, 중국 AI 시대 표준은 12개월 건설. <b>하이퍼스케일러가 입찰에 T+6개월 인도를 요구</b>하니 개발자가 리스크를 안고 셸을 먼저 짓는다(GDS 152MW 6개월 인도 사례). 자료: SemiAnalysis 「Wild Wild West of LEGO Datacenters」·본 리포트</figcaption>
+      </figure>
+      <div class="bn">
+        <div class="lay sys"><div class="lh">미국 — 전력 게이트 <span class="pill no">계통·변압기·주민반대</span></div><div class="lb">계통연결 대기, 변압기 리드타임, 비하인드미터 우회. 시설 쪽 물리 마찰이 빌드 사이클을 정한다.</div></div>
+        <div class="lay comp"><div class="lh">중국 — 칩 게이트 <span class="pill yes">발전 풍부·허가는 깔때기·노동 풍부</span></div><div class="lb">국영 전력사는 데이터센터 부하를 개발 성과로 본다. 시설 마찰이 없으니 <b>빌드 사이클은 순수하게 플랫폼 수요와 칩 공급</b>이 정한다.</div></div>
+      </div>
+      <p class="p">
+        "더 많은 공장, 더 적은 현장"으로 가면 텐센트 T-Block 같은 풀 컨테이너가 표준이어야 하는데 아니다. 이유가 매우 중국적이다 —
+        <b>① 현장 노동이 싸서</b> 철골+프리팹으로도 공격적 일정을 맞추고, <b>② 은행 담보</b>로 잡으려면 컨테이너 마당보다 20년 설계수명 건물이 감정가가 높다.
+        "자산을 담보로 빌려 바이트댄스에 임대"가 사업모델이면 진짜 건물을 짓는다. 알리 CUBE 5.0은 셸 완성 후 <b>100일</b>(공장 30·설치 50·시운전 20)에 서버 반입, 비용 10% 추가 절감.
+      </p>
+      <p class="p"><b>칩 게이트의 현재(9/27):</b> H200은 미국이 1월에 허가했지만 베이징이 구매를 늦춰 Nvidia가 <b>$0.4B 재고 손실</b>을 잡았고 중국 DC 매출은 세그먼트의 1% 미만.
+        화웨이 Ascend는 2026년 다이 <b>160만 개</b> 목표지만 CXMT HBM(~200만 스택 ≈ 25~30만 패키지)이 천장. 960DT는 1Q27로 앞당김(9/17). DeepSeek은 울란차부 1GW에 Ascend 950DT 16만 장 발주(Bloomberg 9/4).</p>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">05</span><h3>수요 — 바이트댄스가 곧 수주장</h3></div>
+      <p class="p">
+        바이트댄스는 중국 인도 완료 용량의 <b>약 1/5</b>을 차지하고 거의 전부 임차한다. 그래서 그 입찰 일정이 전국 도매 사업자의 수주장이다.
+        상장된 GDS·VNET은 2024~26YTD 바이트댄스·알리 주문의 <b>~1/3</b>만 잡았다(빙산의 일각). 텐센트는 2022~23 다운사이클에 소형 임차 사이트를 닫고 자체 캠퍼스로 통합한 "가장 절제된" 플레이어, 바이두는 규모가 한 자릿수 분수, 화웨이는 사업모델상 거의 전부 자체 건설.
+      </p>
+      <div class="tl">
+        <div class="ev done"><div class="when">2025.12</div><div class="what">2026 capex 계획 <b>¥160B</b>(AI 칩 ¥85B) — DigiTimes</div></div>
+        <div class="ev done"><div class="when">2026.05</div><div class="what">≥25% 상향 <b>¥200B+</b>, 국산 칩 비중↑, 메모리 가격 상승 이유(SCMP) → Bloomberg: <b>최대 $70B 검토</b>(2025 ~$25B), 2027 $100B 언급</div></div>
+        <div class="ev done"><div class="when">2026.07</div><div class="what">닝샤 중웨이에 법인 2개 등록 → 4번째 자체 클러스터 시사 (기존: 산시 다퉁 · 안후이 우후 · 내몽골 호린거르+울란차부)</div></div>
+        <div class="ev done"><div class="when">2026.09.03</div><div class="what">울란차부 <b>5~6GW</b> 확장 예비 협의, ¥160B/GW(SCMP 단독) — 어떤 공시 capex보다 큰 숫자, <b>파이프라인이지 확정 수요가 아님</b></div></div>
+        <div class="ev done"><div class="when">2026.09.15</div><div class="what">1H26 매출 $120B(+30%), 순이익 <b>$20B로 감소</b>(마진 21%→16.7%) — AI 지출 탓(The Information). 신디케이트론 $20B에서 확대</div></div>
+      </div>
+      <p class="p">BOT 하이브리드가 세 번째 길이다 — 하이퍼스케일러가 땅·셸을 소유하고 파트너가 M&amp;E를 투자해 8~10년 계약으로 회수. 알리–AtHub, 텐센트–Kehua Data, 바이두–Aofei. 하이퍼스케일러는 통제·속도, 파트너 대차대조표가 capex, IRR은 계약형.</p>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">06</span><h3>한국 각도 — 서버 DRAM은 직접, HBM은 간접</h3></div>
+      <div class="rows">
+        <div class="r"><div class="lab">직접 수혜</div><div class="val">삼성전자 1Q26 중국 매출 <b>전년비 3배</b>, SK하이닉스 중국 비중 <b>24.3%</b>. 1Q26 서버 DRAM 계약가 +60~70% QoQ, 분기 계약만 제시. <b>중국 하이퍼스케일러가 커모디티 서버 DRAM·eSSD의 확인된 수요원</b>.</div></div>
+        <div class="r"><div class="lab">간접</div><div class="val">HBM은 2024.12 이후 대중 수출 금지 → 허가된 Nvidia 칩(H200=HBM3E) 안에서만. <b>H200 허가–베이징 승인 교착이 풀려야 열리는 옵션</b>.</div></div>
+        <div class="r"><div class="lab">리스크</div><div class="val">알리·바이트댄스가 CXMT DDR5/HBM3E·YMTC로 이전 중(CXMT 64GB 서버 모듈 "실질 위협"). 중국 IDC 종목은 바이트댄스 집중(润泽 매출 60%+)·고정가 장기계약(数据港)이 약점.</div></div>
+        <div class="r verdict"><div class="lab">판정</div><div class="val"><b>중국 AI capex는 확인된 사실, 다만 성장 엔진이 하나뿐인 지출.</b> 국내 메모리에는 커모디티 DRAM 수요로 이미 실적에 들어와 있고, 추가 옵션은 H200 교착 해소(HBM). 중국 IDC 직접 투자는 안 함 — 테넌트 집중과 칩 게이트가 내 통제 밖. <b>분기마다 볼 지표: BATB capex 합산, GDS/VNET 도매 수주(MW), H200 실제 선적.</b></div></div>
+      </div>
+    </div>
+
+    <p class="disc">
+      <span class="src">자료:</span> SemiAnalysis 「The Chinese AI Infrastructure Boom: Introducing the SemiAnalysis China Datacenter Model」(2026.09.25, 무료 파트. 테넌트별 유료 섹션은 미열람) ·
+      알리바바 6-K(8/18) · 텐센트 2Q26(8/12) · 바이두 6-K(8/18) · GDS 2Q26 콜(8/13) · VNET 2Q26 콜(8/18) · SCMP(5/9, 9/3) · Bloomberg(5/27, 9/4) · The Information(9/15) ·
+      Nvidia 10-Q(FY27 2Q) · ChinaTalk 「EDWC is Fake」(7/10) · 아주경제(8/30) · TrendForce(1/6).
+      수치는 리포트 원문과 1차 자료를 교차 확인했고, ByteDance 5~6GW는 SCMP 단독 보도로 미확인.
+    </p>
+
+    </div>
+  </article>
+
+
+  <article class="note" data-id="20260927-intel-18a-teardown" data-status="워치">
+    <div class="nmeta">
+      <span class="date">2026.09.27</span>
+      <span class="tk">INTC</span>
+      <span class="tag">Intel 18A</span>
+      <span class="tag">후면전력 BSPDN</span>
+      <span class="tag">GAA</span>
+      <span class="tag">파운드리</span>
+      <span class="tag">삼성 SF2</span>
+      <span class="tag">장비·소재</span>
+      <span class="tag">SemiAnalysis</span>
+    </div>
+    <div class="ntitle">Intel 18A 테어다운 — 로드맵은 돌아왔지만 리더십은 아니다</div>
+    <p class="nlede">
+      <b>한 줄:</b> SemiAnalysis STEEL 랩이 Panther Lake를 잘랐다. 상용 최초 후면전력(PowerVia) + Intel 첫 GAA(RibbonFET 4장)를 동시에 넣은 <b>진짜 제조 이정표</b>인데,
+      로직 밀도는 <b>TSMC N3E 수준</b>이고 N3P·N2·삼성 SF2의 최대 밀도에 못 미친다. CPU 코어는 점진적, 고급 GPU 타일은 여전히 TSMC N3E.
+      주가(+220% YTD, 선행 P/E ~81x)는 공정 PPA가 아니라 <b>서버 CPU 품귀·파운드리 옵션</b>을 사고 있다.
+    </p>
+
+    <div class="nbody">
+
+    <div class="sec">
+      <div class="sech"><span class="sn">01</span><h3>구조 — 10년 만의 트랜지스터 통합 변화 두 개를 한 번에</h3></div>
+      <p class="p">
+        기존 칩은 전력과 신호가 같은 전면 금속층을 쓴다. 전력 레일이 트랜지스터 근처의 희소한 배선 자원을 먹고, 키 큰 비아 스택이 VDD/VSS를 끌어내린다.
+        <b>PowerVia</b>는 전력망을 웨이퍼 뒷면으로 옮긴다 — 전면 M0~M14 신호, 후면 BM0~BM5 전력, 둘을 <b>Mo 라이너 W 나노-TSV</b>(~150nm)가 잇는다.
+        웨이퍼를 캐리어에 접합해 뒤집고 기판을 비아 끝이 드러날 때까지 갈아낸 뒤 후면 금속을 올린다. 캐리어는 완성 칩의 열 경로로 남는다.
+      </p>
+      <div class="bn">
+        <div class="lay"><div class="lh">전면 신호 스택 M0~M14</div><div class="lb">전력 레일이 빠져 <b>5트랙 셀</b> 가능(N3E·Intel 3는 7트랙). M0 피치는 PDK 최소 32nm 대신 <b>36nm로 일부러 완화</b> — 리포트가 "비용·수율 이득"을 명시한 유일한 곳. 라이너: Co/Ru(M0–1)·Co(M2–4)·<b>Nb(M5–9, 특이)</b></div></div>
+        <div class="lay comp"><div class="lh">RibbonFET (GAA) <span class="pill yes">4장 나노시트</span></div><div class="lb">삼성 SF2 MBCFET은 3장·더 넓음. 시트 폭을 P코어·E코어·SRAM(PU 최협·PD 최광)·DDR-PHY마다 다르게 튜닝. La 다이폴로 문턱전압 조절, NMOS TiAl / PMOS TiN. 서브핀을 유전체로 대체해 기생 경로 제거(대신 열 경로 약화)</div></div>
+        <div class="lay"><div class="lh">후면 전력 스택 BM0~BM5</div><div class="lb">BM0~2 미세, BM3~5 굵은 배전. BM0 피치가 셀 행 높이와 일치. 이중 AlOx 에치스톱(AlOx/SiN/AlOx) — SMIC N+3는 단일층. 캐리어·본드 스택 상세는 유료 섹션(미열람)</div></div>
+      </div>
+      <p class="p">
+        패키징은 <b>Foveros-S</b>: 컴퓨트(18A)·GPU(Intel 3 GT1 또는 N3E GT2)·I/O(N6) 타일을 수동 실리콘 베이스 위에 2.5D로. 공칭 36μm 마이크로범프인데 실측 로컬 간격 <b>25.2μm</b>.
+        메모리 컨트롤러를 컴퓨트 타일에 넣어 Meteor/Arrow Lake의 D2D 왕복을 없앴다. Wildcat Lake(Core Series 3)는 베이스 없이 단일 18A 다이 + UCIe PCH — 같은 공정을 상용화하는 두 방식.
+      </p>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">02</span><h3>측정 — 밀도는 N3E급, 면적 절감은 설계에서 나왔다</h3></div>
+      <p class="p">
+        Bohr 대표 셀 모델(NAND2 + 스캔 플립플롭 60:40)로 재면 <b>18A 컴퓨트 로직 ≈ TSMC N3E GPU 로직</b>. 18A는 Intel 3 대비 <b>+18.6%</b>인데 게이트 피치는 세 노드가 거의 같고 <b>셀 높이</b>가 차이를 만든다.
+        18A P코어 M0는 N3E 벡터엔진보다 선당 단면적 2.63배(피치 정규화 1.84배) — 저항은 낮지만 커패시턴스는 더 든다.
+      </p>
+      <figure class="fig chartfig wide">
+          <div class="cw"><svg viewBox="0 0 520 164" role="img"><text x="190" y="12" class="ttl">Panther Lake 블록 면적 변화 vs Lunar Lake (TSMC N3B), %</text><path d="M324.0,18.0H261.6Q257.6,18.0 257.6,22.0V32.0Q257.6,36.0 261.6,36.0H324.0Z" class="b1"><title>NPU 면적 −36.9%: 뉴럴 엔진 6→3개로 통합, SHAVE DSP 12→6, 같은 INT8 MAC 수</title></path><text x="182" y="31.0" text-anchor="end" class="nm">NPU 5 (vs NPU 4)</text><text x="251.6" y="31.0" text-anchor="end" class="vl">-36.9%</text><path d="M324.0,49.0H301.4Q297.4,49.0 297.4,53.0V63.0Q297.4,67.0 301.4,67.0H324.0Z" class="b1"><title>공유 L3 캐시 면적 −14.8%</title></path><text x="182" y="62.0" text-anchor="end" class="nm">P코어 공유 L3</text><text x="291.4" y="62.0" text-anchor="end" class="vl">-14.8%</text><path d="M324.0,80.0H319.0Q315.0,80.0 315.0,84.0V94.0Q315.0,98.0 319.0,98.0H324.0Z" class="b1"><title>Darkmont 클러스터 −5.0% (L2 영역이 대부분)</title></path><text x="182" y="93.0" text-anchor="end" class="nm">LP E코어 4코어 클러스터</text><text x="309.0" y="93.0" text-anchor="end" class="vl">-5%</text><path d="M326.0,111.0H325.9Q326.0,111.0 326.0,111.1V128.9Q326.0,129.0 325.9,129.0H326.0Z" class="b0"><title>P코어 면적 거의 동일 — 그런데 L2 2.5→3MiB(+20%)를 같은 면적에</title></path><text x="182" y="124.0" text-anchor="end" class="nm">P코어 (Cougar Cove)</text><text x="332.0" y="124.0" class="vl">±0% (L2 +20%)</text><path d="M326.0,142.0H446.2Q450.2,142.0 450.2,146.0V156.0Q450.2,160.0 446.2,160.0H326.0Z" class="b3"><title>Intel 3에서 만든 Xe3 코어 1개가 Lunar Lake(N3B) Xe2 코어보다 ~69% 큼 (GT2/N3E 대비도 ~55% 큼)</title></path><text x="182" y="155.0" text-anchor="end" class="nm">Xe 코어 · GT1 (Intel 3)</text><text x="456.2" y="155.0" class="vl">+69%</text><line x1="325.0" x2="325.0" y1="16" y2="161" class="axl"/></svg></div>
+          <figcaption><b>그림 1.</b> 면적 절감의 대부분은 공정이 아니라 <b>설계 통합(NPU 엔진 6→3)</b>에서 나왔다. P코어는 같은 면적에 L2를 20% 더 넣었고(플러스로 읽을 것), Intel 3 GPU 타일은 코어당 면적이 오히려 크다 — 같은 Xe3를 세 공정(Intel 3·N3E·18A)에 올린 비교가 예고돼 있다. 자료: SemiAnalysis STEEL 실측</figcaption>
+        </figure>
+        <figure class="fig chartfig wide">
+          <div class="cw"><svg viewBox="0 0 560 190" role="img"><text x="44" y="12" class="ttl">GPU L2 SRAM 밀도 (Mbit/mm²) — 같은 Xe3, 다른 공정</text><line x1="44" x2="552" y1="160.0" y2="160.0" class="gr"/><text x="38" y="164.0" text-anchor="end" class="lb">0</text><line x1="44" x2="552" y1="108.5" y2="108.5" class="gr"/><text x="38" y="112.5" text-anchor="end" class="lb">10</text><line x1="44" x2="552" y1="56.9" y2="56.9" class="gr"/><text x="38" y="60.9" text-anchor="end" class="lb">20</text><path d="M95.5,160.0V41.9Q95.5,37.9 99.5,37.9H115.5Q119.5,37.9 119.5,41.9V160.0Z" class="b0"><title>TSMC N3E L2 SRAM 매크로 23.7 Mbit/mm² (16KiB 매크로)</title></path><text x="107.5" y="30.9" text-anchor="middle" class="vl">23.7</text><text x="107.5" y="177" text-anchor="middle" class="nm">N3E 매크로</text><path d="M222.5,160.0V69.7Q222.5,65.7 226.5,65.7H242.5Q246.5,65.7 246.5,69.7V160.0Z" class="b1"><title>Intel 3 L2 SRAM 매크로 18.3 Mbit/mm² (8KiB 매크로)</title></path><text x="234.5" y="58.7" text-anchor="middle" class="vl">18.3</text><text x="234.5" y="177" text-anchor="middle" class="nm">Intel 3 매크로</text><path d="M349.5,160.0V76.9Q349.5,72.9 353.5,72.9H369.5Q373.5,72.9 373.5,76.9V160.0Z" class="b0"><title>뱅크 회로 포함 GT2(N3E) ~16.9 Mbit/mm²</title></path><text x="361.5" y="65.9" text-anchor="middle" class="vl">16.9</text><text x="361.5" y="177" text-anchor="middle" class="nm">N3E 뱅크 포함</text><path d="M476.5,160.0V110.4Q476.5,106.4 480.5,106.4H496.5Q500.5,106.4 500.5,110.4V160.0Z" class="b1"><title>뱅크 회로 포함 GT1(Intel 3) ~10.4 Mbit/mm²</title></path><text x="488.5" y="99.4" text-anchor="middle" class="vl">10.4</text><text x="488.5" y="177" text-anchor="middle" class="nm">Intel 3 뱅크 포함</text><line x1="44" x2="552" y1="160" y2="160" class="axl"/></svg></div>
+          <figcaption><b>그림 2.</b> 같은 Xe3 GPU의 L2 SRAM을 두 공정에 올린 결과. N3E 매크로가 <b>2배 비트를 54% 면적에</b> 담아 30% 높은 밀도, 뱅크 회로 포함 시 격차 확대. 18A SRAM 수치는 무료 텍스트에 없음. 자료: SemiAnalysis STEEL</figcaption>
+        </figure>
+      <div class="scrollx"><table class="tbl">
+        <thead><tr><th>노드</th><th>구조</th><th>HD 밀도 추정 (TechInsights, MTr/mm²)</th><th>이번 테어다운의 판정</th></tr></thead>
+        <tbody>
+          <tr class="me-row"><td>Intel 18A</td><td>GAA 4장 + <b>BSPDN</b></td><td>~238</td><td><b>≈ N3E</b>. 성능 지향, 밀도 비선두. 수율 ~80%(GF증권 추정), D0 0.1~0.2(BlueFin)</td></tr>
+          <tr><td>TSMC N2</td><td>GAA, 후면전력 없음(A16에서)</td><td>~313</td><td>A20 Pro(iPhone 18 Pro)에서 9/23 확인, N3E 대비 ~15% 밀도↑. 월 10만 장 목표(2026 말)</td></tr>
+          <tr><td>삼성 SF2</td><td>GAA 3장(MBCFET)</td><td>~231</td><td>수율 20%(2025말)→<b>70%+</b>(9월 보도). 퀄컴 딜은 가격 문제로 2027로 밀릴 수도. SF2Z(후면전력)는 SAFE 2026에서 언급 없음</td></tr>
+          <tr><td>TSMC N3E</td><td>FinFET</td><td>—</td><td>Panther Lake GT2 GPU·(N6) I/O가 아직 여기. 18A의 실측 비교 기준</td></tr>
+        </tbody>
+      </table></div>
+      <div class="fix"><span class="fh">주의</span> TechInsights의 "18A로 공정 리더십 회복"(2월) 헤드라인과 SemiAnalysis의 "N3E급, 비선두" 판정은 <b>모순이 아니다</b>. 전자는 성능·후면전력·최초라는 기준, 후자는 밀도 실측. 밀도 순위(N2 &gt; 18A ≈ SF2)는 양쪽이 같다. STEEL의 Exynos 2600(SF2)·A20 Pro(N2) 테어다운이 나오면 <b>실측 3자 비교</b>가 처음 생긴다.</div>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">03</span><h3>파운드리 현황 — 시장이 사는 것과 테어다운이 말하는 것</h3></div>
+      <figure class="fig chartfig wide">
+        <div class="cw"><svg viewBox="0 0 760 250" role="img"><text x="44" y="12" class="ttl">INTC 종가, 2026년 9월 (표시된 날짜만 — 테어다운은 9/26 토요일 발행)</text><line x1="44" x2="752" y1="220.0" y2="220.0" class="gr"/><text x="38" y="224.0" text-anchor="end" class="lb">$80</text><line x1="44" x2="752" y1="164.6" y2="164.6" class="gr"/><text x="38" y="168.6" text-anchor="end" class="lb">$100</text><line x1="44" x2="752" y1="109.1" y2="109.1" class="gr"/><text x="38" y="113.1" text-anchor="end" class="lb">$120</text><line x1="44" x2="752" y1="53.7" y2="53.7" class="gr"/><text x="38" y="57.7" text-anchor="end" class="lb">$140</text><line x1="44" x2="752" y1="47.2" y2="47.2" class="refl"/><text x="752" y="42.2" text-anchor="end" class="lb">52주 고점 $142.35 (6/30)</text><text x="44.0" y="237" text-anchor="middle" class="ax">9/1</text><text x="241.8" y="237" text-anchor="middle" class="ax">9/8</text><text x="411.2" y="237" text-anchor="middle" class="ax">9/14</text><text x="496.0" y="237" text-anchor="middle" class="ax">9/17</text><text x="609.0" y="237" text-anchor="middle" class="ax">9/21</text><text x="722.0" y="237" text-anchor="middle" class="ax">9/25</text><path d="M44.0,195.1L241.8,152.2L298.2,163.7L411.2,172.4L467.8,161.7L496.0,140.2L609.0,104.2L693.8,88.7L722.0,100.8" class="ln"/><circle cx="44.0" cy="195.1" r="4" class="dot"><title>$88.97</title></circle><circle cx="241.8" cy="152.2" r="4" class="dot"><title>$104.47</title></circle><circle cx="298.2" cy="163.7" r="4" class="dot"><title>$100.32</title></circle><circle cx="411.2" cy="172.4" r="4" class="dot"><title>$97.19</title></circle><circle cx="467.8" cy="161.7" r="4" class="dot"><title>$101.05</title></circle><circle cx="496.0" cy="140.2" r="4" class="dot"><title>$108.8</title></circle><circle cx="609.0" cy="104.2" r="4" class="dot"><title>$121.78</title></circle><circle cx="693.8" cy="88.7" r="4" class="dot"><title>$127.39</title></circle><circle cx="722.0" cy="100.8" r="4" class="dot"><title>$123</title></circle><text x="241.8" y="141.2" text-anchor="middle" class="vl">9/8 High-NA 양산 발표 +9%</text><text x="411.2" y="190.4" text-anchor="middle" class="vl">9/14 페이싱 쇼크 SOX −5%</text><text x="496.0" y="131.2" text-anchor="start" class="vl">9/17 SK하이닉스 오하이오 보도 +8%</text><text x="609.0" y="93.2" text-anchor="end" class="vl">9/21 Muse→"에이전트는 CPU" +12%</text><text x="722.0" y="104.8" text-anchor="start" class="vl">9/25 $123</text><line x1="44" x2="752" y1="220" y2="220" class="axl"/></svg></div>
+        <figcaption><b>그림 3.</b> 9월 한 달 INTC의 상승은 공정 뉴스가 아니라 <b>High-NA 양산·SK하이닉스 오하이오·"에이전트는 CPU가 필요하다"</b>는 헤드라인이 만들었다. 이틀 단위로 ±5%가 뒤집히는 내러티브 종목. 자료: stockanalysis.com 종가, 247wallst·Motley Fool 보도일</figcaption>
+      </figure>
+      <div class="rows">
+        <div class="r"><div class="lab">2Q26</div><div class="val">파운드리 매출 $5.8B(+31%), 영업손실 $2.1B, <b>외부 매출 $293M</b>. 18A 출하 목표 대비 +25%·QoQ +50%. Panther Lake 주력 SKU 원가 <b>YTD −50%</b>, 연내 −20% 추가(Zinsner). A스테핑으로 출하</div></div>
+        <div class="r"><div class="lab">14A</div><div class="val">D0 0.5(6월)→1Q27 목표 0.1~0.2. 리스크 생산 2H27, HVM 2028 "풀 커밋". PDK 0.9 10월. 유망 고객 2곳, 결정은 2H26~1H27</div></div>
+        <div class="r"><div class="lab">고객</div><div class="val">Apple 18A-P 예비계약(WSJ 5/8, 보급형 M시리즈 1,500~2,000만 개/년 추정), Microsoft Maia(보도, 미확인), Terafab 14A(텍사스 2026.12 착공), <b>SK하이닉스 오하이오 팹 임차 탐색</b>(Reuters 9/16, "결정 없음"). Nvidia는 18A 테스트칩 중단(보도)</div></div>
+        <div class="r"><div class="lab">자금</div><div class="val">8/10 $20B 증자($95). 2026 capex $20B+, 2027 "훨씬 위". 미 정부 9.9%, Nvidia $5B. Lip-Bu Tan: <b>"CPU 수요의 50%만 공급 가능"</b>, 메모리 가격 5~7배</div></div>
+      </div>
+      <div class="tl">
+        <div class="ev future"><div class="when">2026.10</div><div class="what">14A PDK 0.9 · 3Q 실적(가이던스 매출 $15.8~16.8B, GM 42%)</div></div>
+        <div class="ev future"><div class="when">2026.4Q</div><div class="what"><b>14A/18A-P 외부 고객 실명 발표</b> 여부 — Motley Fool 연내 예측. STEEL의 SF2·N2 테어다운으로 3자 밀도 비교</div></div>
+        <div class="ev future"><div class="when">2027.2H</div><div class="what">14A 리스크 생산 (Economic Daily는 1Q27 앞당김 보도, Intel 공식은 2H27)</div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">04</span><h3>장비·소재 읽기와 한국 각도</h3></div>
+      <p class="p">
+        테어다운에 보이는 소재가 곧 툴 수요다 — Mo 라이너 W(TiN 대체, Lam ALTUS Halo가 첫 양산 Mo ALD), Ru/Co/Nb 라이너, 이중 AlOx 에치스톱, 캐리어 접합 + 100nm 이하 기판 제거(본더·그라인더·CMP·후접합 오버레이).
+        Lam(9/12): 2026 WFE 상향($150B대 초), GAA 10만 웨이퍼 스타트당 SAM ~$1B, <b>후면전력이 또 ~$1B</b>. AMAT(8/13): GAA·FinFET 증설로 파운드리 로직 매출 사상 최대, 하이브리드 본딩 "중요한 변곡점".
+      </p>
+      <div class="who">
+        <div class="wr b"><div class="wn">BSPDN 툴 수요 = 사실상 Intel 스토리<small>2026~27</small></div><div class="wv">볼륨으로 후면전력을 하는 곳이 Intel뿐. TSMC A16 Super Power Rail은 수랭 AI/HPC 니치, 삼성 SF2Z는 조용. High-NA도 Intel이 유일한 HVM(일부 레이어, 누적 100만 장), 삼성·하이닉스는 DRAM 2028, TSMC 로직 2030.</div></div>
+        <div class="wr"><div class="wn">삼성 파운드리</div><div class="wv">유일한 양산 GAA+BSPDN 노드를 Intel이 먼저 가졌다. 삼성의 대응은 <b>수율 회복(70%+ 주장) + TSMC 타이트함에서 오는 가격 결정력 + Tesla AI5·Broadcom 앵커</b>. 한국 언론 프레임: "TSMC+Intel이 선단 주문을 나누면 삼성이 밀려난다."</div></div>
+        <div class="wr"><div class="wn">국내 2차 파생<small>케이씨텍 · 한미 · 한화세미텍</small></div><div class="wv">케이씨텍은 국내 유일 CMP 장비로 후면 박막화 수혜 거론(2024 보도), 한미반도체·한화세미텍은 HBM 하이브리드 본더. <b>18A 직접 공급 근거는 없음 — HBM/하이브리드 본딩이 진짜 드라이버.</b></div></div>
+      </div>
+      <div class="rows">
+        <div class="r verdict"><div class="lab">판정</div><div class="val"><b>INTC는 공정 뉴스로 사고파는 종목이 아니라 서버 CPU 품귀 + 파운드리 옵션 내러티브 종목.</b> 이 테어다운은 그 내러티브를 "실물은 N3E급"으로 한 단계 눌러 읽게 하는 자료지 매도 트리거는 아니다(주가는 9/25 $123, 고점 −14%, 81x). 내 결론은 <b>Intel 직접 진입 없음</b>. 읽을 것은 ① 연내 14A/18A-P 외부 고객 실명 ② STEEL 3자 밀도 비교 ③ SK하이닉스 오하이오 딜의 실체(하이닉스 미국 생산 = 관세·CHIPS 각도). 장비 쪽 BSPDN 수혜는 Lam·AMAT이고 국내 소부장은 HBM 본딩 축으로 따로 본다.</div></div>
+      </div>
+    </div>
+
+    <p class="disc">
+      <span class="src">자료:</span> SemiAnalysis STEEL 「Intel Panther Lake Teardown」(2026.09.26, 무료 파트 전문. "Extended carrier and bond stack detail" 유료 섹션 미열람) ·
+      Intel 2Q26 8-K·프리페어드 리마크(7/23) · Intel VLSI 2026 18A-P(6/16) · Intel-ASML High-NA(9/8) · TechInsights Panther Lake·A20 Pro·Exynos 2600 요약 · SemiWiki IEDM 2025 · TrendForce(4/14, 9/11, 9/16) · Reuters via SK hynix(9/16) · CNBC(5/8) · Lam 투자자 행사(9/12) · AMAT 3Q FY26 콜(8/13) · stockanalysis.com · Motley Fool(9/21, 9/26).
+      밀도 추정치(MTr/mm²)는 TechInsights/Scotten Jones 공개 추정이며 SemiAnalysis 실측과 별개 소스.
+    </p>
+
+    </div>
+  </article>
+
 
   <article class="note" data-id="20260901-ai-frame-shift" data-status="프레임">
     <div class="nmeta">
