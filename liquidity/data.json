@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-14T01:20:41+00:00",
+  "generatedAt": "2026-10-15T00:45:38+00:00",
   "indicators": [
     {
       "id": "net_liquidity",
@@ -834,8 +834,8 @@
       "decimals": 0,
       "source": "FRED · BAMLH0A0HYM2",
       "sourceUrl": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2",
-      "value": 311,
-      "asOf": "2026-10-12",
+      "value": 316,
+      "asOf": "2026-10-13",
       "history": [
         {
           "t": "2023-10-27",
@@ -1458,18 +1458,18 @@
           "v": 311
         },
         {
-          "t": "2026-10-12",
-          "v": 311
+          "t": "2026-10-13",
+          "v": 316
         }
       ],
       "mom": {
         "phase": "역풍",
         "tone": "neg",
-        "d1": 0,
-        "dN": 38,
+        "d1": 5,
+        "dN": 43,
         "lookback": 13
       },
-      "momLine": "13주 Δ +38bp · 직전주 +0"
+      "momLine": "13주 Δ +43bp · 직전주 +5"
     },
     {
       "id": "nfci",
@@ -2141,7 +2141,7 @@
       },
       {
         "label": "하이일드 스프레드",
-        "value": 311,
+        "value": 316,
         "unit": "bp",
         "phase": "역풍",
         "tone": "neg"
