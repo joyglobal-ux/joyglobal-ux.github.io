@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한국 산업 지도 · 해자 — Polaris 리서치</title>
+<meta name="description" content="Polaris 리서치 노트 · 반도체 · AI 인프라 — 핵심만 누적">
+<style>
+  :root{
+    --bg:#0b0d14; --bg2:#0f1117; --panel:#161a24; --panel2:#1d2230; --line:#272d3c;
+    --txt:#e8eaf0; --muted:#9aa3b2; --faint:#69727f;
+    --accent:#8b9bff; --accent-dim:#5b6bd6; --gold:#ffd66b;
+    --go:#22c55e; --stop:#ef4444; --cyan:#5fd0e0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;
+    background:var(--bg); color:var(--txt); line-height:1.65; -webkit-font-smoothing:antialiased; min-height:100vh;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px}
+
+  header{
+    background:
+      radial-gradient(120% 90% at 85% -10%, rgba(139,155,255,0.16), transparent 55%),
+      linear-gradient(180deg,#0c0f18,#0b0d14);
+    border-bottom:1px solid var(--line);
+  }
+  .top{padding:22px 0 0}
+  .back{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;padding:5px 13px;transition:border-color .18s,color .18s}
+  .back:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .hero{padding:26px 0 30px}
+  .kicker{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint)}
+  .htitle{display:flex;align-items:center;gap:12px;margin-top:10px}
+  .htitle .ic{font-size:27px}
+  .htitle h1{font-size:25px;font-weight:800;letter-spacing:-.3px}
+  .hsub{font-size:13px;color:var(--muted);margin-top:11px;max-width:620px}
+
+  main{padding:32px 0 10px}
+
+  .note{background:linear-gradient(180deg,var(--panel),#13161f);border:1px solid var(--line);
+    border-radius:15px;padding:22px 22px 20px;margin-bottom:20px}
+  .nmeta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:13px}
+  .nmeta .date{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums;
+    border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .nmeta .tk{font-size:11.5px;font-weight:800;letter-spacing:.4px;color:var(--accent);
+    background:rgba(139,155,255,0.08);border:1px solid rgba(139,155,255,0.22);border-radius:6px;padding:2px 9px}
+  .nmeta .tag{font-size:11px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+    border-radius:6px;padding:2px 9px}
+  .ntitle{font-size:19px;font-weight:800;letter-spacing:-.3px;margin-bottom:6px}
+  .nlede{font-size:13px;color:var(--muted);margin-bottom:6px}
+  .nlede b{color:var(--txt);font-weight:600}
+
+  /* section within note */
+  .sec{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+  .sech{display:flex;align-items:center;gap:9px;margin-bottom:14px}
+  .sech .sn{font-size:10.5px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;
+    border:1px solid rgba(139,155,255,0.3);border-radius:5px;padding:1px 6px}
+  .sech h3{font-size:14.5px;font-weight:800;letter-spacing:-.2px}
+  .p{font-size:13px;color:var(--muted);margin:10px 0}
+  .p b{color:var(--txt);font-weight:600}
+  .hl{color:var(--accent);font-weight:600}
+
+  /* PDN distance diagram */
+  .pdn{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 6px;position:relative}
+  .pdn .node{background:var(--panel2);border:1px solid var(--line);border-radius:11px;
+    padding:13px 10px;text-align:center}
+  .pdn .node.near{border-color:var(--accent-dim);background:rgba(139,155,255,0.07)}
+  .pdn .node.die{border-color:var(--gold);background:rgba(255,214,107,0.06)}
+  .pdn .node .e{font-size:21px}
+  .pdn .node .t{font-size:12px;font-weight:800;margin-top:6px}
+  .pdn .node .d{font-size:10.5px;color:var(--faint);margin-top:4px;line-height:1.45}
+  .pdn .node .tag2{display:inline-block;font-size:9.5px;font-weight:700;margin-top:7px;border-radius:5px;padding:1px 6px}
+  .tag-mlcc{color:var(--cyan);background:rgba(95,208,224,.1);border:1px solid rgba(95,208,224,.3)}
+  .tag-sic{color:var(--accent);background:rgba(139,155,255,.1);border:1px solid rgba(139,155,255,.3)}
+  .axis{display:flex;justify-content:space-between;font-size:10.5px;color:var(--faint);margin-top:9px;
+    padding:7px 4px 0;border-top:1px dashed var(--line)}
+  .axis b{color:var(--muted);font-weight:600}
+
+  /* tables */
+  .tbl{width:100%;border-collapse:collapse;margin:12px 0 4px;font-size:12.5px}
+  .tbl th,.tbl td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  .tbl thead th{font-size:11px;color:var(--faint);font-weight:700;letter-spacing:.3px;
+    text-transform:none;border-bottom:1px solid var(--line)}
+  .tbl tbody td:first-child{font-weight:700;color:var(--txt);white-space:nowrap}
+  .tbl .c-mlcc{color:var(--cyan)}
+  .tbl .c-sic{color:var(--accent)}
+  .tbl td b{color:var(--txt);font-weight:600}
+  .tbl .me{font-weight:800;color:var(--accent)} /* highlight samsung row */
+  .tbl tr.me-row td:first-child{color:var(--accent)}
+
+  /* ESL/ESR explainer */
+  .esx{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 4px}
+  .esx .card{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:13px 14px}
+  .esx .card .h{font-size:12px;font-weight:800;color:var(--accent);margin-bottom:5px}
+  .esx .card .h small{color:var(--faint);font-weight:600;font-size:10px;letter-spacing:.3px}
+  .esx .card .b{font-size:11.5px;color:var(--muted);line-height:1.55}
+  .esx .card .b b{color:var(--txt);font-weight:600}
+  .why{background:rgba(139,155,255,0.06);border:1px solid rgba(139,155,255,0.2);border-radius:11px;
+    padding:12px 14px;margin-top:10px;font-size:12px;color:var(--muted);line-height:1.6}
+  .why b{color:var(--txt);font-weight:600}
+
+  /* bottleneck layers */
+  .bn{display:flex;flex-direction:column;gap:9px;margin:13px 0 4px}
+  .bn .lay{border-radius:11px;padding:13px 15px;border:1px solid var(--line)}
+  .bn .lay .lh{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:800;margin-bottom:5px}
+  .bn .lay .lb{font-size:11.5px;color:var(--muted);line-height:1.55}
+  .bn .lay .lb b{color:var(--txt);font-weight:600}
+  .bn .sys{background:rgba(239,68,68,0.05);border-color:rgba(239,68,68,0.25)}
+  .bn .sys .lh{color:var(--stop)}
+  .bn .comp{background:rgba(34,197,94,0.05);border-color:rgba(34,197,94,0.25)}
+  .bn .comp .lh{color:var(--go)}
+  .pill{font-size:10px;font-weight:800;border-radius:999px;padding:2px 9px;margin-left:auto}
+  .pill.no{color:var(--stop);background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3)}
+  .pill.yes{color:var(--go);background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3)}
+
+  /* timeline */
+  .tl{position:relative;margin:14px 0 4px;padding-left:6px}
+  .tl .ev{position:relative;padding:0 0 16px 22px;border-left:2px solid var(--line)}
+  .tl .ev:last-child{border-left-color:transparent;padding-bottom:0}
+  .tl .ev::before{content:"";position:absolute;left:-7px;top:2px;width:12px;height:12px;border-radius:50%;
+    background:var(--panel2);border:2px solid var(--accent-dim)}
+  .tl .ev.done::before{background:var(--go);border-color:var(--go)}
+  .tl .ev.future::before{background:var(--panel2);border-color:var(--gold)}
+  .tl .ev .when{font-size:11px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums}
+  .tl .ev.future .when{color:var(--gold)}
+  .tl .ev .what{font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.5}
+  .tl .ev .what b{color:var(--txt);font-weight:600}
+
+  /* label rows */
+  .rows{display:flex;flex-direction:column;gap:11px;margin-top:6px}
+  .r{display:grid;grid-template-columns:74px 1fr;gap:13px;align-items:start}
+  .r .lab{font-size:11.5px;font-weight:800;color:var(--accent);letter-spacing:.3px;padding-top:1px}
+  .r .val{font-size:13px;color:var(--muted)}
+  .r .val b{color:var(--txt);font-weight:600}
+  .r.verdict{background:rgba(255,214,107,0.05);border:1px solid rgba(255,214,107,0.22);
+    border-radius:11px;padding:13px 14px;grid-template-columns:64px 1fr}
+  .r.verdict .val{color:var(--txt)}
+  .r.verdict .lab{color:var(--gold)}
+
+  /* ── 오픈소스 TCO 3-lane (2026.07 노트) ── */
+  .lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 6px}
+  .lane{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 13px}
+  .lane .le{font-size:22px}
+  .lane .lt{font-size:12.5px;font-weight:800;margin-top:7px}
+  .lane .ls{font-size:10.5px;color:var(--accent);font-weight:700;margin-top:3px}
+  .lane .ld{font-size:11px;color:var(--faint);margin-top:8px;line-height:1.5}
+  .lane .lp{font-size:11px;color:var(--muted);margin-top:9px;padding-top:8px;border-top:1px dashed var(--line);line-height:1.5}
+  .lane .lp b{color:var(--txt);font-weight:700}
+  .lane.pick{border-color:var(--gold);background:rgba(255,214,107,0.05)}
+  .lane.pick .ls{color:var(--gold)}
+
+  /* 손익분기 스케일 */
+  .bex{margin:14px 0 4px}
+  .bex .brow{display:grid;grid-template-columns:132px 1fr;gap:12px;align-items:center;margin-bottom:9px}
+  .bex .blab{font-size:11.5px;color:var(--muted);font-weight:700;line-height:1.4}
+  .bex .btrack{position:relative;height:27px;background:var(--panel2);border:1px solid var(--line);border-radius:7px;overflow:hidden}
+  .bex .bfill{position:absolute;left:0;top:0;bottom:0;
+    background:linear-gradient(90deg,rgba(139,155,255,.4),rgba(139,155,255,.1))}
+  .bex .bval{position:absolute;right:10px;top:0;line-height:27px;font-size:11px;font-weight:800;
+    color:var(--txt);font-variant-numeric:tabular-nums}
+
+  /* 누가 어디에 있나 */
+  .who{display:flex;flex-direction:column;gap:8px;margin:13px 0 4px}
+  .who .wr{display:grid;grid-template-columns:132px 1fr;gap:11px;align-items:start;
+    background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+  .who .wn{font-size:12px;font-weight:800;color:var(--txt)}
+  .who .wn small{display:block;font-size:10px;color:var(--faint);font-weight:600;margin-top:2px}
+  .who .wv{font-size:11.5px;color:var(--muted);line-height:1.55}
+  .who .wv b{color:var(--txt);font-weight:600}
+  .who .wr.a{border-color:rgba(34,197,94,.28);background:rgba(34,197,94,.05)}
+  .who .wr.b{border-color:rgba(255,214,107,.28);background:rgba(255,214,107,.05)}
+
+  /* distillation 체인 */
+  .chn{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:13px 0 6px}
+  .chn .cbox{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;
+    font-size:11.5px;font-weight:700;color:var(--txt);text-align:center;line-height:1.4}
+  .chn .cbox small{display:block;font-size:9.5px;color:var(--faint);font-weight:600;margin-top:2px}
+  .chn .cbox.src{border-color:var(--gold);background:rgba(255,214,107,.07);color:var(--gold)}
+  .chn .arw{color:var(--faint);font-size:13px}
+
+  /* 정정 박스 */
+  .fix{background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.25);border-radius:11px;
+    padding:12px 14px;margin:12px 0 4px;font-size:12px;color:var(--muted);line-height:1.6}
+  .fix b{color:var(--txt);font-weight:600}
+  .fix .fh{color:var(--stop);font-weight:800;font-size:11.5px;letter-spacing:.2px;display:block;margin-bottom:5px}
+
+  .disc{font-size:11px;color:var(--faint);margin-top:18px;line-height:1.65;border-top:1px solid var(--line);padding-top:13px}
+  .disc .src{color:var(--muted)}
+
+  /* ── 리포트 원문 도표 캡처 ── */
+  .fig{margin:16px 0 6px;min-width:0}
+  .fig .fw{background:#fff;border:1px solid var(--line);border-radius:11px;padding:9px;overflow-x:auto}
+  .fig img{display:block;width:100%;min-width:560px;height:auto;border-radius:3px}
+  .fig.wide img{min-width:820px}
+  .fig figcaption{font-size:11px;color:var(--faint);margin-top:8px;line-height:1.6}
+  .fig figcaption b{color:var(--muted);font-weight:700}
+  .figs2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0 6px}
+  .figs2 .fig{margin:0;min-width:0}
+  .figs2 .fig img{min-width:420px}
+
+  /* ── 2026.09 노트 전용: 정적 SVG 차트 (다크 테마 변수 사용, optical.html과 동일 규약) ── */
+  .chartfig .cw{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:12px 10px 8px}
+  .chartfig svg{display:block;width:100%;height:auto;overflow:visible}
+  .chartfig text{font-family:inherit;font-size:10.5px;fill:var(--faint)}
+  .chartfig text.nm{font-size:11.5px;fill:var(--muted)} .chartfig text.nm.me{fill:var(--txt);font-weight:700}
+  .chartfig text.vl{font-size:11px;fill:var(--txt)} .chartfig text.ttl{font-size:11px;fill:var(--muted);font-weight:700}
+  .chartfig text.inl{font-size:10.5px;fill:#0b0d14;font-weight:700} .chartfig text.inl.lt{fill:var(--txt)}
+  .chartfig .gr{stroke:#232838;stroke-width:1} .chartfig .axl{stroke:#3a4152;stroke-width:1}
+  .chartfig .refl{stroke:var(--gold);stroke-width:1;stroke-dasharray:4 3;opacity:.75}
+  .chartfig .ln{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+  .chartfig .dot{fill:var(--accent);stroke:var(--panel2);stroke-width:2}
+  .chartfig .b1{fill:var(--accent)} .chartfig .b0{fill:#4a5163} .chartfig .b3{fill:#d95926}
+  .chartfig .b2{fill:var(--accent);opacity:.45} .chartfig .bext{fill:var(--accent);opacity:.22}
+  .chartfig .bgo{fill:var(--go)} .chartfig .bstop{fill:var(--stop)}
+  .scrollx{overflow-x:auto}
+
+  /* ── 노트 목차 · 태그 필터 (JS 자동 생성) ── */
+  .toc{background:linear-gradient(180deg,var(--panel),#13161f);border:1px solid var(--line);
+    border-radius:15px;padding:18px 20px;margin-bottom:20px}
+  .toc .th{display:flex;align-items:baseline;gap:9px;margin-bottom:12px}
+  .toc .th b{font-size:13px;font-weight:800;letter-spacing:-.2px}
+  .toc .th span{font-size:11px;color:var(--faint)}
+  .tagbar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:13px}
+  .tagbar button{font-size:11px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+    border-radius:999px;padding:3px 11px;cursor:pointer;font-family:inherit;transition:all .15s}
+  .tagbar button:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .tagbar button.on{color:var(--accent);border-color:var(--accent-dim);background:rgba(139,155,255,0.1)}
+  .toclist{display:flex;flex-direction:column;gap:2px}
+  .toclist a{display:grid;grid-template-columns:78px 1fr;gap:11px;align-items:baseline;
+    padding:7px 9px;border-radius:8px;transition:background .15s}
+  .toclist a:hover{background:var(--panel2)}
+  .toclist a .d{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
+  .toclist a .t{font-size:12.5px;color:var(--muted)}
+  .toclist a:hover .t{color:var(--txt)}
+  .toc .empty{font-size:12px;color:var(--faint);padding:6px 2px}
+
+  /* ── 노트 접기 ── */
+  .note.collapsed .nbody{display:none}
+  .fold{margin-left:auto;font-size:11px;color:var(--muted);background:var(--panel2);
+    border:1px solid var(--line);border-radius:999px;padding:2px 11px;cursor:pointer;font-family:inherit}
+  .fold:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .note{scroll-margin-top:18px}
+  .anch{font-size:11px;color:var(--faint);border:1px solid var(--line);border-radius:6px;
+    padding:2px 7px;cursor:pointer;font-family:inherit;background:transparent}
+  .anch:hover{border-color:var(--accent-dim);color:var(--accent)}
+
+
+  @media(max-width:560px){
+    .figs2{grid-template-columns:minmax(0,1fr)}
+    .toclist a{grid-template-columns:1fr;gap:1px}
+  }
+
+  footer{border-top:1px solid var(--line);margin-top:18px;padding:24px 0 38px;
+    font-size:11.5px;color:var(--faint);text-align:center}
+  footer .star{color:var(--accent)}
+
+  @media(max-width:560px){
+    .htitle h1{font-size:21px}
+    .pdn{grid-template-columns:1fr 1fr}
+    .esx{grid-template-columns:1fr}
+    .r{grid-template-columns:60px 1fr;gap:10px}
+    .tbl{font-size:11.5px}
+    .tbl th,.tbl td{padding:7px 8px}
+    .lanes{grid-template-columns:1fr}
+    .bex .brow{grid-template-columns:1fr;gap:5px}
+    .who .wr{grid-template-columns:1fr;gap:5px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap top">
+    <a class="back" href="/">← Polaris 허브</a>
+  </div>
+  <div class="wrap hero">
+    <div class="kicker">Research · 산업 노트</div>
+    <div class="htitle">
+      <span class="ic">🗺️</span>
+      <h1>한국 산업 지도 · 해자</h1>
+    </div>
+    <p class="hsub">
+      산업을 가로지르는 지도 — 안행형 이전·해자 채점·지정학 보호막·집중 포트의 꼬리 위험. 어느 산업이 이기고 어디가 넘어가는지. 최신순 누적.
+    </p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- 새 노트는 이 줄 바로 아래에 추가 (최신순) -->
+
+  <article class="note" data-id="20261021-korea-moat-map" data-status="프레임">
+    <div class="nmeta">
+      <span class="date">2026.10.21</span>
+      <span class="tk">한국 산업 해자</span>
+      <span class="tag">안행형 60년</span>
+      <span class="tag">31개 세그먼트 채점</span>
+      <span class="tag">HBM · 범용 DRAM</span>
+      <span class="tag">조선·방산·원전·전력기기</span>
+      <span class="tag">반도체 집중 리스크</span>
+    </div>
+    <div class="ntitle">표준품은 넘어가고, 고객에 묶인 해자만 깊어진다 — 한국 31개 세그먼트 채점</div>
+    <p class="nlede">
+      <b>한 줄:</b> 미국→일본→한국→중국 60년 산업 이전에서 <b>국제 규격이 있고 설비·가격으로 승부 나는 제품은 예외 없이 다음 추격자에게 넘어갔다</b>.
+      살아남은 건 고객 공정에 공동개발로 묶였거나, 안전·규제 인증이 필요하거나, 동맹 신뢰가 구매 조건인 영역뿐.
+      그 기준으로 한국 31개 세그먼트를 6변수 12점으로 채점하면 <b>복리형 해자는 5개 군의 좁은 띠</b>(HBM · 미국 초고압 전력기기 · 동맹 안보 제조 · 서방 원전 기자재 · 바이오 CDMO)이고 <b>10/31은 중국으로 넘어가는 중</b>이다.
+      2026년의 변화: 한국 해자의 원천이 기술 자체에서 <b>"중국이 아닌 공급자 중 가장 빠르고 싼 곳"이라는 지정학적 지위</b>로 옮겨가고 있다.
+    </p>
+
+    <div class="nbody">
+
+    <div class="sec">
+      <div class="sech"><span class="sn">01</span>한눈에 보는 판정 — 다섯 유형</div>
+      <table class="tbl">
+        <thead><tr><th>판정</th><th>세그먼트</th><th>핵심 근거</th></tr></thead>
+        <tbody>
+          <tr><td><b style="color:var(--go)">해자 심화 (복리형)</b></td><td>HBM·후공정, 미국 초고압 변압기, NATO 방산, 미 해군 함정·MRO, 서방 원전 주기기·SMR, 바이오 CDMO</td><td>고객 공정·인증에 묶여 있고 <b>중국이 법·안보 논리로 배제</b>됨</td></tr>
+          <tr><td><b style="color:var(--gold)">시간 싸움</b></td><td>LNG선, 하이엔드 OLED, 신약 플랫폼, 중동 원전 EPC</td><td>해자는 있지만 중국 배제 장치가 없음. 보조금으로 수율을 따라잡을 때까지만 유효 — <b>LCD가 여기서 무너졌다</b></td></tr>
+          <tr><td><b style="color:var(--accent)">정책 임대</b></td><td>범용 DRAM·NAND, 서버 DRAM, 미국 ESS 배터리, 미국 완성차</td><td>관세·세제·수출통제가 만든 보호막. <b>정치가 바뀌면 사라짐</b></td></tr>
+          <tr><td><b style="color:var(--stop)">이양 진행</b></td><td>범용 상선, LCD·범용 OLED, 유럽·아시아 EV 배터리, 비미국 변압기, 성숙 파운드리, 신약 후보물질, 휴머노이드</td><td>표준품·가격 경쟁·중국 국가전략 표적이 겹침</td></tr>
+          <tr><td><b>성장 상·해자 중</b></td><td>K-뷰티, K-푸드, K-콘텐츠</td><td>브랜드는 설비투자로 살 수 없어 중국 공식이 안 통함. 대신 교체비용이 0에 가까움</td></tr>
+        </tbody>
+      </table>
+      <div class="why">
+        <b>판정 변수 6개 (각 0~2점).</b> <b>A</b> 표준화(맞춤·공동설계 2 / 국제 규격 0) · <b>B</b> 경쟁 축(수율 학습·암묵지 2 / 설비 규모·가격 0) · <b>C</b> 교체비용·인증(장기 퀄·안전 인증 2) · <b>D</b> 중국 배제 장치(법률·안보 2 / 관세·협상형 1 / 없음 0) · <b>E</b> 중국 국가전략 표적 여부 · <b>F</b> 기술 연속성(패러다임 전환기 0).
+        A+B+C ≥ 4면 "내재 해자 높음", D ≥ 1이면 "배제 장치 있음" — 둘 다 있으면 <b>복리형</b>, 내재만 있으면 <b>시간 싸움형</b>, 배제만 있으면 <b>정책 임대형</b>, 둘 다 없으면 <b>이양</b>.
+        D의 1점과 2점을 가른 실증: 항만수수료 <b>예고</b> 직후 한국 단월 수주 점유율 39%(2025.9) → <b>유예</b> 후 15%(2026 1~9월). 반면 미 해군 해외건조 금지법은 FY2026 NDAA가 재확인한 <b>법률</b>.
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">02</span>역사의 교훈 — 추격 기간은 30년에서 5년으로</div>
+      <div class="figs2">
+        <figure class="chartfig"><div class="cw"><svg viewBox="0 0 360 145" role="img"><text x="100" y="11" class="ttl">진입 → 세계 1위까지 걸린 기간 (년)</text><path d="M100.0,16.0H152.0Q156.0,16.0 156.0,20.0V32.0Q156.0,36.0 152.0,36.0H100.0Z" class="b0"><title>점유율 70%→20% (1978~1986)</title></path><text x="92" y="30.0" text-anchor="end" class="nm">미국 DRAM 상실</text><text x="162.0" y="30.0" class="vl">8년</text><path d="M100.0,51.0H285.0Q289.0,51.0 289.0,55.0V67.0Q289.0,71.0 285.0,71.0H100.0Z" class="b0"><title>25~30년 (중간값 27)</title></path><text x="92" y="65.0" text-anchor="end" class="nm">한국 조선 일본 추월</text><text x="295.0" y="65.0" class="vl">27년</text><path d="M100.0,86.0H159.0Q163.0,86.0 163.0,90.0V102.0Q163.0,106.0 159.0,106.0H100.0Z" class="b1"><title>1983 진입 → 1992 1위</title></path><text x="92" y="100.0" text-anchor="end" class="nm">삼성 DRAM 1위</text><text x="169.0" y="100.0" class="vl">9년</text><path d="M100.0,121.0H131.0Q135.0,121.0 135.0,125.0V137.0Q135.0,141.0 131.0,141.0H100.0Z" class="b3"><title>5년</title></path><text x="92" y="135.0" text-anchor="end" class="nm">중국 자동차 수출 1위</text><text x="141.0" y="135.0" class="vl">5년</text><line x1="100" x2="100" y1="16" y2="141" class="axl"/></svg></div><figcaption><b>그림 1.</b> "중국이 아직 못 따라왔다"는 사실만으로는 10년 해자를 보장할 수 없다. 세대마다 추격이 빨라졌다.</figcaption></figure>
+        <div>
+          <table class="tbl">
+            <thead><tr><th>기존 강자</th><th>잃은 것</th><th>지킨 것</th></tr></thead>
+            <tbody>
+              <tr><td><b>미국</b> vs 일본</td><td>DRAM, 가전, 철강</td><td>항공우주, 제약, SW, EDA, 장비, 로직 설계</td></tr>
+              <tr><td><b>일본</b> vs 한국</td><td>DRAM(1992), 조선(1999~2000), TV, LCD</td><td>코터/디벨로퍼 ~88%, EUV 마스크 검사 90%+, 포토레지스트 3사 60.5%, MLCC</td></tr>
+              <tr><td><b>한국</b> vs 중국</td><td>범용 상선, 대형 LCD(생산 0), EV 배터리 1위, 태양광</td><td>HBM, 대형 OLED(83.7%), LNG선, 초고압 변압기(미국)</td></tr>
+              <tr><td><b>대만</b> 예외</td><td>—</td><td>TSMC 72.5%(2Q26 사상 최고). <b>고객 맞춤 공정이라 국경을 넘지 않음</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="p"><b>2019 일본 수출규제의 교훈.</b> 불화수소 수출은 88~97% 급감했지만 한국은 1~2년 안에 대체했고, 포토레지스트는 거의 안 줄었다. 규제가 풀린 2023년 이후 고객은 다시 일본산으로 돌아갔다. <span class="hl">해자의 깊이는 공급자를 바꿀 때 <b>고객이 떠안는 수율 리스크</b>에 비례한다.</span></p>
+      <p class="p"><b>중국은 다른 엔진을 쓴다.</b> 보호된 내수를 학습장으로, 이익을 무시한 과잉설비로 가격을 원가 아래로. MIC2025 정부 지원은 매출 대비 4.5%(OECD 평균 0.69%의 6배). 2026 1~9월 무역흑자 9,381억$, <b>반도체 수출 +108%·자동차 +54%</b> — 한국 주력과 정면으로 겹친다. 그리고 <b>한국만의 약점: 후퇴할 상류가 얇다</b>. 일본은 완제품을 잃고 소재·장비로 후퇴했지만 한국은 그 상류를 일본·중국에 기댄다(희토류 금속 대중 의존 95.1%, 흑연 97%, 갈륨 98%).</p>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">03</span>31개 세그먼트 채점표</div>
+      <figure class="chartfig wide"><div class="cw"><svg viewBox="0 0 560 572" role="img"><text x="168" y="11" class="ttl">31개 세그먼트 총점 (12점 만점)</text><path d="M168.0,16.0H477.5Q481.5,16.0 481.5,20.0V24.0Q481.5,28.0 477.5,28.0H168.0Z" class="b1"><title>서방 원전 주기기·SMR 기자재 — 복리형 · 심화(지대 일부 미국 귀속) (A2 B2 C2 D2 E2 F1)</title></path><text x="160" y="26.0" text-anchor="end" class="nm me">서방 원전 주기기·SMR 기자재</text><text x="487.5" y="26.0" class="vl">11</text><path d="M168.0,34.0H477.5Q481.5,34.0 481.5,38.0V42.0Q481.5,46.0 477.5,46.0H168.0Z" class="b1"><title>미 해군 함정·MRO — 복리형 · 심화(현지 건조로 마진 희석) (A2 B1 C2 D2 E2 F2)</title></path><text x="160" y="44.0" text-anchor="end" class="nm me">미 해군 함정·MRO</text><text x="487.5" y="44.0" class="vl">11</text><path d="M168.0,52.0H449.0Q453.0,52.0 453.0,56.0V60.0Q453.0,64.0 449.0,64.0H168.0Z" class="b1"><title>HBM(HBM4/4E) — 복리형 · 해자 심화 (A2 B2 C2 D2 E1 F1)</title></path><text x="160" y="62.0" text-anchor="end" class="nm me">HBM(HBM4/4E)</text><text x="459.0" y="62.0" class="vl">10</text><path d="M168.0,70.0H449.0Q453.0,70.0 453.0,74.0V78.0Q453.0,82.0 449.0,82.0H168.0Z" class="b1"><title>NATO·동맹 지상방산 — 복리형 · 심화(현지화로 마진 희석) (A2 B1 C2 D2 E2 F1)</title></path><text x="160" y="80.0" text-anchor="end" class="nm me">NATO·동맹 지상방산</text><text x="459.0" y="80.0" class="vl">10</text><path d="M168.0,88.0H420.5Q424.5,88.0 424.5,92.0V96.0Q424.5,100.0 420.5,100.0H168.0Z" class="b1"><title>미국 초고압 변압기·배전반 — 복리형 · 심화(2028~30 정상화 리스크) (A2 B2 C2 D1 E1 F1)</title></path><text x="160" y="98.0" text-anchor="end" class="nm me">미국 초고압 변압기·배전반</text><text x="430.5" y="98.0" class="vl">9</text><path d="M168.0,106.0H420.5Q424.5,106.0 424.5,110.0V114.0Q424.5,118.0 420.5,118.0H168.0Z" class="b1"><title>삼성 최선단 파운드리 — 복리형 · 중국 위협 낮음, TSMC 대비 해자 없음 (A2 B2 C1 D2 E1 F1)</title></path><text x="160" y="116.0" text-anchor="end" class="nm me">삼성 최선단 파운드리</text><text x="430.5" y="116.0" class="vl">9</text><path d="M168.0,124.0H420.5Q424.5,124.0 424.5,128.0V132.0Q424.5,136.0 420.5,136.0H168.0Z" class="b2"><title>신약 플랫폼(SC 제형 등) — 시간 싸움형 · 틈새 강점 (A2 B2 C2 D0 E2 F1)</title></path><text x="160" y="134.0" text-anchor="end" class="nm">신약 플랫폼(SC 제형 등)</text><text x="430.5" y="134.0" class="vl">9</text><path d="M168.0,142.0H392.0Q396.0,142.0 396.0,146.0V150.0Q396.0,154.0 392.0,154.0H168.0Z" class="b1"><title>바이오 CDMO — 복리형 · 유지~심화 (A1 B2 C2 D1 E1 F1)</title></path><text x="160" y="152.0" text-anchor="end" class="nm me">바이오 CDMO</text><text x="402.0" y="152.0" class="vl">8</text><path d="M168.0,160.0H392.0Q396.0,160.0 396.0,164.0V168.0Q396.0,172.0 392.0,172.0H168.0Z" class="b1"><title>HBM 후공정·테스트 장비 — 복리형 · 유지(하이브리드 본딩이 변수) (A2 B2 C2 D1 E1 F0)</title></path><text x="160" y="170.0" text-anchor="end" class="nm me">HBM 후공정·테스트 장비</text><text x="402.0" y="170.0" class="vl">8</text><path d="M168.0,178.0H363.5Q367.5,178.0 367.5,182.0V186.0Q367.5,190.0 363.5,190.0H168.0Z" class="b2"><title>하이엔드 OLED — 시간 싸움형 · 2028년까지 심화, 이후 압박 (A2 B2 C2 D0 E0 F1)</title></path><text x="160" y="188.0" text-anchor="end" class="nm">하이엔드 OLED</text><text x="373.5" y="188.0" class="vl">7</text><path d="M168.0,196.0H363.5Q367.5,196.0 367.5,200.0V204.0Q367.5,208.0 363.5,208.0H168.0Z" class="b0"><title>고용량 서버 DRAM·eSSD — 정책 임대형 · 우위 유지, 일부 잠식 (A1 B1 C1 D1 E1 F2)</title></path><text x="160" y="206.0" text-anchor="end" class="nm">고용량 서버 DRAM·eSSD</text><text x="373.5" y="206.0" class="vl">7</text><path d="M168.0,214.0H335.0Q339.0,214.0 339.0,218.0V222.0Q339.0,226.0 335.0,226.0H168.0Z" class="b2"><title>LNG 운반선 — 시간 싸움형 · 완만한 잠식(우위 유지) (A1 B2 C1 D0 E1 F1)</title></path><text x="160" y="224.0" text-anchor="end" class="nm">LNG 운반선</text><text x="345.0" y="224.0" class="vl">6</text><path d="M168.0,232.0H335.0Q339.0,232.0 339.0,236.0V240.0Q339.0,244.0 335.0,244.0H168.0Z" class="b2"><title>중동 원전 EPC — 시간 싸움형 · 중국과 정면 경쟁 (A1 B1 C2 D0 E0 F2)</title></path><text x="160" y="242.0" text-anchor="end" class="nm">중동 원전 EPC</text><text x="345.0" y="242.0" class="vl">6</text><path d="M168.0,250.0H335.0Q339.0,250.0 339.0,254.0V258.0Q339.0,262.0 335.0,262.0H168.0Z" class="bext"><title>K-콘텐츠 IP — 소비재 · 강함, 수익은 해외 플랫폼에 (A2 B1 C0 D0 E2 F1)</title></path><text x="160" y="260.0" text-anchor="end" class="nm">K-콘텐츠 IP</text><text x="345.0" y="260.0" class="vl">6</text><path d="M168.0,268.0H306.5Q310.5,268.0 310.5,272.0V276.0Q310.5,280.0 306.5,280.0H168.0Z" class="b0"><title>미국 완성차·하이브리드 — 정책 임대형 · 방어 가능, 관세가 마진 압박 (A1 B1 C1 D1 E0 F1)</title></path><text x="160" y="278.0" text-anchor="end" class="nm">미국 완성차·하이브리드</text><text x="316.5" y="278.0" class="vl">5</text><path d="M168.0,286.0H306.5Q310.5,286.0 310.5,290.0V294.0Q310.5,298.0 306.5,298.0H168.0Z" class="bext"><title>K-뷰티(해외) — 소비재 · 성장 높음, 해자 얕음 (A1 B1 C0 D0 E2 F1)</title></path><text x="160" y="296.0" text-anchor="end" class="nm">K-뷰티(해외)</text><text x="316.5" y="296.0" class="vl">5</text><path d="M168.0,304.0H306.5Q310.5,304.0 310.5,308.0V312.0Q310.5,316.0 306.5,316.0H168.0Z" class="bext"><title>K-푸드(라면) — 소비재 · 성장 높음, 브랜드 집중 (A1 B1 C0 D0 E2 F1)</title></path><text x="160" y="314.0" text-anchor="end" class="nm">K-푸드(라면)</text><text x="316.5" y="314.0" class="vl">5</text><path d="M168.0,322.0H278.0Q282.0,322.0 282.0,326.0V330.0Q282.0,334.0 278.0,334.0H168.0Z" class="b0"><title>범용 DRAM — 정책 임대형 · 중국 점유율 확대(→이양) (A0 B1 C0 D1 E0 F2)</title></path><text x="160" y="332.0" text-anchor="end" class="nm">범용 DRAM</text><text x="288.0" y="332.0" class="vl">4</text><path d="M168.0,340.0H278.0Q282.0,340.0 282.0,344.0V348.0Q282.0,352.0 278.0,352.0H168.0Z" class="b0"><title>범용 NAND — 정책 임대형 · 중국 점유율 확대(→이양) (A0 B1 C0 D1 E0 F2)</title></path><text x="160" y="350.0" text-anchor="end" class="nm">범용 NAND</text><text x="288.0" y="350.0" class="vl">4</text><path d="M168.0,358.0H278.0Q282.0,358.0 282.0,362.0V366.0Q282.0,370.0 278.0,370.0H168.0Z" class="b3"><title>파운드리 성숙 공정 — 이양 · SMIC 우위 (A1 B0 C1 D0 E0 F2)</title></path><text x="160" y="368.0" text-anchor="end" class="nm">파운드리 성숙 공정</text><text x="288.0" y="368.0" class="vl">4</text><path d="M168.0,376.0H278.0Q282.0,376.0 282.0,380.0V384.0Q282.0,388.0 278.0,388.0H168.0Z" class="b3"><title>대중 수출형 전공정 장비 — 이양 · 중국 국산화로 잠식 (A0 B1 C1 D0 E0 F2)</title></path><text x="160" y="386.0" text-anchor="end" class="nm">대중 수출형 전공정 장비</text><text x="288.0" y="386.0" class="vl">4</text><path d="M168.0,394.0H278.0Q282.0,394.0 282.0,398.0V402.0Q282.0,406.0 278.0,406.0H168.0Z" class="b3"><title>비미국 변압기 — 이양 · 잠식 위험 높음 (A1 B1 C1 D0 E0 F1)</title></path><text x="160" y="404.0" text-anchor="end" class="nm">비미국 변압기</text><text x="288.0" y="404.0" class="vl">4</text><path d="M168.0,412.0H278.0Q282.0,412.0 282.0,416.0V420.0Q282.0,424.0 278.0,424.0H168.0Z" class="b3"><title>글로벌 사우스 전투기 — 이양 · 잠식 위험 (A1 B1 C1 D0 E0 F1)</title></path><text x="160" y="422.0" text-anchor="end" class="nm">글로벌 사우스 전투기</text><text x="288.0" y="422.0" class="vl">4</text><path d="M168.0,430.0H221.0Q225.0,430.0 225.0,434.0V438.0Q225.0,442.0 221.0,442.0H168.0Z" class="b0"><title>미국 ESS 배터리 — 정책 임대형 · 조건부(보조금 의존) (A0 B0 C1 D1 E0 F0)</title></path><text x="160" y="440.0" text-anchor="end" class="nm">미국 ESS 배터리</text><text x="231.0" y="440.0" class="vl">2</text><path d="M168.0,448.0H221.0Q225.0,448.0 225.0,452.0V456.0Q225.0,460.0 221.0,460.0H168.0Z" class="b3"><title>신약 후보물질(ADC 등) — 이양 · 중국 우위 확대 (A1 B0 C0 D0 E0 F1)</title></path><text x="160" y="458.0" text-anchor="end" class="nm">신약 후보물질(ADC 등)</text><text x="231.0" y="458.0" class="vl">2</text><path d="M168.0,466.0H192.5Q196.5,466.0 196.5,470.0V474.0Q196.5,478.0 192.5,478.0H168.0Z" class="b0"><title>범용 LLM — 정책 임대형 · 열위(내수 한정) (A0 B0 C0 D1 E0 F0)</title></path><text x="160" y="476.0" text-anchor="end" class="nm">범용 LLM</text><text x="202.5" y="476.0" class="vl">1</text><path d="M168.0,484.0H192.5Q196.5,484.0 196.5,488.0V492.0Q196.5,496.0 192.5,496.0H168.0Z" class="b3"><title>휴머노이드·협동로봇 — 이양 · 중국 우위 확정적 (A0 B0 C1 D0 E0 F0)</title></path><text x="160" y="494.0" text-anchor="end" class="nm">휴머노이드·협동로봇</text><text x="202.5" y="494.0" class="vl">1</text><path d="M168.0,502.0H192.5Q196.5,502.0 196.5,506.0V510.0Q196.5,514.0 192.5,514.0H168.0Z" class="b3"><title>범용 상선 — 이양 · 이양 완료 (A0 B0 C0 D0 E0 F1)</title></path><text x="160" y="512.0" text-anchor="end" class="nm">범용 상선</text><text x="202.5" y="512.0" class="vl">1</text><path d="M168.0,520.0H192.5Q196.5,520.0 196.5,524.0V528.0Q196.5,532.0 192.5,532.0H168.0Z" class="b3"><title>EV 배터리(유럽·아시아) — 이양 · 열세 고착 (A0 B0 C1 D0 E0 F0)</title></path><text x="160" y="530.0" text-anchor="end" class="nm">EV 배터리(유럽·아시아)</text><text x="202.5" y="530.0" class="vl">1</text><path d="M168.0,538.0H192.5Q196.5,538.0 196.5,542.0V546.0Q196.5,550.0 192.5,550.0H168.0Z" class="b3"><title>유럽·신흥국 중저가차 — 이양 · 잠식 위험 높음 (A0 B0 C1 D0 E0 F0)</title></path><text x="160" y="548.0" text-anchor="end" class="nm">유럽·신흥국 중저가차</text><text x="202.5" y="548.0" class="vl">1</text><path d="M168.0,556.0H192.5Q196.5,556.0 196.5,560.0V564.0Q196.5,568.0 192.5,568.0H168.0Z" class="b3"><title>범용 OLED·LCD — 이양 · 이양 완료 (A0 B0 C0 D0 E0 F1)</title></path><text x="160" y="566.0" text-anchor="end" class="nm">범용 OLED·LCD</text><text x="202.5" y="566.0" class="vl">1</text><line x1="168" x2="168" y1="16" y2="568" class="axl"/></svg></div><figcaption><b>그림 2.</b> 색: 파랑 복리형 · 옅은 파랑 시간 싸움형 · 회색 정책 임대형 · 주황 이양 · 가장 옅음 소비재. 점수 하나하나보다 <b>순서</b>를 읽을 것. 정량 모델이 아니라 리서치 노트 7개의 사실에 근거한 판단. 소비재·콘텐츠는 제조업 변수가 안 맞아 별도 해석.</figcaption></figure>
+      <div class="scrollx"><table class="tbl">
+        <thead><tr><th>세그먼트</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>합</th><th>유형</th><th>5~10년 판정</th></tr></thead>
+        <tbody><tr><td><b>서방 원전 주기기·SMR 기자재</b> <span style="color:var(--faint);font-size:11px">원전</span></td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center"><b>11</b></td><td>복리형</td><td>심화(지대 일부 미국 귀속)</td></tr><tr><td><b>미 해군 함정·MRO</b> <span style="color:var(--faint);font-size:11px">조선</span></td><td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center"><b>11</b></td><td>복리형</td><td>심화(현지 건조로 마진 희석)</td></tr><tr><td><b>HBM(HBM4/4E)</b> <span style="color:var(--faint);font-size:11px">반도체</span></td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center"><b>10</b></td><td>복리형</td><td>해자 심화</td></tr><tr><td><b>NATO·동맹 지상방산</b> <span style="color:var(--faint);font-size:11px">방산</span></td><td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center"><b>10</b></td><td>복리형</td><td>심화(현지화로 마진 희석)</td></tr><tr><td><b>미국 초고압 변압기·배전반</b> <span style="color:var(--faint);font-size:11px">전력기기</span></td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center"><b>9</b></td><td>복리형</td><td>심화(2028~30 정상화 리스크)</td></tr><tr><td><b>삼성 최선단 파운드리</b> <span style="color:var(--faint);font-size:11px">반도체</span></td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center"><b>9</b></td><td>복리형</td><td>중국 위협 낮음, TSMC 대비 해자 없음</td></tr><tr><td><b>신약 플랫폼(SC 제형 등)</b> <span style="color:var(--faint);font-size:11px">바이오</span></td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">0</td><td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center"><b>9</b></td><td>시간 싸움형</td><td>틈새 강점</td></tr><tr><td><b>바이오 CDMO</b> <span style="color:var(--faint);font-size:11px">바이오</span></td><td style="text-align:center">1</td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center"><b>8</b></td><td>복리형</td><td>유지~심화</td></tr><tr><td><b>HBM 후공정·테스트 장비</b> <span style="color:var(--faint);font-size:11px">반도체</span></td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center"><b>8</b></td><td>복리형</td><td>유지(하이브리드 본딩이 변수)</td></tr><tr><td><b>하이엔드 OLED</b> <span style="color:var(--faint);font-size:11px">디스플레이</span></td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">2</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center"><b>7</b></td><td>시간 싸움형</td><td>2028년까지 심화, 이후 압박</td></tr><tr><td><b>고용량 서버 DRAM·eSSD</b> <span style="color:var(--faint);font-size:11px">반도체</span></td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">2</td><td style="text-align:center"><b>7</b></td><td>정책 임대형</td><td>우위 유지, 일부 잠식</td></tr><tr><td><b>LNG 운반선</b> <span style="color:var(--faint);font-size:11px">조선</span></td><td style="text-align:center">1</td><td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center"><b>6</b></td><td>시간 싸움형</td><td>완만한 잠식(우위 유지)</td></tr><tr><td><b>중동 원전 EPC</b> <span style="color:var(--faint);font-size:11px">원전</span></td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">2</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">2</td><td style="text-align:center"><b>6</b></td><td>시간 싸움형</td><td>중국과 정면 경쟁</td></tr><tr><td><b>K-콘텐츠 IP</b> <span style="color:var(--faint);font-size:11px">소비재</span></td><td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center"><b>6</b></td><td>소비재</td><td>강함, 수익은 해외 플랫폼에</td></tr><tr><td><b>미국 완성차·하이브리드</b> <span style="color:var(--faint);font-size:11px">자동차</span></td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center"><b>5</b></td><td>정책 임대형</td><td>방어 가능, 관세가 마진 압박</td></tr><tr><td><b>K-뷰티(해외)</b> <span style="color:var(--faint);font-size:11px">소비재</span></td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center"><b>5</b></td><td>소비재</td><td>성장 높음, 해자 얕음</td></tr><tr><td><b>K-푸드(라면)</b> <span style="color:var(--faint);font-size:11px">소비재</span></td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center"><b>5</b></td><td>소비재</td><td>성장 높음, 브랜드 집중</td></tr><tr><td><b>범용 DRAM</b> <span style="color:var(--faint);font-size:11px">반도체</span></td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">2</td><td style="text-align:center"><b>4</b></td><td>정책 임대형</td><td>중국 점유율 확대(→이양)</td></tr><tr><td><b>범용 NAND</b> <span style="color:var(--faint);font-size:11px">반도체</span></td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">2</td><td style="text-align:center"><b>4</b></td><td>정책 임대형</td><td>중국 점유율 확대(→이양)</td></tr><tr><td><b>파운드리 성숙 공정</b> <span style="color:var(--faint);font-size:11px">반도체</span></td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">2</td><td style="text-align:center"><b>4</b></td><td>이양</td><td>SMIC 우위</td></tr><tr><td><b>대중 수출형 전공정 장비</b> <span style="color:var(--faint);font-size:11px">반도체</span></td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">2</td><td style="text-align:center"><b>4</b></td><td>이양</td><td>중국 국산화로 잠식</td></tr><tr><td><b>비미국 변압기</b> <span style="color:var(--faint);font-size:11px">전력기기</span></td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center"><b>4</b></td><td>이양</td><td>잠식 위험 높음</td></tr><tr><td><b>글로벌 사우스 전투기</b> <span style="color:var(--faint);font-size:11px">방산</span></td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center"><b>4</b></td><td>이양</td><td>잠식 위험</td></tr><tr><td><b>미국 ESS 배터리</b> <span style="color:var(--faint);font-size:11px">배터리</span></td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center"><b>2</b></td><td>정책 임대형</td><td>조건부(보조금 의존)</td></tr><tr><td><b>신약 후보물질(ADC 등)</b> <span style="color:var(--faint);font-size:11px">바이오</span></td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center"><b>2</b></td><td>이양</td><td>중국 우위 확대</td></tr><tr><td><b>범용 LLM</b> <span style="color:var(--faint);font-size:11px">AI</span></td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center"><b>1</b></td><td>정책 임대형</td><td>열위(내수 한정)</td></tr><tr><td><b>휴머노이드·협동로봇</b> <span style="color:var(--faint);font-size:11px">로봇</span></td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center"><b>1</b></td><td>이양</td><td>중국 우위 확정적</td></tr><tr><td><b>범용 상선</b> <span style="color:var(--faint);font-size:11px">조선</span></td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center"><b>1</b></td><td>이양</td><td>이양 완료</td></tr><tr><td><b>EV 배터리(유럽·아시아)</b> <span style="color:var(--faint);font-size:11px">배터리</span></td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center"><b>1</b></td><td>이양</td><td>열세 고착</td></tr><tr><td><b>유럽·신흥국 중저가차</b> <span style="color:var(--faint);font-size:11px">자동차</span></td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center"><b>1</b></td><td>이양</td><td>잠식 위험 높음</td></tr><tr><td><b>범용 OLED·LCD</b> <span style="color:var(--faint);font-size:11px">디스플레이</span></td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center"><b>1</b></td><td>이양</td><td>이양 완료</td></tr></tbody>
+      </table></div>
+      <div class="figs2">
+        <div class="why" style="margin:0"><b>함정 1. 해자 깊이 ≠ 이익 포착률.</b> 원전·함정·방산은 점수가 가장 높지만 웨스팅하우스 로열티, 미국 현지 건조, 폴란드·루마니아 현지화가 이익을 나눠 가진다. <b>HBM과 미국 초고압 변압기는 한국 기업이 스스로 가격 결정력을 쥔 드문 경우.</b></div>
+        <div class="why" style="margin:0"><b>함정 2. "중국 대비 해자" ≠ "돈 버는 해자".</b> 삼성 최선단 파운드리는 중국이 EUV에 막혀 못 따라오지만 진짜 경쟁자 TSMC 대비로는 해자가 없다(분기 ~1조 적자 보도).</div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">04</span>반도체 — HBM은 파운드리형 해자로, 범용은 일본의 길로</div>
+      <p class="p">DRAM은 미국→일본→한국으로 세 번 국경을 넘었다. 파운드리는 넘지 않았다. 차이는 <b>표준화</b>. HBM은 베이스다이 공동설계와 NVIDIA 퀄로 <b>고객 맞춤 공정 서비스</b>에 가까워지고 있다 — 2Q26 HBM 매출 점유율 SK하이닉스 50 / 삼성 33 / 마이크론 18, 한국 2사 83%. 삼성이 1년 만에 15→33%로 올라선 건 해자 붕괴가 아니라 <b>퀄 타이밍</b> 문제(두 종목 동시 보유 시 상당 부분 상쇄).</p>
+      <div class="figs2">
+        <figure class="chartfig"><div class="cw"><svg viewBox="0 0 360 200" role="img"><text x="44" y="12" class="ttl">CXMT DRAM 점유율 (%) · 점선 = 15% 자력투자 임계</text><line x1="44" x2="352" y1="104.9" y2="104.9" class="refl"/><line x1="44" x2="352" y1="170.0" y2="170.0" class="gr"/><text x="38" y="174.0" text-anchor="end" class="lb">0%</text><line x1="44" x2="352" y1="132.0" y2="132.0" class="gr"/><text x="38" y="136.0" text-anchor="end" class="lb">9%</text><line x1="44" x2="352" y1="94.0" y2="94.0" class="gr"/><text x="38" y="98.0" text-anchor="end" class="lb">18%</text><line x1="44" x2="352" y1="56.0" y2="56.0" class="gr"/><text x="38" y="60.0" text-anchor="end" class="lb">26%</text><line x1="44" x2="352" y1="18.0" y2="18.0" class="gr"/><text x="38" y="22.0" text-anchor="end" class="lb">35%</text><path d="M57.9,170.0V156.6Q57.9,152.6 61.9,152.6H87.7Q91.7,152.6 91.7,156.6V170.0Z" class="b1"><title>실적, 매출 기준 (Counterpoint)</title></path><text x="74.8" y="145.6" text-anchor="middle" class="vl">4%</text><text x="74.8" y="187" text-anchor="middle" class="nm">2Q25</text><path d="M119.5,170.0V130.6Q119.5,126.6 123.5,126.6H149.3Q153.3,126.6 153.3,130.6V170.0Z" class="b1"><title>실적 — 1년 만에 4%→10%</title></path><text x="136.4" y="119.6" text-anchor="middle" class="vl">10%</text><text x="136.4" y="187" text-anchor="middle" class="nm">2Q26</text><path d="M181.1,170.0V126.2Q181.1,122.2 185.1,122.2H210.9Q214.9,122.2 214.9,126.2V170.0Z" class="b2"><title>Counterpoint 2028 (비트 기준)</title></path><text x="198.0" y="115.2" text-anchor="middle" class="vl">11%</text><text x="198.0" y="187" text-anchor="middle" class="nm">2028 CP</text><path d="M242.7,170.0V95.8Q242.7,91.8 246.7,91.8H272.5Q276.5,91.8 276.5,95.8V170.0Z" class="b2"><title>Nomura 2028년 말 전망 — 15% 임계 돌파</title></path><text x="259.6" y="84.8" text-anchor="middle" class="vl">18%</text><text x="259.6" y="187" text-anchor="middle" class="nm">2028말 Nomura</text><path d="M304.3,170.0V43.7Q304.3,39.7 308.3,39.7H334.1Q338.1,39.7 338.1,43.7V170.0Z" class="b2"><title>CXMT 자체 목표</title></path><text x="321.2" y="32.7" text-anchor="middle" class="vl">30%</text><text x="321.2" y="187" text-anchor="middle" class="nm">2030 목표</text><line x1="44" x2="352" y1="170" y2="170" class="axl"/></svg></div><figcaption><b>그림 3.</b> 실적(2Q25·2Q26)은 매출 기준, 전망은 기준이 섞여 있어 <b>방향만</b> 읽을 것. Nomura가 맞다면 2028년 안에 15% 임계점 돌파.</figcaption></figure>
+        <div>
+          <table class="tbl">
+            <thead><tr><th>지표</th><th>값</th></tr></thead>
+            <tbody>
+              <tr><td>삼성 3Q26 잠정 OPM</td><td><b>55.1%</b></td></tr>
+              <tr><td>CXMT 2Q26 OPM</td><td>~70% (2차 출처)</td></tr>
+              <tr><td>YMTC NAND 출하 점유율</td><td>14% (첫 3위)</td></tr>
+              <tr><td>CXMT 웨이퍼 추가 투입 (EUV 부재)</td><td>+30%</td></tr>
+              <tr><td>CXMT 비트당 원가</td><td>3사 대비 +30% 이상</td></tr>
+            </tbody>
+          </table>
+          <p class="p" style="font-size:12.5px">추격자와 기존 강자가 <b>동시에</b> 사상 최대 마진 — 경쟁이 아니라 한국 3사가 HBM·서버로 돌리면서 생긴 범용 공백을 CXMT가 메우는 국면.</p>
+        </div>
+      </div>
+      <div class="fix">
+        <b>핵심 통찰.</b> 범용 DRAM에서 한국의 30% 원가 우위는 상당 부분 <b>미국 EUV 금수에서 빌려 온 것</b>이다. 붕괴 신호는 CXMT 점유율보다 <b>중국 노광 장비가 양산 라인에 들어가는 시점</b>에 먼저 나타난다(선전 EUV 프로토타입 2028~30 생산 목표).
+        장비는 판매처가 운명을 가른다: HBM 후공정(한미반도체 TC 본더 71%, 경쟁자 ASMPT·BESI) 유지~심화 · 한국 본토 증설향 전공정(삼성 10·하이닉스 7 신규 팹, 원익IPS·주성·테스 잔고 1조751억) 심화 · <b>중국 로컬 팹향 범용 전공정은 잠식</b>(중국 국산화 식각·증착 40% 초과).
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">05</span>조선·방산·원전·전력기기 — 지정학이 해자를 만들고, 문지기가 지대를 걷는다</div>
+      <table class="tbl">
+        <thead><tr><th>산업</th><th>판정</th><th>근거</th><th>이익 희석 요인</th></tr></thead>
+        <tbody>
+          <tr><td><b>조선</b></td><td>범용 상선 이양 완료 / LNG선 시간 싸움 / 미 해군 함정·MRO 복리형</td><td>수주 점유 중국 76% vs 한국 15%(2026 1~9월)인데 한국 수주량은 +42%, HD현대중공업 OPM 16.4% — <b>선별 수주 모델</b>. LNG 오더북 66~75%</td><td>해외건조 금지법이 한국 본토 건조도 막아 이익은 필리조선소 등 미국 현지로. 이주노동자 22.7%, E-9 쿼터 폐지 = 물량 하드캡</td></tr>
+          <tr><td><b>방산</b></td><td>NATO·동맹 복리형 / 글로벌 사우스 이양</td><td>SIPRI 9위 3.0%, 폴란드 58%. 중국(5위)과 시장이 안 겹침. 수주 173→135→95→154억$(22~25) 계단식</td><td>유럽 현지화(루마니아 80%), 튀르키예 +122%</td></tr>
+          <tr><td><b>원전</b></td><td>서방 주기기·SMR 기자재 복리형 / KHNP 독자 서방 수출 구조적 봉쇄</td><td>두코바니 2기 186억$. 두산에너빌리티 테라파워 용기 수주, 잔고 26.4조. 미국 8기 프레임워크(AP1000 6 + APR1400 2, 단일 출처)</td><td>웨스팅하우스 1기당 ~6.5억$ 물품 + 1.75억$ 기술료(보도). 카메코가 두코바니 배당 1.7억$ 수령(SEC 6-K) = 지대 증거</td></tr>
+          <tr><td><b>전력기기</b></td><td>미국 초고압 복리형 / 비미국 이양 진행</td><td>납기: 중국 ~52주 vs 한·일·유럽 104~156주 vs 미국 평균 ~128주. 미국 30% 부족, 가격 2019 대비 +77%. HD현대일렉트릭 잔고 85억$+(4~5년치)</td><td><b>2028~30 시험</b>: 232조 경감세율 15% 원복(2028-01-01, 벤더 블로그) + WoodMac 수급 해소 + 한국 3사 미국 공장 증설이 겹침. 중국 변압기 수출 2025 +36% 사상 최대</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">06</span>배터리·자동차·디스플레이 · 바이오·소비재·로봇</div>
+      <table class="tbl">
+        <thead><tr><th>산업</th><th>방어선</th><th>최전선</th><th>판정</th></tr></thead>
+        <tbody>
+          <tr><td><b>배터리</b></td><td>미국 ESS(PFE 규정 2026 착공분부터). <b>LG엔솔 3Q26 OP 7,560억 중 55.1%가 AMPC</b> — 해자가 세법 조항 하나에 달림</td><td>유럽·아시아 EV: 한국 3사 중국 밖 점유 37.9→26.8%(1년 −11.1%p). LFP 범용 + 나트륨이온(CATL 양산)</td><td>EV 열세 고착 / ESS 정책 임대</td></tr>
+          <tr><td><b>자동차</b></td><td>미국 현지 생산(점유 6%대), 하이브리드 18.9%</td><td>유럽 중국 브랜드 12%, 하이브리드의 25%. 현대차 2Q26 OPM 5.8%(−1.7%p)</td><td>미국 방어 / 유럽·신흥국 잠식</td></tr>
+          <tr><td><b>디스플레이</b></td><td>애플 OLED SDC 59·LGD 27·BOE 14. 8.6세대 IT OLED 수율 SDC 90%+ vs BOE 30% 미만</td><td>BOE·비전옥스·CSOT 8.6세대 캐파가 2028~30 수율 올리면 LCD 시나리오 재현</td><td>2028년까지 심화, 이후 압박 (삼성전자 보유자의 숨은 시간 싸움형 자산)</td></tr>
+          <tr><td><b>바이오</b></td><td>CDMO 복리형(삼성바이오 OPM 44.4%, "중국 배제 프리미엄") · 신약 플랫폼 시간 싸움(알테오젠 ALT-B4 노바티스 4.4조)</td><td>신약 후보물질은 이양 — 중화권 기술수출 1,377억$(한국의 7배), 글로벌 ADC 라이선싱 ~90%</td><td>CDMO ○ / 플랫폼 △ / 후보물질 ✗</td></tr>
+          <tr><td><b>소비재·콘텐츠</b></td><td>K-뷰티 1H26 70억$(+27%, 미국이 중국 제치고 1위), 라면 15.2억$ 중 불닭 60%+, 케데헌 넷플릭스 최다</td><td>중국 내수에선 자국 브랜드 57.4%로 이미 밀림. 숏드라마 상위 20앱의 90%가 중국계</td><td>성장 상·해자 중 — 위협은 중국이 아니라 트렌드 피로</td></tr>
+          <tr><td><b>로봇·AI</b></td><td>현대차 연 3만 대(2028)가 유일한 대형 옵션</td><td>산업용 로봇 중국 점유 59%, 휴머노이드 출하 95%(1H26). 액추에이터 국산화 ~40%. 범용 LLM은 내수 한정</td><td>이양 — <b>한국 AI 밸류체인의 진짜 해자는 SW가 아니라 HBM</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">07</span>반도체 집중 포트폴리오의 세 가지 시험</div>
+      <p class="p">하이닉스·삼성에 순자산 이상을 넣는 것은 두 종목이 아니라 <b>한국 경제 전체를 움직이는 하나의 팩터를 레버리지로 보유</b>하는 일이다. 메모리 가격이 수출·세수·코스피·원화를 동시에 움직인다.</p>
+      <div class="figs2">
+        <figure class="chartfig"><div class="cw"><svg viewBox="0 0 300 200" role="img"><text x="44" y="12" class="ttl">반도체 / 총수출 (%)</text><line x1="44" x2="292" y1="170.0" y2="170.0" class="gr"/><text x="38" y="174.0" text-anchor="end" class="lb">0%</text><line x1="44" x2="292" y1="132.0" y2="132.0" class="gr"/><text x="38" y="136.0" text-anchor="end" class="lb">15%</text><line x1="44" x2="292" y1="94.0" y2="94.0" class="gr"/><text x="38" y="98.0" text-anchor="end" class="lb">30%</text><line x1="44" x2="292" y1="56.0" y2="56.0" class="gr"/><text x="38" y="60.0" text-anchor="end" class="lb">45%</text><line x1="44" x2="292" y1="18.0" y2="18.0" class="gr"/><text x="38" y="22.0" text-anchor="end" class="lb">60%</text><path d="M84.0,170.0V112.2Q84.0,108.2 88.0,108.2H124.0Q128.0,108.2 128.0,112.2V170.0Z" class="b0"><title>반도체 수출 비중 24.4%</title></path><text x="106.0" y="101.2" text-anchor="middle" class="vl">24.4%</text><text x="106.0" y="187" text-anchor="middle" class="nm">2025 연간</text><path d="M208.0,170.0V47.3Q208.0,43.3 212.0,43.3H248.0Q252.0,43.3 252.0,47.3V170.0Z" class="b3"><title>603억$ / 1,209억$ ≈ 50% (뉴스핌 10/6 기준 계산)</title></path><text x="230.0" y="36.3" text-anchor="middle" class="vl">50%</text><text x="230.0" y="187" text-anchor="middle" class="nm">2026년 9월</text><line x1="44" x2="292" y1="170" y2="170" class="axl"/></svg></div><figcaption><b>그림 4.</b> 한 해 만에 두 배. 국내 자산으로는 분산이 안 된다.</figcaption></figure>
+        <div>
+          <table class="tbl">
+            <thead><tr><th>시점</th><th>2028~29 동시 가동 — 시험 1</th></tr></thead>
+            <tbody>
+              <tr><td>2026 말</td><td>CXMT 월 ~35만 장 투입</td></tr>
+              <tr><td>2027.02 / 2Q27</td><td>SK 용인 Y1 첫 클린룸 / 삼성 P5 1단계 장비 반입</td></tr>
+              <tr><td>2027~30</td><td>마이크론 신규 7곳 가동</td></tr>
+              <tr><td><b>2028</b></td><td><b>삼성 P5 가동 · SK M17(12월)</b></td></tr>
+              <tr><td><b>2029</b></td><td><b>삼성 용인 1호 · SK Y2(6월) · CXMT 6번째 메가팹(월 60만 장+)</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="p"><b>비대칭성.</b> 수요가 꺾이면 한국 업체는 신규 팹 일부를 HBM·서버로 돌릴 수 있다. CXMT는 매출 98%가 범용이지만 국가 자본 덕에 감산하지 않을 가능성이 높다 → <b>가격 하락은 범용 DRAM에서 일어나고 폭은 과거보다 클 수 있다.</b> 종목별: 삼성전자는 범용·NAND 비중 높고 시안 NAND 중국 노출(1H26 대중 출하가 대미보다 127억$ 많았음), 하이닉스는 HBM 완충이 크지만 점유율 하락 압력.</p>
+      <p class="p"><b>시험 2.</b> CXMT 15% + 수출통제 약화 — 미국은 H200 대중 판매를 조건부 승인했다. 수출통제가 봉쇄 수단에서 <b>협상 카드</b>로 바뀌는 중이고, 조선 항만수수료의 취약성이 반도체에도 적용될 수 있다.</p>
+      <table class="tbl">
+        <thead><tr><th>시험 3 · 일본 1990 비교</th><th>일본 1990</th><th>한국 2026</th><th>판정</th></tr></thead>
+        <tbody>
+          <tr><td>단일 산업 정점</td><td>세계 반도체 ~50%</td><td>메모리 정점, 수출 50%</td><td style="color:var(--stop)">닮음</td></tr>
+          <tr><td>주식시장 · 인구</td><td>버블 정점 · 고령화 진입</td><td>KOSPI 7,208(5월) · TFR 0.80</td><td style="color:var(--stop)">닮음·더 빠름</td></tr>
+          <tr><td>미국 견제</td><td>1986 반도체협정</td><td>232조 25% 관세 + 투자 조건부 면제</td><td style="color:var(--stop)">형태만 다름</td></tr>
+          <tr><td>통화 · 대차대조표 · 지배구조 · 외부 해자</td><td>엔고 · 부채 축소 · 개혁 수십 년 뒤 · 없음</td><td>원화 1,529(최약) · 가계부채 하락 · 정점에서 자사주 소각 입법 · 미 수출통제</td><td style="color:var(--go)">다름</td></tr>
+          <tr><td><b>충격기 투자</b></td><td>투자를 줄여 영구히 점유율 상실. 역발상 증설자는 한국</td><td>그 역할을 <b>국가 자본을 업은 CXMT</b>가 맡음</td><td style="color:var(--stop)"><b>가장 위험한 닮은 점</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sec">
+      <div class="sech"><span class="sn">08</span>판정 · 반대논리 · 붕괴 트리거 · 연결</div>
+      <div class="rows">
+        <div class="r"><div class="lab">테제</div><div class="val">
+          살아남는 해자 = <b>내재 해자(맞춤·수율·인증) × 중국 배제 장치(법·안보)</b>. 둘 다 있는 곳만 시간이 갈수록 깊어진다. 한국의 복리형 해자는 5개 군의 좁은 띠이고, 그 안에서도 <b>스스로 가격 결정력을 쥔 건 HBM과 미국 초고압 변압기</b>뿐이다.</div></div>
+        <div class="r"><div class="lab">반대논리</div><div class="val">
+          ① <b>"HBM도 결국 DRAM"</b> — 삼성이 1년 만에 15→33%로 올라선 건 진입장벽이 생각보다 낮다는 증거. SemiAnalysis는 CXMT가 2028년 세계 HBM 웨이퍼의 12%를 확보한다고 본다. ② 채점은 정량 모델이 아니라 판단 — 세그먼트 순서는 믿되 점수 차 1~2점은 노이즈. ③ 핵심 수치 다수가 2차 출처(웨스팅하우스 조건=언론, 미국 8기=단일 출처, 후동중화 21%=중국 관영, 232조 세율=벤더 블로그). ④ Goldman은 SMIC 수율 23→75%(2035)를 가정해도 첨단 칩 자급 66% — 중국 강세론도 "완전 대체"는 아님. ⑤ IMF 잠재성장 2.14% vs OECD 1.66% 차이는 결국 "AI 사이클이 구조적인가"의 판단 차이.</div></div>
+        <div class="r verdict"><div class="lab">판정</div><div class="val">
+          <b>프레임으로 채택. 포트폴리오 함의는 "뭘 더 살까"가 아니라 "집중의 꼬리 위험이 무엇인가"다.</b>
+          HBM 해자가 깊어지는가의 답은 "그렇다". 진짜 질문은 <span class="hl">2028~29년 한국·마이크론·CXMT 신규 팹이 동시에 가동될 때 범용 DRAM 가격 하락을 HBM이 얼마나 상쇄하느냐</span>이고, 지금은 슈퍼사이클이 이 시험을 가리고 있다.
+          실전 함의 셋: ① 두 보유 종목 이익에서 <b>HBM·서버 비중</b>을 분기마다 추적 ② CXMT 15%·중국 노광 양산 중 어느 쪽이 먼저 오는지 ③ 수출통제가 항만수수료처럼 협상 카드로 꺼지는지. 세 답이 모두 불리하면 그게 반도체 집중 포트의 꼬리 위험이며 <b>한국 경제 전체의 꼬리 위험과 겹친다</b>(원화·코스피·세수가 같이 움직여 국내 자산으로는 헤지 불가).
+          복리형 띠 안의 2차 후보(미국 초고압 전력기기·HBM 후공정 장비·서방 원전 기자재)는 리스트로 두되, <b>2028~30 정상화 리스크</b>가 붙은 전력기기는 이미 배수가 그걸 반영하기 시작했다(10월 효성 −60%).</div></div>
+        <div class="r"><div class="lab">KPI</div><div class="val">
+          <b>붕괴 트리거</b> — HBM: 하이브리드 본딩 전환기 수율 순위 역전 / CXMT 중국 밖 고객 퀄 통과 · 범용 DRAM: <b>CXMT 15% 돌파</b>(Counterpoint 분기), 중국 노광 양산 투입, DDR5 계약가 2분기 연속 하락 · 조선: LNG선 신규 수주 중국 30%대 안착 · 방산: 수주 2년 연속 감소 · 원전: 미국 8기가 구속력 계약으로 전환 실패 · 전력기기: 북미 수주 2분기 연속 감소, 중국 변압기 미국 진입 완화 · OLED: BOE 8.6세대 수율 70~80% · 배터리: AMPC 그대로인 채 PFE 완화.
+          <b>캘린더</b> — 10월 말 하이닉스·삼성 3Q 확정(2027 capex, HBM4 배분, 범용 가격 코멘트) · 11/9~10 USTR 항만수수료·희토류 0.1% 규칙 유예 만료 · 2026 말 CXMT HBM3E 퀄 · 2Q27 삼성 P5 장비 반입 · 2028.1.1 변압기 232조 경감 원복.</div></div>
+        <div class="r"><div class="lab">연결</div><div class="val">
+          <a href="/research/semiconductor-ai.html#20260825-memory-cycle-payability">「2030년에도 메모리 부족」</a>(LS 8/25)이 수요·가격 상단을 말했다면 이 지도는 <b>2028~29 공급 측 시험</b>을 말한다 — 같은 사이클의 반대쪽 끝.
+          <a href="/research/semiconductor-ai.html#20261021-korea-aidc-indepth">「국내 AIDC 인뎁스」</a>(같은 날)의 전력기기·전력망 종목은 여기서 "미국 초고압(복리형) vs 비미국(이양)" 사이의 <b>내수 전업 틈새</b>로 위치가 잡힌다.
+          <a href="/research/robotics.html">로봇 노트</a>의 "몸체의 중국 / 부품의 한국" 프레임은 이 채점(휴머노이드 이양, 액추에이터 국산화 40%)과 일치.
+          <a href="/semiconductor-cycle/">반도체 사이클 트래커</a>의 수출 비중 50%가 이 노트의 "국내 자산으로 분산 불가"의 숫자다.</div></div>
+      </div>
+    </div>
+
+    <div class="disc">
+      출처: <span class="src">회사 맥북 쓰레드에서 7개 분야 리서치 노트를 종합해 작성한 「한국 산업 해자 지도」(2026.10.21)</span>. 1차 출처: Counterpoint(DRAM·HBM 점유율) · TrendForce(파운드리·3사 신규 캐파) · SemiAnalysis(CXMT) · USCC·Rhodium(MIC2025) · CEPR(2019 한일 수출규제) · SIPRI 2025 · Cameco 6-K · Wood Mackenzie·Bloomberg(변압기) · SNE리서치 · Omdia(OLED) · IFR(로봇) · 뉴스핌(9월 수출). 수치 신뢰도가 낮은 항목(언론·단일 출처·벤더 블로그)은 본문에 표기. 차트는 원문 Chart.js 수치를 SVG로 재구성. 투자권유 아님.
+    </div>
+    </div>
+  </article>
+
+
+</main>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   리서치 노트 누적 레이어 — 목차·태그 필터·접기·딥링크를 DOM에서 자동 생성.
+   새 노트는 <article class="note" data-id="YYYYMMDD-slug"> 하나만 붙이면
+   목차·태그·앵커가 전부 알아서 갱신된다. 수동 동기화 지점 없음.
+   ───────────────────────────────────────────────────────────── */
+(function () {
+  var main  = document.querySelector('main');
+  var notes = [].slice.call(document.querySelectorAll('article.note'));
+  if (!notes.length) return;
+
+  var slug = function (t) {
+    return t.trim().toLowerCase().replace(/[^\w가-힣]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+  };
+
+  var meta = notes.map(function (n, i) {
+    var date  = (n.querySelector('.nmeta .date') || {}).textContent || '';
+    var title = (n.querySelector('.ntitle')      || {}).textContent || '노트 ' + (i + 1);
+    var tags  = [].slice.call(n.querySelectorAll('.nmeta .tag, .nmeta .tk'))
+                  .map(function (e) { return e.textContent.trim(); });
+    n.id = n.dataset.id || (date.replace(/\./g, '') + '-' + slug(title));
+
+    /* 본문 래퍼가 없으면 자동 생성 — 기존 노트도 손대지 않고 접기 지원 */
+    if (!n.querySelector('.nbody')) {
+      var wrap = document.createElement('div');
+      wrap.className = 'nbody';
+      var start = n.querySelector('.nlede') || n.querySelector('.ntitle');
+      if (start) {
+        var sib = start.nextSibling, nx;
+        while (sib) { nx = sib.nextSibling; wrap.appendChild(sib); sib = nx; }
+        n.appendChild(wrap);
+      }
+    }
+
+    /* 접기 토글 — 최신 1개만 펼침 */
+    if (n.querySelector('.nbody')) {
+      var btn = document.createElement('button');
+      btn.className = 'fold';
+      btn.type = 'button';
+      var setLabel = function () { btn.textContent = n.classList.contains('collapsed') ? '펼치기 ▾' : '접기 ▴'; };
+      btn.onclick = function () { n.classList.toggle('collapsed'); setLabel(); };
+      if (i > 0) n.classList.add('collapsed');
+      setLabel();
+
+      /* 딥링크 버튼 */
+      var lnk = document.createElement('button');
+      lnk.className = 'anch';
+      lnk.type = 'button';
+      lnk.textContent = '#';
+      lnk.title = '이 노트 링크 복사';
+      lnk.onclick = function () {
+        var url = location.origin + location.pathname + '#' + n.id;
+        history.replaceState(null, '', '#' + n.id);
+        if (navigator.clipboard) navigator.clipboard.writeText(url);
+        lnk.textContent = '복사됨';
+        setTimeout(function () { lnk.textContent = '#'; }, 1200);
+      };
+      var nm = n.querySelector('.nmeta');
+      nm.appendChild(lnk);
+      nm.appendChild(btn);
+    }
+    return { el: n, date: date, title: title, tags: tags };
+  });
+
+  /* ── 목차 + 태그 필터 ── */
+  var allTags = [];
+  meta.forEach(function (m) {
+    m.tags.forEach(function (t) { if (allTags.indexOf(t) < 0) allTags.push(t); });
+  });
+
+  var toc = document.createElement('div');
+  toc.className = 'toc';
+  toc.innerHTML =
+    '<div class="th"><b>이 산업 노트</b><span>' + meta.length + '건 · 최신순</span></div>' +
+    '<div class="tagbar"></div><div class="toclist"></div>';
+  main.insertBefore(toc, main.firstElementChild);
+
+  var bar  = toc.querySelector('.tagbar');
+  var list = toc.querySelector('.toclist');
+
+  var render = function (active) {
+    list.innerHTML = '';
+    var shown = 0;
+    meta.forEach(function (m) {
+      var hit = !active || m.tags.indexOf(active) >= 0;
+      m.el.style.display = hit ? '' : 'none';
+      if (!hit) return;
+      shown++;
+      var a = document.createElement('a');
+      a.href = '#' + m.el.id;
+      a.innerHTML = '<span class="d">' + m.date + '</span><span class="t">' + m.title + '</span>';
+      a.onclick = function () { m.el.classList.remove('collapsed'); var f = m.el.querySelector('.fold'); if (f) f.textContent = '접기 ▴'; };
+      list.appendChild(a);
+    });
+    if (!shown) list.innerHTML = '<div class="empty">해당 태그의 노트가 없습니다.</div>';
+  };
+
+  var mkBtn = function (label, tag) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = label;
+    b.onclick = function () {
+      var was = b.classList.contains('on');
+      [].forEach.call(bar.children, function (c) { c.classList.remove('on'); });
+      if (!was) b.classList.add('on');
+      render(was ? null : tag);
+    };
+    return b;
+  };
+  allTags.forEach(function (t) { bar.appendChild(mkBtn(t, t)); });
+  render(null);
+
+  /* ── 해시로 들어오면 해당 노트 펼치고 이동 ── */
+  var openHash = function () {
+    var id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    var n = document.getElementById(id);
+    if (!n) return;
+    n.classList.remove('collapsed');
+    var f = n.querySelector('.fold'); if (f) f.textContent = '접기 ▴';
+    n.scrollIntoView();
+  };
+  openHash();
+  window.addEventListener('hashchange', openHash);
+})();
+</script>
+
+<footer>
+  <div class="wrap"><span class="star">✦</span> POLARIS — Research Notes</div>
+</footer>
+
+</body>
+</html>
