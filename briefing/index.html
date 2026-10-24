@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>뉴스레터 브리핑 — Polaris</title>
+<meta name="description" content="Polaris · 영어 뉴스레터에서 건진 핵심 인사이트만 날짜별로 누적">
+<style>
+  :root{
+    --bg:#0b0d14; --bg2:#0f1117; --panel:#161a24; --panel2:#1d2230; --line:#272d3c;
+    --txt:#e8eaf0; --muted:#9aa3b2; --faint:#69727f;
+    --accent:#8b9bff; --accent-dim:#5b6bd6; --gold:#ffd66b;
+    --go:#22c55e; --stop:#ef4444;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Segoe UI",sans-serif;
+    background:var(--bg); color:var(--txt); line-height:1.65; -webkit-font-smoothing:antialiased; min-height:100vh;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px}
+
+  header{
+    background:
+      radial-gradient(120% 90% at 85% -10%, rgba(139,155,255,0.16), transparent 55%),
+      linear-gradient(180deg,#0c0f18,#0b0d14);
+    border-bottom:1px solid var(--line);
+  }
+  .top{padding:22px 0 0}
+  .back{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;padding:5px 13px;transition:border-color .18s,color .18s}
+  .back:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .hero{padding:26px 0 30px}
+  .kicker{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint)}
+  .htitle{display:flex;align-items:center;gap:12px;margin-top:10px}
+  .htitle .ic{font-size:27px}
+  .htitle h1{font-size:25px;font-weight:800;letter-spacing:-.3px}
+  .hsub{font-size:13px;color:var(--muted);margin-top:11px;max-width:620px}
+
+  main{padding:28px 0 10px}
+
+  .tagbar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+  .tagbar button{font-size:11px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);
+    border-radius:999px;padding:3px 11px;cursor:pointer;font-family:inherit;transition:all .15s}
+  .tagbar button:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .tagbar button.on{color:var(--accent);border-color:var(--accent-dim);background:rgba(139,155,255,0.1)}
+
+  .day{background:linear-gradient(180deg,var(--panel),#13161f);border:1px solid var(--line);
+    border-radius:15px;padding:20px 22px 16px;margin-bottom:18px;scroll-margin-top:18px}
+  .day.weekly{border-color:rgba(255,214,107,0.35)}
+  .dmeta{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .dmeta .date{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums;
+    border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .dmeta .kind{font-size:11px;font-weight:700;color:var(--accent)}
+  .day.weekly .dmeta .kind{color:var(--gold)}
+  .fold{margin-left:auto;font-size:11px;color:var(--muted);background:var(--panel2);
+    border:1px solid var(--line);border-radius:999px;padding:2px 11px;cursor:pointer;font-family:inherit}
+  .fold:hover{border-color:var(--accent-dim);color:var(--txt)}
+  .dtitle{font-size:16.5px;font-weight:800;letter-spacing:-.2px;margin-bottom:6px}
+  .dlede{font-size:13px;color:var(--muted);margin-bottom:14px}
+  .dlede b{color:var(--txt);font-weight:600}
+  .day.collapsed .dbody{display:none}
+  .day.collapsed .dlede{margin-bottom:0}
+
+  .it{border-top:1px solid var(--line);padding:13px 0 12px}
+  .it.hide{display:none}
+  .ih{display:flex;flex-wrap:wrap;align-items:baseline;gap:7px;margin-bottom:5px}
+  .ih .src{font-size:11px;font-weight:800;color:var(--accent);letter-spacing:.3px}
+  .ih .t{font-size:13.5px;font-weight:700;color:var(--txt)}
+  .ih a.t:hover{color:var(--accent)}
+  .ih .lv{font-size:10.5px;border-radius:5px;padding:1px 7px;border:1px solid var(--line);color:var(--faint)}
+  .ih .lv.must{color:var(--gold);border-color:rgba(255,214,107,0.4)}
+  .it ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+  .it li{font-size:13px;color:var(--muted);padding-left:13px;position:relative}
+  .it li::before{content:"·";position:absolute;left:2px;color:var(--faint)}
+  .it li b{color:var(--txt);font-weight:600}
+  .it .web{font-size:10.5px;color:var(--faint)}
+  .it .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+  .it .tags span{font-size:10.5px;color:var(--faint);background:var(--panel2);border:1px solid var(--line);
+    border-radius:5px;padding:1px 7px}
+  .cross{font-size:12.5px;color:var(--muted);background:rgba(139,155,255,0.06);border:1px solid rgba(139,155,255,0.18);
+    border-radius:10px;padding:10px 13px;margin-top:6px}
+  .cross b{color:var(--txt)}
+
+  .disc{font-size:11px;color:var(--faint);line-height:1.6;margin:6px 0 20px}
+  footer{border-top:1px solid var(--line);margin-top:18px;padding:24px 0 38px;
+    font-size:11.5px;color:var(--faint);text-align:center}
+  footer .star{color:var(--accent)}
+  @media(max-width:560px){ .htitle h1{font-size:21px} .day{padding:18px 16px 14px} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap top">
+    <a class="back" href="/">← Polaris 허브</a>
+  </div>
+  <div class="wrap hero">
+    <div class="kicker">Briefing · 뉴스레터</div>
+    <div class="htitle">
+      <span class="ic">📬</span>
+      <h1>뉴스레터 브리핑</h1>
+    </div>
+    <p class="hsub">
+      매일 받는 영어 뉴스레터(SemiAnalysis · Stratechery · Money Stuff · a16z 등)에서 투자 판단에 쓸 인사이트만 건져 날짜별로 쌓는다. 유료 글이 잘린 부분은 공개 보도로 보강했고 <span style="color:var(--faint)">[웹]</span>으로 표시했다. 같은 테마가 쌓이면 주간 종합으로 묶고, 그다음 리서치 노트로 넘긴다.
+    </p>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="tagbar" id="tagbar"></div>
+
+  <!-- 새 브리핑은 이 줄 바로 아래에 추가 (최신순) -->
+
+  <article class="day weekly" id="20261024-pilot">
+    <div class="dmeta"><span class="date">2026.10.24</span><span class="kind">파일럿 · 10/19~10/23 묶음</span></div>
+    <div class="dtitle">수요는 확인됐고, 병목과 청구서는 물리 세계와 채권시장으로 옮겨간다</div>
+    <p class="dlede"><b>한 줄:</b> GPU 임대료·토큰 소비·리스 계약이 모두 오르는 사이 병목은 전력에서 <b>메모리·로직 칩</b>으로 옮겨가는 중이고, 그 비용을 <b>CDS·주식 발행·합병</b>으로 메우는 움직임이 같은 주에 동시에 나왔다.</p>
+    <div class="dbody">
+
+      <div class="it">
+        <div class="ih"><span class="src">SemiAnalysis</span><a class="t" href="https://newsletter.semianalysis.com/p/datacenters-2027-the-year-of-acceleration" target="_blank" rel="noopener">Datacenters 2027: The Year of Acceleration</a><span class="lv must">정독</span></div>
+        <ul>
+          <li>2027년 데이터센터 증설은 <b>+50GW</b>(중국 제외)로, 2024년까지 세계에 누적된 용량을 1년에 짓는 규모다. 공사가 꽤 진척된 상위 40개 캠퍼스만 24GW를 넘는다.</li>
+          <li>2026년 들어 맺은 취소 불가 리스는 약 1조 달러다(본문 안에서 표기가 1조 미만·초과로 엇갈린다). 리스 → 부채 조달 → 착공 순서라 <b>선행지표</b>로 쓸 수 있다.</li>
+          <li>전력은 자가발전과 모듈 공법으로 "대체로 해결" 쪽이라고 본다. 2027~28년 1순위 제약은 <b>메모리·로직</b>이 될 수 있다는 것이 결론이다(핵심 근거는 유료 구간).</li>
+        </ul>
+        <div class="tags"><span>전력·DC건설</span><span>AI capex</span><span>메모리</span><span>compute수급</span></div>
+      </div>
+
+      <div class="it">
+        <div class="ih"><span class="src">a16z</span><a class="t" href="https://www.a16z.news/p/charts-of-the-week-attention-is-all" target="_blank" rel="noopener">Charts of the Week: Attention is All You Need</a><span class="lv must">정독</span></div>
+        <ul>
+          <li>Ornn Data 기준으로 가장 오래된 A100까지 <b>모든 GPU의 임대료가 연초보다 높다</b>. 6년 정액 상각선보다 9~143% 위다. "GPU 감가상각 과소" 약세 논리의 반증 재료다.</li>
+          <li>AI capex 4개 부문 중 전력장비가 가격은 가장 많이 올랐는데 국내 생산능력은 오히려 줄었다. 모자란 물량은 수입으로 메운다.</li>
+        </ul>
+        <div class="tags"><span>compute수급</span><span>전력·DC건설</span><span>AI capex</span></div>
+      </div>
+
+      <div class="it">
+        <div class="ih"><span class="src">Money Stuff</span><span class="t">Someone Has to Take the AI Risk (10/20)</span><span class="lv must">정독</span></div>
+        <ul>
+          <li>빅테크·AI 관련 7개사 채권에 붙은 CDS 거래가 7월 주평균 20억 달러 미만에서 <b>9월 90억 달러 이상</b>으로 늘었다(MS Research, FT 인용). Oracle 5년물 CDS는 5년 전 약 0.33%에서 약 3.3%로 올랐다.</li>
+          <li>데이터센터 대출은 자산 담보라 개별 파산보다 <b>시장 전체 충격</b>(수요 둔화, 칩 노후화)이 진짜 위험이다. 보험사·은행이 이미 이 위험을 많이 들고 있어 보호 가격이 비싸다는 설명이다.</li>
+          <li>Brookings 추정으로는 2025~32년 DC 투자 약 10.3조 달러에 10% 수익을 내려면 <b>2032년 연매출 약 3.7조 달러</b>가 필요하다. GB300 GPU-시간당 약 5.5달러가 유지돼야 하는 수준이다.</li>
+        </ul>
+        <div class="tags"><span>AI크레딧</span><span>AI capex</span></div>
+      </div>
+
+      <div class="it">
+        <div class="ih"><span class="src">Money Stuff</span><span class="t">Zuckerberg Wants to Keep His Votes (10/22)</span><span class="lv must">정독</span></div>
+        <ul>
+          <li>Meta가 <b>무의결권 C주</b>를 A·B주 1주당 1주씩 배당한다(효력 2027-01-19). 매틴은 이를 Meta가 자사주를 사는 회사에서 <b>주식을 찍어 AI를 조달하는 회사</b>로 바뀔 수 있다는 신호로 읽는다. 지배력은 희석되지 않는다.</li>
+          <li>Anthropic은 IPO 예비 신고서에 상반기 순손실 800억 달러 이상을 적었다. 그중 720억 달러는 조달상품을 시가평가한 <b>비현금</b> 손실이다.</li>
+        </ul>
+        <div class="tags"><span>AI capex</span><span>빅테크전략</span><span>시장구조</span></div>
+      </div>
+
+      <div class="it">
+        <div class="ih"><span class="src">Money Stuff</span><span class="t">Obviously SpaceX and Tesla Will Merge (10/21)</span><span class="lv must">정독</span></div>
+        <ul>
+          <li>머스크가 SpaceX–Tesla 합병을 공개 지지했고 두 회사 모두 특별위원회를 꾸렸다. 아직 조건 합의는 없다. 이론상 약 3.5조 달러 규모다.</li>
+          <li>매틴의 논리: AI 인프라 시대에는 VC보다 <b>크레딧 시장에서 수천억 달러를 빌리는 능력</b>이 중요하고, 사업이 분산된 거대 단일 법인이 신용상 유리하다. 머스크는 터빈 블레이드처럼 납기가 12~18개월 늦는 부품을 직접 주조해 전력을 앞당기겠다고 말했다.</li>
+        </ul>
+        <div class="tags"><span>AI크레딧</span><span>빅테크전략</span></div>
+      </div>
+
+      <div class="it">
+        <div class="ih"><span class="src">Speedwell</span><a class="t" href="https://www.speedwellmemos.com/p/meta-3q26-business-update" target="_blank" rel="noopener">Meta: 3Q26 Business Update</a><span class="lv must">정독</span></div>
+        <ul>
+          <li>앱 부문 매출은 +26%(노출 +10%, 단가 +14%)다. 2026년 capex 가이던스는 <b>1,150~1,350억 달러</b>(금융리스 포함)이고 2027년은 더 늘어난다.</li>
+          <li>에이전트 <b>Muse</b>는 설정 사용자 1,000만 명, 그중 25%가 매일 쓴다. 저커버그는 사용자당 매출이 기존 앱을 넘을 수 있고, 서비스 비용 효율이 1년 안에 10배 넘게 개선된다고 봤다. Amazon은 Muse 접근을 막았고 Walmart는 받아들였다.</li>
+        </ul>
+        <div class="tags"><span>AI capex</span><span>광고·소비자AI</span><span>빅테크전략</span></div>
+      </div>
+
+      <div class="it">
+        <div class="ih"><span class="src">Stratechery</span><a class="t" href="https://stratechery.com/2026/do-you-trust-apple/" target="_blank" rel="noopener">Do You Trust Apple?</a><span class="lv must">정독</span></div>
+        <ul>
+          <li>Apple 스마트홈 기기(HomeView 등)는 Siri 지연 탓에 거의 2년 늦게 12월에 나온다. Thompson은 새 Siri AI가 예전보다 느리고 실수가 잦다고 평가한다. 그사이 경쟁 에이전트는 정보를 모으는 데서 그치지 않고 직접 실행한다.</li>
+          <li>Apple은 Siri 밑단 모델을 소유하지 못하고 Google·Meta에 기댄다. 같은 주에는 Meta 오픈소스 모델을 기기에서 돌리는 제휴도 나왔다(<a href="https://stratechery.com/2026/a-new-era/" target="_blank" rel="noopener">주간 요약</a>). 대신 AI 비용 부담은 동종사보다 가볍다.</li>
+        </ul>
+        <div class="tags"><span>빅테크전략</span><span>AI플랫폼</span></div>
+      </div>
+
+      <div class="it">
+        <div class="ih"><span class="src">SemiAnalysis</span><a class="t" href="https://newsletter.semianalysis.com/p/huawei-deepseek" target="_blank" rel="noopener">The Huawei-DeepSeek Symbiosis</a><span class="lv must">정독</span></div>
+        <ul>
+          <li>Ascend 950PR은 행렬곱 효율이 이론치의 99.7%까지 나와 <b>소프트웨어는 최전선급</b>이다. 그러나 절대 성능은 A100과 MI300X 사이라 하드웨어는 5년 이상 뒤처졌다고 본다.</li>
+          <li>SemiAnalysis는 DeepSeek이 2027~28년쯤 주로 화웨이 스택을 쓸 것으로 본다. 다만 최적화가 화웨이 슈퍼노드에 쏠려 있어 DeepSeek 밖의 고객은 아직 쓰기 어렵다. 중국은 전력이 싸서 칩 단위가 아니라 TCO로 비교해야 한다는 지적도 있다.</li>
+        </ul>
+        <div class="tags"><span>중국AI</span><span>반도체경쟁</span></div>
+      </div>
+
+      <div class="it">
+        <div class="ih"><span class="src">SemiAnalysis</span><a class="t" href="https://newsletter.semianalysis.com/p/amazons-trainium-takes-a-strike-at" target="_blank" rel="noopener">Amazon's Trainium Takes a Strike at the Training King</a><span class="lv">요약</span></div>
+        <ul>
+          <li>AWS가 Trainium을 네이티브 PyTorch 백엔드(TorchNeuron)로 바꿔 연구용 학습 시장까지 노린다. 10/20 오픈소스 베타로 공개됐다. <span class="web">[웹: Techzine, 10/20]</span></li>
+          <li>Anthropic은 이미 Trainium2·3에서 추론과 RL 롤아웃을 돌린다. 약점은 첫 컴파일이 3~4분(일부 모델은 27분) 걸린다는 점이다. CUDA만큼 성숙하려면 아직 멀었다.</li>
+        </ul>
+        <div class="tags"><span>반도체경쟁</span><span>compute수급</span></div>
+      </div>
+
+      <div class="it">
+        <div class="ih"><span class="src">a16z</span><a class="t" href="https://www.a16z.news/p/why-hardware-specialization-is-back" target="_blank" rel="noopener">Why Hardware Specialization is Back</a><span class="lv">요약</span></div>
+        <ul>
+          <li>골드만 추정으로 2026~30년 토큰 수요는 24배인데 쓸 수 있는 전력은 약 2배라, <b>와트당 성능</b>이 가장 희소한 자원이 된다. 2012~22년 GPU 연산은 80배 늘었지만 메모리 대역폭은 17배에 그쳤다(메모리 벽).</li>
+          <li>반대 근거도 있다. 파운드리·HBM 물량 배정이 희소해 신규 칩 업체가 물량을 잡기 어렵다. 필자가 이종칩 스타트업 창업자라 이해관계가 있다.</li>
+        </ul>
+        <div class="tags"><span>반도체경쟁</span><span>메모리</span></div>
+      </div>
+
+      <div class="it">
+        <div class="ih"><span class="src">Retail Dive</span><a class="t" href="https://techcrunch.com/2026/10/21/while-amazon-blocks-ai-agents-walmart-rolls-out-the-welcome-mat/" target="_blank" rel="noopener">Walmart welcomes AI agents</a><span class="lv">요약</span></div>
+        <ul>
+          <li>Walmart는 승인된 외부 에이전트가 MCP로 접속하는 Agent Gateway를 초대제 베타로 열었다. 에이전트에게도 사람과 같은 가격을 보여준다고 했다. Amazon은 Perplexity와 Meta Muse를 차단해, <b>에이전트 커머스에서 막는 쪽과 여는 쪽</b>이 갈렸다. <span class="web">[웹: TechCrunch·Axios, 10/21]</span></li>
+        </ul>
+        <div class="tags"><span>광고·소비자AI</span><span>빅테크전략</span></div>
+      </div>
+
+      <div class="it">
+        <div class="ih"><span class="src">Citrini</span><a class="t" href="https://www.citriniresearch.com/p/citrini-therapeutics" target="_blank" rel="noopener">Citrini Therapeutics</a><span class="lv must">정독</span></div>
+        <ul>
+          <li>Claude로 독소 결합 단백질을 거의 자율로 설계했다. 64시간, 컴퓨트 약 5만 달러가 들었다. 실험실로 보낸 211개 중 17개가 결합 기준을 통과했다. <span class="web">[웹: <a href="https://anthropic.com/research/claude-scorpion-toxin-binder-design" target="_blank" rel="noopener">Anthropic</a>, 10/20]</span></li>
+          <li>설계는 이틀인데 합성·검증은 두 달이 걸렸다. 병목이 <b>습식 실험실·CRO</b>로 옮겨갔다. Citrini가 붐비는 AI 인프라 대신 헬스케어로 눈을 돌린 이유이기도 하다(선호 종목은 유료 구간).</li>
+        </ul>
+        <div class="tags"><span>AI헬스케어</span></div>
+      </div>
+
+      <div class="it">
+        <div class="ih"><span class="src">The Generalist</span><a class="t" href="https://www.generalist.com/p/pete-florence-when-robots-improvise" target="_blank" rel="noopener">Pete Florence: When Robots Improvise</a><span class="lv">요약</span></div>
+        <ul>
+          <li>로봇에서 범용 핵심 역량은 손재주다. GEN-1.5는 시연 한 번으로 새 작업을 배우는데, 10개 작업 원샷 평균 59%, 작업당 5분 데이터로 미세조정하면 83%다(회사 자체 보고, 작업이 단순함). <span class="web">[웹: Generalist 블로그, 2026-08]</span></li>
+        </ul>
+        <div class="tags"><span>로봇·자동화</span></div>
+      </div>
+
+      <div class="cross"><b>크로스 테마:</b> ① 병목 이동: 전력·DC는 모듈화로 풀리는 중이고, 2027~28년엔 <b>메모리·로직·전력장비 생산능력</b>이 제약이다(SemiAnalysis·a16z 두 곳). ② 조달 방식 변화: CDS 급증, Meta 무의결권주, 머스크 합병 논리가 같은 질문, 즉 "현금흐름만으로 capex를 감당할 수 있나"를 가리킨다. ③ 대체 칩(Trainium·TPU·Ascend)이 소프트웨어 장벽을 낮추지만 아직 CUDA급은 아니다.</div>
+    </div>
+  </article>
+
+  <p class="disc">요약·해석은 원문을 다시 쓴 것이며 원문 문장을 옮기지 않는다. 숫자는 각 출처 표기 그대로다. 투자 권유가 아니다.</p>
+</main>
+
+<footer><span class="star">✦</span> Polaris · 뉴스레터 브리핑</footer>
+
+<script>
+(function(){
+  const days=[...document.querySelectorAll('.day')];
+  // 접기: 최신 1개만 펼침
+  days.forEach((d,i)=>{
+    const m=d.querySelector('.dmeta'); if(!m) return;
+    const b=document.createElement('button'); b.className='fold';
+    const set=c=>{d.classList.toggle('collapsed',c); b.textContent=c?'펼치기':'접기';};
+    b.onclick=()=>set(!d.classList.contains('collapsed'));
+    m.appendChild(b); set(i>0);
+    if(d.id && location.hash==='#'+d.id) set(false);
+  });
+  // 태그 필터
+  const items=[...document.querySelectorAll('.it')];
+  const count={};
+  items.forEach(it=>it.querySelectorAll('.tags span').forEach(s=>{const t=s.textContent.trim();count[t]=(count[t]||0)+1;}));
+  const bar=document.getElementById('tagbar');
+  const tags=Object.keys(count).sort((a,b)=>count[b]-count[a]);
+  if(!tags.length){bar.style.display='none';return;}
+  let cur=null;
+  const mk=(label,val)=>{const b=document.createElement('button');b.textContent=label;b.onclick=()=>{cur=(cur===val?null:val);apply();};b.dataset.v=val??'';bar.appendChild(b);return b;};
+  mk('전체',null);
+  tags.forEach(t=>mk(t+' '+count[t],t));
+  function apply(){
+    [...bar.children].forEach(b=>b.classList.toggle('on',(b.dataset.v||null)===cur));
+    items.forEach(it=>{
+      const has=!cur||[...it.querySelectorAll('.tags span')].some(s=>s.textContent.trim()===cur);
+      it.classList.toggle('hide',!has);
+    });
+    if(cur) days.forEach(d=>{const any=d.querySelector('.it:not(.hide)'); d.style.display=any?'':'none'; if(any){d.classList.remove('collapsed');const f=d.querySelector('.fold');if(f)f.textContent='접기';}});
+    else days.forEach((d,i)=>{d.style.display='';});
+  }
+  apply();
+})();
+</script>
+</body>
+</html>
