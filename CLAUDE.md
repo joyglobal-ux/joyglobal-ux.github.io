@@ -12,6 +12,7 @@
 | `research/*.html` | 산업별 리서치 노트 (파일 하나 = 산업 하나) |
 | `liquidity/` | 유동성 대시보드 (data.json + refresh.py) |
 | `capex-gate/` | CAPEX 게이트 워치 (게이트 판정·팩트 로그는 수동 HTML append-only, 크레딧 레이어는 refresh.py 자동) |
+| `briefing/` | 뉴스레터 브리핑 (영어 뉴스레터 핵심 인사이트 일일 누적, append-only. 개인 맥북 예약작업 `newsletter-briefing`이 매일 07:30 추가. 포지션 연결·Gmail 링크 금지) |
 
 **여기 없는 것**: portfolio-tracker, rs-screener, semiconductor-cycle, etf-tracker는
 **각각 별도 repo**다 (GitHub Pages 프로젝트 사이트로 `/도구이름/` 경로에 붙음).
