@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-29T01:55:11+00:00",
+  "generatedAt": "2026-10-30T02:06:09+00:00",
   "indicators": [
     {
       "id": "net_liquidity",
@@ -23,13 +23,9 @@
           "url": "https://fred.stlouisfed.org/series/RRPONTSYD"
         }
       ],
-      "value": 5.801,
-      "asOf": "2026-10-21",
+      "value": 5.746,
+      "asOf": "2026-10-28",
       "history": [
-        {
-          "t": "2023-11-01",
-          "v": 5.967
-        },
         {
           "t": "2023-11-08",
           "v": 6.064
@@ -649,17 +645,21 @@
         {
           "t": "2026-10-21",
           "v": 5.801
+        },
+        {
+          "t": "2026-10-28",
+          "v": 5.746
         }
       ],
       "mom": {
         "phase": "역풍",
         "tone": "neg",
-        "d1": -0.071,
-        "dN": -0.116,
+        "d1": -0.055,
+        "dN": -0.079,
         "lookback": 13
       },
       "alert": null,
-      "momLine": "13주 Δ -0.12$T · 직전주 -0.07"
+      "momLine": "13주 Δ -0.08$T · 직전주 -0.06"
     },
     {
       "id": "m2_yoy",
@@ -834,8 +834,8 @@
       "decimals": 0,
       "source": "FRED · BAMLH0A0HYM2",
       "sourceUrl": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2",
-      "value": 318,
-      "asOf": "2026-10-27",
+      "value": 314,
+      "asOf": "2026-10-28",
       "history": [
         {
           "t": "2023-11-10",
@@ -1458,18 +1458,18 @@
           "v": 338
         },
         {
-          "t": "2026-10-27",
-          "v": 318
+          "t": "2026-10-28",
+          "v": 314
         }
       ],
       "mom": {
         "phase": "역풍 완화",
         "tone": "warn-pos",
-        "d1": -20,
-        "dN": 33,
+        "d1": -24,
+        "dN": 29,
         "lookback": 13
       },
-      "momLine": "13주 Δ +33bp · 직전주 -20"
+      "momLine": "13주 Δ +29bp · 직전주 -24"
     },
     {
       "id": "nfci",
@@ -2127,7 +2127,7 @@
     "bullets": [
       {
         "label": "Fed 순유동성",
-        "value": 5.801,
+        "value": 5.746,
         "unit": "$T",
         "phase": "역풍",
         "tone": "neg"
@@ -2141,7 +2141,7 @@
       },
       {
         "label": "하이일드 스프레드",
-        "value": 318,
+        "value": 314,
         "unit": "bp",
         "phase": "역풍 완화",
         "tone": "warn-pos"
