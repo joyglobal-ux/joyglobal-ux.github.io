@@ -37,8 +37,6 @@ VIX_WASHOUT_PEAK = 30     # 20일 최고 VIX ≥ 30 이고
 VIX_WASHOUT_DROP = 0.8    # 현재 ≤ 최고 × 0.8 → 워시아웃 재진입 허용
 TILT_STRONG, TILT_WEAK = 75, 25
 DGS10_ALERT = 4.8         # AIDC 노트의 경보선
-HYNIX_LINES = {"structure": 1_600_000, "oct_low": 1_208_000}
-CREDIT_DUE = "2026-12-07"
 
 
 def log(m): print(m, file=sys.stderr)
@@ -87,6 +85,45 @@ def us_group_of(sector, industry):
     return US_SECTOR_ETF.get(sector)
 
 TOP_GROUPS = 5; TOP_STOCKS = 2; MIN_CAP = {"us": 2e9, "kr": 3e11}; MIN_RS = 70
+HEAT_PASS = 80          # 과열도(50일선 이격의 자기 1년 백분위) ≥ 80 → 늘어난 자리, 패스
+SETUP_FRESH_DAYS = 14   # 셋업 발생일이 이 일수 안이면 '매수 후보'
+# KR 그룹 → 대표 섹터 ETF (groups-kr.json의 etf 카드에서 고름). 없는 그룹은 None
+KR_GROUP_ETF = {"반도체": ("091160", "KODEX 반도체"), "IT하드웨어·전자부품": ("139260", "TIGER 200 IT"), "2차전지·전기장비": ("305720", "KODEX 2차전지산업"),
+    "바이오·헬스케어": ("244580", "KODEX 바이오"), "인터넷·소프트웨어": ("157490", "TIGER 소프트웨어"), "기계·산업재": ("102960", "KODEX 기계장비"),
+    "건설·건자재": ("117700", "KODEX 건설"), "철강·비철금속": ("117680", "KODEX 철강"), "화학·소재": ("117460", "KODEX 에너지화학"),
+    "에너지·유틸리티": ("117460", "KODEX 에너지화학"), "자동차": ("091180", "KODEX 자동차"), "조선·운송": ("494670", "TIGER 조선TOP10"),
+    "화장품·의류·생활용품": ("228790", "TIGER 화장품"), "미디어·엔터·게임": ("228810", "TIGER 미디어컨텐츠"), "금융": ("139270", "TIGER 200 금융"),
+    "레저·교육·서비스": ("228800", "TIGER 여행레저")}
+SCAN_LABEL = {"gap_up": "갭 상승", "ma200_cross": "200일선 돌파", "base_breakout": "베이스 돌파", "high_26w": "26주 신고가",
+              "bottom_escape": "바닥 탈출", "ma30w_reclaim": "30주선 리클레임", "high_52w": "52주 신고가", "ma10m_cross": "10개월선 돌파"}
+_SETUPS_CACHE: dict[str, dict] = {}
+def setups(m: str) -> dict:
+    if m not in _SETUPS_CACHE:
+        try: _SETUPS_CACHE[m] = requests.get(f"https://joyglobal-ux.github.io/rs-screener/setups-{m}.json", timeout=120).json().get("stocks", {})
+        except Exception as e:  # noqa
+            log(f"  setups {m} fetch failed: {e}"); _SETUPS_CACHE[m] = {}
+    return _SETUPS_CACHE[m]
+
+def verdict(pick: dict, st: dict | None, as_of: str) -> dict:
+    """꼬리표: 패스(늘어남) / 매수 후보(최근 셋업) / 관찰(셋업 대기). 손절선 재료도 같이."""
+    out = {"setups": [], "earnings": None}
+    if st:
+        out["earnings"] = st.get("earnings")
+        for sid, sc in (st.get("scans") or {}).items():
+            days = (pd.Timestamp(as_of) - pd.Timestamp(sc["eventDate"])).days
+            stats = sc.get("stats", {})
+            stop = stats.get("pivot") or stats.get("sma30") or stats.get("ma200") or stats.get("prevHigh")
+            out["setups"].append({"id": sid, "label": SCAN_LABEL.get(sid, sid), "date": sc["eventDate"], "days": days, "fresh": days <= SETUP_FRESH_DAYS,
+                                  "stop": stop, "stopLabel": "피봇" if stats.get("pivot") else "30주선" if stats.get("sma30") else "200일선" if stats.get("ma200") else "직전 고점" if stats.get("prevHigh") else None})
+        out["setups"].sort(key=lambda x: x["days"])
+    fresh = [x for x in out["setups"] if x["fresh"]]
+    if (pick.get("heat") or 0) >= HEAT_PASS:
+        out["tag"] = "pass"; out["tagLabel"] = "패스 · 늘어남"
+    elif fresh:
+        out["tag"] = "buy"; out["tagLabel"] = f"매수 후보 · {fresh[0]['label']} ({fresh[0]['date'][5:]})"
+    else:
+        out["tag"] = "watch"; out["tagLabel"] = "관찰 · 셋업 대기"
+    return out
 
 def allowed_sectors(m: str, stocks: list[dict]) -> dict:
     """그룹판 3M 상대 상위 TOP_GROUPS ∩ 주봉 ▲ = 허용. 각 그룹에서 RS점수 상위 TOP_STOCKS (50일선 위·시총 컷·RS≥MIN_RS)."""
@@ -108,8 +145,12 @@ def allowed_sectors(m: str, stocks: list[dict]) -> dict:
         picks = [{"ticker": s["ticker"], "name": s["name"], "score": s.get("score"), "scoreShort": s.get("scoreShort"),
                   "r1M": s["r"].get("1M"), "r3M": s["r"].get("3M"), "dev50": s["dev"].get("dev50"), "heat": s["dev"].get("heat"),
                   "cap": s.get("marketCap"), "industry": s.get("industry") or s.get("sector")} for s in pool[:TOP_STOCKS]]
+        su = setups(m)
+        for pk in picks: pk.update(verdict(pk, su.get(pk["ticker"]), g.get("asOf") or ""))
+        etf = (c["ticker"], c["name"]) if m == "us" else KR_GROUP_ETF.get(c["name"])
         out.append({"id": c["id"], "name": c["name"], "rel3M": c["rel3M"], "r1M": c.get("r1M"), "badges": c["badges"], "changed": c.get("changed"),
-                    "n": c.get("n"), "allowed": c["badges"].get("w") == "up", "picks": picks, "poolSize": len(pool)})
+                    "n": c.get("n"), "allowed": c["badges"].get("w") == "up", "picks": picks, "poolSize": len(pool),
+                    "etf": {"ticker": etf[0], "name": etf[1]} if etf else None})
     idx = [{"name": c["name"], "badges": c["badges"]} for c in g["cards"] if c["kind"] == "index"]
     return {"asOf": g.get("asOf"), "index": idx, "top": out}
 
@@ -208,7 +249,6 @@ def main() -> None:
         {"id": "vix_washout", "label": "VIX 워시아웃 (20일 최고≥30 → −20%)", "value": f"{vlast:.1f} / 최고 {vmax20:.1f}", "on": bool(washout), "effect": "재진입 +25 허용"},
         {"id": "hy_spike", "label": f"HY OAS 4주 +{HY_4W_BP}bp", "value": f"{hy_last:.0f}bp ({hy_chg:+.0f})" if hy_chg is not None else "—", "on": guard_hy, "effect": "상한 −25"},
         {"id": "dgs10", "label": f"미 10년물 ≥ {DGS10_ALERT}%", "value": f"{float(dgs10.iloc[-1]):.2f}%", "on": bool(float(dgs10.iloc[-1]) >= DGS10_ALERT), "effect": "AIDC·전력기기 섹터 금지"},
-        {"id": "credit_due", "label": f"신용 만기 {CREDIT_DUE}", "value": f"D-{(pd.Timestamp(CREDIT_DUE) - today).days}", "on": (pd.Timestamp(CREDIT_DUE) - today).days <= 14, "effect": "레버리지 0 데드라인"},
     ]
 
     # history append (하루 1행, 같은 날이면 덮어씀)
@@ -232,9 +272,9 @@ def main() -> None:
 
     payload = {
         "generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"), "asOf": today.strftime("%Y-%m-%d"),
-        "rules": {"breadthGuard": BREADTH_GUARD, "hy4wBp": HY_4W_BP, "vixPeak": VIX_WASHOUT_PEAK, "vixDrop": VIX_WASHOUT_DROP, "tilt": [TILT_STRONG, TILT_WEAK], "dgs10Alert": DGS10_ALERT, "hynixLines": HYNIX_LINES, "creditDue": CREDIT_DUE},
+        "rules": {"breadthGuard": BREADTH_GUARD, "hy4wBp": HY_4W_BP, "vixPeak": VIX_WASHOUT_PEAK, "vixDrop": VIX_WASHOUT_DROP, "tilt": [TILT_STRONG, TILT_WEAK], "dgs10Alert": DGS10_ALERT},
         "markets": {"us": us, "kr": kr}, "tilt": tilt, "macro": macro, "orders": orders, "triggers": trig, "sectors": sectors,
-        "picks": {"topGroups": TOP_GROUPS, "topStocks": TOP_STOCKS, "minRS": MIN_RS, "minCap": MIN_CAP},
+        "picks": {"topGroups": TOP_GROUPS, "topStocks": TOP_STOCKS, "minRS": MIN_RS, "minCap": MIN_CAP, "heatPass": HEAT_PASS, "setupFreshDays": SETUP_FRESH_DAYS},
         "history": hist[-400:],
     }
     (HERE / "data.json").write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
