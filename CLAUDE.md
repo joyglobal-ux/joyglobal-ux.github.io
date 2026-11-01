@@ -141,3 +141,10 @@ output을 만들면 반드시 검증한다:
 - 기존 노트 내용 수정/삭제 (append-only).
 - 허브에 포트폴리오 원화 금액·계좌 수치 노출 (금액은 지수화 원칙 — portfolio-tracker 참조).
 - 다른 도구 repo의 내용을 여기로 복사해오는 것 (링크 카드로만 연결).
+
+## 공개 범위·개인정보 (2026-11-01 점검 후)
+
+- 모든 페이지 `<head>`에 `<meta name="robots" content="noindex, nofollow">` 유지 — 새 페이지·새 산업 파일도 복제 시 그대로 둘 것.
+- 커밋 작성자는 repo 로컬 설정의 GitHub noreply 주소를 쓴다. `git -c user.email=개인메일`로 덮어쓰지 말 것.
+- 서술 필드·노트에 **주수, 원화 금액, 계좌·대출·신용의 금액이나 일정**을 쓰지 않는다(portfolio-tracker README 규칙과 동일).
+- 다른 사이트(ironpal 등)와 이 repo를 서로 링크·언급하지 않는다.
