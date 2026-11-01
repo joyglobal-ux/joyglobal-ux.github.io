@@ -9,7 +9,7 @@
   다이얼  = 지수>200일선(+50) + 지수>50일선(+50) → 시장별 익스포저 상한 0/50/100%
   가드    = breadth(50일선 위) < 30% → −25%p · HY OAS 4주 +50bp↑ → −25%p · VIX 워시아웃(20일 최고≥30, 현재≤최고×0.8) → +25%p 재진입 허용(상한 50)
   틸트    = 12개월 상대 모멘텀(원화 기준, SPY×USDKRW vs 코스피) 강한 쪽 75 / 약한 쪽 25
-  지시    = 슬리브 US = min(capUS, tiltUS), KR = min(capKR, tiltKR), 나머지 현금
+  지시    = 추세 슬리브 US = min(capUS, tiltUS), KR = min(capKR, tiltKR), 나머지 현금
 history.json 에 일별 스냅샷을 append(트리거 since 계산·향후 가드 백테스트용).
 
 사용: python3 refresh.py   (의존성: requests, pandas, yfinance)
@@ -55,17 +55,63 @@ def fred(sid: str) -> pd.Series:
 def pct(a, b): return None if (a is None or b is None or b == 0) else round((a / b - 1) * 100, 2)
 
 
+_SCREENER_CACHE: dict[str, dict] = {}
+def screener(m: str) -> dict | None:
+    if m not in _SCREENER_CACHE:
+        try: _SCREENER_CACHE[m] = requests.get(SCREENER.format(m=m), timeout=90).json()
+        except Exception as e:  # noqa
+            log(f"  screener {m} fetch failed: {e}"); _SCREENER_CACHE[m] = None
+    return _SCREENER_CACHE[m]
+
 def breadth(m: str) -> dict | None:
-    try:
-        d = requests.get(SCREENER.format(m=m), timeout=60).json()
-    except Exception as e:  # noqa
-        log(f"  breadth {m} fetch failed: {e}"); return None
+    d = screener(m)
+    if not d: return None
     st = [s for s in d["stocks"] if s.get("dev")]
     n = len(st)
     a50 = sum(1 for s in st if (s["dev"].get("dev50") or 0) > 0)
     a200 = sum(1 for s in st if (s["dev"].get("dev200") or 0) > 0)
     rs90 = sum(1 for s in d["stocks"] if (s.get("score") or 0) >= 90)
     return {"asOf": d["asOf"], "n": n, "a50": round(100 * a50 / n, 1), "a200": round(100 * a200 / n, 1), "rs90": rs90}
+
+
+# scanner.py와 같은 US 매핑 (groups-us.json의 groupOf가 비어 있을 때만 쓰는 폴백 — scanner가 groupOf를 내보내면 미사용)
+US_INDUSTRY_ETF = [("Semiconductor","SMH"),("Computer Software","IGV"),("EDP Services","IGV"),("Biotechnology","IBB"),("Homebuilding","ITB"),
+    ("Precious Metals","XME"),("Metal Mining","XME"),("Steel","XME"),("Aluminum","XME"),("Coal","XME"),("Oil & Gas Production","XOP"),
+    ("Aerospace","ITA"),("Military","ITA"),("Commercial Banks","KRE"),("Savings Institutions","KRE"),("Retail","XRT"),("Stores","XRT"),
+    ("Engineering & Construction","PAVE"),("Building Materials","PAVE"),("Air Freight","IYT"),("Trucking","IYT"),("Railroads","IYT")]
+US_SECTOR_ETF = {"Technology":"XLK","Health Care":"XLV","Finance":"XLF","Consumer Discretionary":"XLY","Industrials":"XLI","Energy":"XLE",
+    "Basic Materials":"XLB","Consumer Staples":"XLP","Utilities":"XLU","Real Estate":"XLRE","Telecommunications":"XLC"}
+def us_group_of(sector, industry):
+    for sub, etf in US_INDUSTRY_ETF:
+        if sub.lower() in (industry or "").lower(): return etf
+    return US_SECTOR_ETF.get(sector)
+
+TOP_GROUPS = 5; TOP_STOCKS = 2; MIN_CAP = {"us": 2e9, "kr": 3e11}; MIN_RS = 70
+
+def allowed_sectors(m: str, stocks: list[dict]) -> dict:
+    """그룹판 3M 상대 상위 TOP_GROUPS ∩ 주봉 ▲ = 허용. 각 그룹에서 RS점수 상위 TOP_STOCKS (50일선 위·시총 컷·RS≥MIN_RS)."""
+    try:
+        g = requests.get(f"https://joyglobal-ux.github.io/rs-screener/groups-{m}.json", timeout=60).json()
+    except Exception as e:  # noqa
+        log(f"  groups {m} fetch failed: {e}"); return {"asOf": None, "index": [], "top": []}
+    gof = g.get("groupOf") or {}
+    if not gof and m == "us":
+        gof = {s["ticker"]: us_group_of(s.get("sector"), s.get("industry")) for s in stocks}
+    cards = [c for c in g["cards"] if c["kind"] == "group" and c.get("rel3M") is not None]   # group = 구성종목이 있는 카드 (글로벌 ETF·국내 섹터 ETF 중복 제외)
+    cards.sort(key=lambda c: -c["rel3M"])
+    out = []
+    for c in cards[:TOP_GROUPS]:
+        members = [s for s in stocks if gof.get(s["ticker"]) == c["id"]]
+        pool = [s for s in members if (s.get("score") or 0) >= MIN_RS and (s.get("marketCap") or 0) >= MIN_CAP[m]
+                and s.get("dev") and (s["dev"].get("dev50") or 0) > 0]
+        pool.sort(key=lambda s: (-(s.get("score") or 0), -(s.get("scoreShort") or 0)))
+        picks = [{"ticker": s["ticker"], "name": s["name"], "score": s.get("score"), "scoreShort": s.get("scoreShort"),
+                  "r1M": s["r"].get("1M"), "r3M": s["r"].get("3M"), "dev50": s["dev"].get("dev50"), "heat": s["dev"].get("heat"),
+                  "cap": s.get("marketCap"), "industry": s.get("industry") or s.get("sector")} for s in pool[:TOP_STOCKS]]
+        out.append({"id": c["id"], "name": c["name"], "rel3M": c["rel3M"], "r1M": c.get("r1M"), "badges": c["badges"], "changed": c.get("changed"),
+                    "n": c.get("n"), "allowed": c["badges"].get("w") == "up", "picks": picks, "poolSize": len(pool)})
+    idx = [{"name": c["name"], "badges": c["badges"]} for c in g["cards"] if c["kind"] == "index"]
+    return {"asOf": g.get("asOf"), "index": idx, "top": out}
 
 
 def main() -> None:
@@ -98,6 +144,9 @@ def main() -> None:
         }
 
     us = market("SPY", "S&P 500 (SPY)", "us"); kr = market("^KS11", "코스피", "kr")
+    sectors = {m: allowed_sectors(m, (screener(m) or {}).get("stocks", [])) for m in ("us", "kr")}
+    for m in ("us", "kr"):
+        log(f"  {m} 허용 섹터: " + ", ".join(f"{t['name']}({'▲' if t['allowed'] else '✗'}:{'/'.join(p['ticker'] for p in t['picks']) or '-'})" for t in sectors[m]["top"]))
 
     # 매크로
     vix = px["^VIX"].dropna(); vmax20 = float(vix.iloc[-20:].max()); vlast = float(vix.iloc[-1])
@@ -184,7 +233,8 @@ def main() -> None:
     payload = {
         "generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"), "asOf": today.strftime("%Y-%m-%d"),
         "rules": {"breadthGuard": BREADTH_GUARD, "hy4wBp": HY_4W_BP, "vixPeak": VIX_WASHOUT_PEAK, "vixDrop": VIX_WASHOUT_DROP, "tilt": [TILT_STRONG, TILT_WEAK], "dgs10Alert": DGS10_ALERT, "hynixLines": HYNIX_LINES, "creditDue": CREDIT_DUE},
-        "markets": {"us": us, "kr": kr}, "tilt": tilt, "macro": macro, "orders": orders, "triggers": trig,
+        "markets": {"us": us, "kr": kr}, "tilt": tilt, "macro": macro, "orders": orders, "triggers": trig, "sectors": sectors,
+        "picks": {"topGroups": TOP_GROUPS, "topStocks": TOP_STOCKS, "minRS": MIN_RS, "minCap": MIN_CAP},
         "history": hist[-400:],
     }
     (HERE / "data.json").write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")

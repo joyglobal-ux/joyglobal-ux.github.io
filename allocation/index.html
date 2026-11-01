@@ -26,7 +26,7 @@
   h2 .n{font-size:11px;color:var(--accent);border:1px solid var(--line);border-radius:6px;padding:1px 7px}
   h2 .hint{font-size:11.5px;color:var(--faint);font-weight:500;margin-left:auto}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px} .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px} .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px} .grid2>.card{min-width:0} .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px} .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
   @media (max-width:820px){.grid2,.grid3,.grid4{grid-template-columns:1fr}}
   /* 지시서 */
   .order{background:linear-gradient(180deg,#171b27,#12151f);border:1px solid var(--accent-dim);border-radius:16px;padding:18px 20px}
@@ -62,6 +62,8 @@
   .note{background:#121a2a;border:1px solid #1f3050;border-left:4px solid var(--accent);border-radius:10px;padding:11px 14px;font-size:12.5px;margin:10px 0}
   .fix{background:#2a1515;border:1px solid #5a2a2a;border-left:4px solid var(--stop);border-radius:10px;padding:11px 14px;font-size:12.5px;margin:10px 0}
   .trg td.state{white-space:nowrap} .trg .changed td{background:rgba(255,214,107,.08)}
+  #sectors td:nth-child(1),#sectors td:nth-child(2),#sectors td:nth-child(3),#sectors th{white-space:nowrap}
+  #sectors .bd{margin-right:4px}
   .sec{display:inline-flex;align-items:center;gap:6px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:5px 9px;font-size:12.5px;margin:3px 4px 3px 0}
   .sec b{color:var(--txt)} .sec .bd{font-size:10.5px;font-weight:800} .bd.up{color:var(--stop)} .bd.down{color:#60a5fa} .bd.mixed{color:var(--faint)}
   .entry{border:1px solid var(--line);border-radius:12px;padding:12px 15px;margin:10px 0;background:var(--panel)}
@@ -80,6 +82,10 @@
   <!-- 1 지시서 -->
   <div class="order" id="order"></div>
 
+  <!-- 1.5 오늘의 구성 -->
+  <h2><span class="n">01</span>오늘의 구성 — 그래서 포트를 어떻게 짜라는 것인가<span class="hint">코어 상한을 고르면 나머지가 계산된다 · 저장됨(이 브라우저)</span></h2>
+  <div class="card" id="plan">로딩…</div>
+
   <!-- 2 갭 -->
   <h2><span class="n">02</span>현재 포트 vs 지시 — 갭<span class="hint">portfolio-tracker positions.json · 코어 슬리브(하이닉스)는 따로</span></h2>
   <div class="card" id="gapBox">포트 데이터 로딩…</div>
@@ -96,7 +102,7 @@
   </div>
 
   <!-- 5 허용 섹터 -->
-  <h2><span class="n">05</span>허용 섹터 — 그룹판 3개월 상대 상위 5 ∩ 주봉 ▲<span class="hint">종목 후보는 <a href="/rs-screener/#setups">셋업 탭</a>에서 이 섹터 ∩ RS≥70</span></h2>
+  <h2><span class="n">05</span>허용 섹터와 상위 종목 — 그룹판 3개월 상대 상위 5 ∩ 주봉 ▲<span class="hint">종목 = 그룹 안 RS점수 상위 2 (50일선 위 · RS≥70 · 시총 컷) · 타이밍은 <a href="/rs-screener/#setups">셋업 탭</a></span></h2>
   <div class="grid2" id="sectors"></div>
 
   <!-- 6 트리거 -->
@@ -119,7 +125,7 @@
 
     <div class="entry">
       <div class="edate">2026-11-01</div>
-      <div class="etitle">배분판 개설 — 첫 지시: US 상한 50(경계) · KR 상한 0(방어) · 순응 슬리브 = US 50 / 현금 50</div>
+      <div class="etitle">배분판 개설 — 첫 지시: US 상한 50(경계) · KR 상한 0(방어) · 추세 슬리브 = US 50 / 현금 50</div>
       <ul>
         <li>코스피 50·150·200일선 전부 아래(−12/−18/−14%), 국내 종목 <b>50일선 위 18.5%</b> → KR 다이얼 0 + breadth 가드. SPY는 200일선 위·50일선 아래 → 50.</li>
         <li>12M 상대(원화)는 아직 KR 우위(+38%p)지만 3M·6M은 US 우위 — <b>12M 역전이 다음 틸트 트리거</b>.</li>
@@ -154,7 +160,7 @@ function orders(D){
       <span class="chip ${regimeCls(o.capUS)}">US ${o.regimeUS} · 상한 ${o.capUS}%</span>
       <span class="chip ${regimeCls(o.capKR)}">KR ${o.regimeKR} · 상한 ${o.capKR}%</span>
       <span class="chip">틸트 ${D.tilt.winner12M} 우위</span></div>
-    <div class="big">순응 슬리브: US <span style="color:#9fb0ff">${o.sleeveUS}%</span> · KR <span style="color:#ff9b91">${o.sleeveKR}%</span> · 현금 <span style="color:var(--muted)">${o.cash}%</span></div>
+    <div class="big">추세 슬리브: US <span style="color:#9fb0ff">${o.sleeveUS}%</span> · KR <span style="color:#ff9b91">${o.sleeveKR}%</span> · 현금 <span style="color:var(--muted)">${o.cash}%</span></div>
     <div class="abar">${o.sleeveUS?`<div class="us" style="width:${o.sleeveUS}%">US ${o.sleeveUS}</div>`:""}${o.sleeveKR?`<div class="kr" style="width:${o.sleeveKR}%">KR ${o.sleeveKR}</div>`:""}${o.cash?`<div class="cash" style="width:${o.cash}%">현금 ${o.cash}</div>`:""}</div>
     <div class="why">${why.map(w=>"· "+w).join("<br>")}</div>
     <div class="why" style="margin-top:8px">합산 익스포저 상한 <b>${CONFIG.totalCap}%</b>(레버리지 0). 코어 슬리브(하이닉스)는 이 지시 밖 — 상한은 <b>${CONFIG.coreCap==null?"미정(Jay)":CONFIG.coreCap+"%"}</b>.</div>`;
@@ -229,19 +235,19 @@ function breadthHist(D){
   $("bhNote").textContent = `${h.length}일 누적 · 파랑 US · 빨강 KR · 점선 = 가드 ${D.rules.breadthGuard}%. 최근: US ${h.at(-1)?.us.a50}% · KR ${h.at(-1)?.kr.a50}%`;
 }
 
-async function sectors(D){
-  const box=$("sectors");
+function sectors(D){
+  const box=$("sectors"); box.innerHTML="";
   for(const m of ["us","kr"]){
-    try{
-      const g=await (await fetch(`${ORIGIN}/rs-screener/groups-${m}.json?v=${D.asOf}`)).json();
-      const cards=g.cards.filter(c=>c.kind!=="index"&&c.rel3M!=null).sort((a,b)=>b.rel3M-a.rel3M);
-      const top=cards.slice(0,5); const allowed=top.filter(c=>c.badges.w==="up");
-      const idx=g.cards.filter(c=>c.kind==="index");
-      box.insertAdjacentHTML("beforeend", `<div class="card"><div class="k">${m.toUpperCase()} · 기준 ${g.asOf} · 지수 배지 ${idx.map(c=>`${c.name} 일${bd(c.badges.d)} 주${bd(c.badges.w)} 월${bd(c.badges.m)}`).join(" · ")}</div>
-        <div style="margin:8px 0 4px"><b>허용 ${allowed.length}개</b> (상위 5 중 주봉 ▲)</div>
-        ${top.map(c=>`<span class="sec"><b>${c.name}</b> <span class="${cls(c.rel3M)}">${f1(c.rel3M)}p</span> <span class="bd ${c.badges.d}">일${bd(c.badges.d)}</span><span class="bd ${c.badges.w}">주${bd(c.badges.w)}</span><span class="bd ${c.badges.m}">월${bd(c.badges.m)}</span>${c.badges.w!=="up"?' <span class="small">(제외)</span>':''}</span>`).join("")}
-        <div class="small" style="margin-top:8px">${D.markets[m].cap===0?'<b class="neg">이 시장은 상한 0 — 허용 섹터가 있어도 신규 진입 없음.</b>':`후보 = <a href="/rs-screener/#setups">셋업 탭</a>에서 이 섹터 ∩ RS≥70. 하단 숫자가 손절선.`}</div></div>`);
-    }catch(e){ box.insertAdjacentHTML("beforeend", `<div class="card small">${m.toUpperCase()} 그룹판 로드 실패 (${e.message})</div>`); }
+    const S=D.sectors[m]; if(!S||!S.top.length){ box.insertAdjacentHTML("beforeend",`<div class="card small">${m.toUpperCase()} 그룹판 없음</div>`); continue; }
+    const allowed=S.top.filter(t=>t.allowed);
+    box.insertAdjacentHTML("beforeend", `<div class="card"><div class="k">${m.toUpperCase()} · 기준 ${S.asOf} · 지수 ${S.index.map(c=>`${c.name} 일${bd(c.badges.d)} 주${bd(c.badges.w)} 월${bd(c.badges.m)}`).join(" · ")}</div>
+      <div style="margin:8px 0 6px"><b>허용 ${allowed.length}/${S.top.length}</b> ${D.markets[m].cap===0?'<span class="chip stop">이 시장 상한 0 — 신규 진입 없음</span>':""}</div>
+      <div class="tblwrap"><table><tr><th>그룹</th><th class="r">3M 상대</th><th>배지</th><th>상위 종목 (RS점수 · 단기RS · 1M/3M · 50일선 이격 · 과열도)</th></tr>
+      ${S.top.map(t=>`<tr class="${t.allowed?"":""}" style="${t.allowed?"":"opacity:.55"}"><td><b>${t.name}</b> <span class="small">${t.n??""}</span></td><td class="r ${cls(t.rel3M)}">${f1(t.rel3M)}p</td>
+        <td><span class="bd ${t.badges.d}">일${bd(t.badges.d)}</span> <span class="bd ${t.badges.w}">주${bd(t.badges.w)}</span> <span class="bd ${t.badges.m}">월${bd(t.badges.m)}</span>${t.allowed?"":' <span class="small">제외</span>'}</td>
+        <td>${t.picks.length?t.picks.map(p=>`<div><b>${p.ticker.replace(/\.(KS|KQ)$/,"")}</b> ${p.name} <span class="small">· RS ${p.score} · 단기 ${p.scoreShort??"—"} · ${f1(p.r1M)}/${f1(p.r3M)} · 50일선 ${f1(p.dev50)} · 과열 <b class="${(p.heat??0)>=80?"neg":""}">${p.heat??"—"}</b>${(p.heat??0)>=80?' <span class="chip stop" style="padding:0 7px">늘어남 · 패스</span>':''}</span></div>`).join(""):`<span class="small">조건 충족 종목 없음 (후보 풀 ${t.poolSize})</span>`}</td></tr>`).join("")}
+      </table></div>
+      <div class="small" style="margin-top:8px">종목은 "어디를 볼지"다. 진입 시점은 셋업 탭(베이스 돌파·갭일 저가)과 토요일 루틴이 정한다. 과열도 ≥ 80이면 이번 주 패스.</div></div>`);
   }
 }
 const bd = b => b==="up"?"▲":b==="down"?"▼":"–";
@@ -255,17 +261,50 @@ async function gap(D){
     for(const h of p.holdings){ const w=+h.weight||0; if(h.credit) credit+=w; if(CONFIG.coreMatch(h.name)) core+=w; else if(isKR(h)) krS+=w; else usS+=w; }
     const cash=+p.cashWeight||0, total=core+krS+usS; const o=D.orders;
     const row=(lab,act,order,note)=>{const d=act-order; return `<div class="hd">${lab}</div><div>${act.toFixed(1)}%</div><div>${order==null?"—":order+"%"}</div><div class="${order==null?"":d>0.5?"over":"ok"}">${order==null?note:(d>0.5?`초과 +${d.toFixed(1)}p`:"상한 안")}</div>`;};
+    renderPlan(D, p, meta, {core, krS, usS, cash, credit, total});
     box.innerHTML = `<div class="gap">
       <div class="h">슬리브</div><div class="h">현재 (${p.asOf})</div><div class="h">지시·상한</div><div class="h">갭</div>
       ${row("코어 · 하이닉스", core, CONFIG.coreCap, "상한 미정 — Jay")}
-      ${row("순응 · KR", krS, o.sleeveKR)}
-      ${row("순응 · US", usS, o.sleeveUS)}
+      ${row("추세 · KR", krS, o.sleeveKR)}
+      ${row("추세 · US", usS, o.sleeveUS)}
       ${row("합산 익스포저", total, CONFIG.totalCap)}
-      <div class="hd">현금</div><div>${cash.toFixed(1)}%</div><div>${o.cash}% (순응 기준)</div><div class="${cash<o.cash-0.5?"over":"ok"}">${cash<o.cash-0.5?`부족 −${(o.cash-cash).toFixed(1)}p`:"충분"}</div>
+      <div class="hd">현금</div><div>${cash.toFixed(1)}%</div><div>${o.cash}% (추세 기준)</div><div class="${cash<o.cash-0.5?"over":"ok"}">${cash<o.cash-0.5?`부족 −${(o.cash-cash).toFixed(1)}p`:"충분"}</div>
     </div>
     <div class="note" style="margin-top:12px">${credit>0?`신용 포지션 ${credit.toFixed(1)}% 잔존 · `:""}${meta.operation?`트래커 운영 메모: ${meta.operation}`:""}${meta.nextGate?` · 다음 게이트: ${meta.nextGate}`:""}</div>
-    <div class="small">갭은 '순응 슬리브'에 대한 지시와 비교한 것. 코어는 네 룰(구조선 ${D.rules.hynixLines.structure.toLocaleString()} · 10/19 저점 ${D.rules.hynixLines.oct_low.toLocaleString()} 종가 이탈)로 따로 관리. 합산 상한 ${CONFIG.totalCap}%는 둘을 더해 본다.</div>`;
+    <div class="small">갭은 '추세 슬리브'에 대한 지시와 비교한 것. 코어는 네 룰(구조선 ${D.rules.hynixLines.structure.toLocaleString()} · 10/19 저점 ${D.rules.hynixLines.oct_low.toLocaleString()} 종가 이탈)로 따로 관리. 합산 상한 ${CONFIG.totalCap}%는 둘을 더해 본다.</div>`;
   }catch(e){ box.innerHTML=`<span class="small">포트 데이터 로드 실패 (${e.message})</span>`; }
+}
+
+function renderPlan(D, p, meta, cur){
+  const o=D.orders; const key="alloc-coreCap";
+  let coreCap=localStorage.getItem(key); coreCap = coreCap==null||coreCap==="" ? null : +coreCap;
+  const opts=[["","현재 유지 (코어 상한 미정)"],["70","70%"],["60","60%"],["50","50%"],["40","40%"],["30","30%"],["0","0% (코어 없음)"]];
+  const coreT = coreCap==null ? Math.min(cur.core, CONFIG.totalCap) : Math.min(coreCap, cur.core>0?cur.core:coreCap, CONFIG.totalCap);
+  const budget = Math.max(0, CONFIG.totalCap - coreT);                       // 추세 슬리브 예산
+  const tUS = budget*o.sleeveUS/100, tKR = budget*o.sleeveKR/100, tCash = budget*o.cash/100;
+  // 추세 US 종목: 허용 섹터의 상위 종목을 순서대로 최대 4개, 동일비중
+  const pickFrom = m => { const all=(D.sectors[m]?.top||[]).filter(t=>t.allowed).flatMap(t=>t.picks.map(x=>({...x,group:t.name}))); const cool=all.filter(x=>(x.heat??0)<80); return (cool.length>=2?cool:all).slice(0,4); };   // 과열도 ≥ 80은 목표 포트에서 제외 (늘어난 고무줄)
+  const picksUS = pickFrom("us"), picksKR = pickFrom("kr");
+  const each=(tot,n)=>n?tot/n:0;
+  const rows=[];
+  rows.push(["코어 · 하이닉스", cur.core, coreT, coreT<cur.core-0.5?`축소 −${(cur.core-coreT).toFixed(1)}p`:"유지", coreCap==null?"상한 미정 — 아래에서 고른다":""]);
+  const krActs = p.holdings.filter(h=>!CONFIG.coreMatch(h.name)&&(/^\d{6}$/.test(String(h.ticker||''))));
+  rows.push(["추세 · KR", cur.krS, tKR, tKR<cur.krS-0.5?`−${(cur.krS-tKR).toFixed(1)}p`:tKR>cur.krS+0.5?`+${(tKR-cur.krS).toFixed(1)}p`:"유지", tKR===0&&krActs.length?`전부 정리: ${krActs.map(h=>h.name+" "+(+h.weight).toFixed(1)+"%").join(", ")}`:(picksKR.length?picksKR.map(x=>`${x.ticker.replace(/\.(KS|KQ)$/,"")} ${each(tKR,picksKR.length).toFixed(1)}%`).join(" · "):"")]);
+  rows.push(["추세 · US", cur.usS, tUS, tUS>cur.usS+0.5?`+${(tUS-cur.usS).toFixed(1)}p`:tUS<cur.usS-0.5?`−${(cur.usS-tUS).toFixed(1)}p`:"유지", picksUS.length?picksUS.map(x=>`${x.ticker} ${each(tUS,picksUS.length).toFixed(1)}% (${x.group})`).join(" · "):"허용 섹터에 조건 충족 종목 없음 → 현금"]);
+  if(cur.credit>0) rows.push(["신용 · 대출", cur.credit, 0, `−${cur.credit.toFixed(1)}p`, "레버리지 0 — 만기 전 전액"]);
+  rows.push(["현금", cur.cash, tCash + (CONFIG.totalCap - coreT - budget), tCash>cur.cash+0.5?`+${(tCash-cur.cash).toFixed(1)}p`:"유지", ""]);
+  $("plan").innerHTML = `
+    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px">
+      <label class="small">코어 상한 <select id="coreCap" style="background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:7px;padding:4px 8px">${opts.map(([v,l])=>`<option value="${v}" ${(coreCap==null?"":String(coreCap))===v?"selected":""}>${l}</option>`).join("")}</select></label>
+      <span class="chip">추세 슬리브 예산 ${budget.toFixed(1)}% = 100 − 코어 ${coreT.toFixed(1)}</span>
+      <span class="chip ${regimeCls(o.capUS)}">US ${o.sleeveUS}% of 예산</span><span class="chip ${regimeCls(o.capKR)}">KR ${o.sleeveKR}% of 예산</span><span class="chip">현금 ${o.cash}% of 예산</span>
+    </div>
+    <div class="abar"><div class="cash" style="width:${coreT}%;background:#5b3a3a;color:#fff">코어 ${coreT.toFixed(0)}</div>${tUS?`<div class="us" style="width:${tUS}%">US ${tUS.toFixed(0)}</div>`:""}${tKR?`<div class="kr" style="width:${tKR}%">KR ${tKR.toFixed(0)}</div>`:""}<div class="cash" style="width:${Math.max(0,100-coreT-tUS-tKR)}%">현금 ${(100-coreT-tUS-tKR).toFixed(0)}</div></div>
+    <div class="tblwrap"><table><tr><th>슬리브</th><th class="r">현재</th><th class="r">목표</th><th>액션</th><th>구성</th></tr>
+      ${rows.map(r=>`<tr><td><b>${r[0]}</b></td><td class="r">${r[1].toFixed(1)}%</td><td class="r"><b>${r[2].toFixed(1)}%</b></td><td class="${/−|축소|정리/.test(r[3])?"neg":/\+/.test(r[3])?"pos":""}"><b>${r[3]}</b></td><td class="small">${r[4]}</td></tr>`).join("")}
+    </table></div>
+    <div class="small" style="margin-top:8px">읽는 법: 코어는 네 룰(구조선·10/19 저점)로, 추세 슬리브는 이 판의 룰로. 종목은 동일비중·최대 4개(집중). US 종목은 허용 섹터 순서대로 뽑은 RS 상위 — <b>진입은 셋업 탭의 베이스 돌파/갭일 저가에서</b>, 손절 −8%·50일선 트레일. 합산 ${CONFIG.totalCap}%·레버리지 0.</div>`;
+  $("coreCap").onchange=e=>{ localStorage.setItem(key, e.target.value); renderPlan(D,p,meta,cur); };
 }
 
 async function backtest(D){
@@ -277,7 +316,7 @@ async function backtest(D){
       + tbl("미국 vs 한국 배분 · 원화 2004~ (월말)", B.alloc_krw_2004, "12M 상대 모멘텀 틸트가 50/50보다 수익↑ 낙폭↓");
   }catch(e){ $("btBox").innerHTML=`<div class="card small">backtest.json 로드 실패</div>`; }
   const r=D.rules;
-  $("ruleText").innerHTML = `<b>룰 v1.</b> 다이얼 = 지수>200일선(+50) + >50일선(+50). 가드 = breadth(50일선 위) &lt; ${r.breadthGuard}% → −25 · HY OAS 4주 +${r.hy4wBp}bp → −25 · VIX 20일 최고 ≥ ${r.vixPeak} 후 ×${r.vixDrop} 이하 → +25(상한 50, 워시아웃 재진입). 틸트 = 12M 상대(원화) 강한 쪽 ${r.tilt[0]} / ${r.tilt[1]}. <b>가드 셋은 미검증</b>(breadth 이력이 없어서) — 07의 이력이 쌓이면 백테스트로 확정하거나 버린다. 상수는 refresh.py 상단에만 있다.`;
+  $("ruleText").innerHTML = `<b>룰 v1.</b> 다이얼 = 지수>200일선(+50) + >50일선(+50). 가드 = breadth(50일선 위) &lt; ${r.breadthGuard}% → −25 · HY OAS 4주 +${r.hy4wBp}bp → −25 · VIX 20일 최고 ≥ ${r.vixPeak} 후 ×${r.vixDrop} 이하 → +25(상한 50, 워시아웃 재진입). 틸트 = 12M 상대(원화) 강한 쪽 ${r.tilt[0]} / ${r.tilt[1]}. 다이얼을 0/50/100 세 단계로 둔 이유: 150일선·200일선 기울기를 더한 4단(0/25/50/75/100)은 SPY에서 MDD −33→−28로 조금 낫고 코스피에선 −34→−38로 오히려 나빠 유의한 차이가 없었다(backtest.json 보조 실험). 세밀한 단계는 다이얼이 아니라 <b>가드(±25)와 틸트(75/25)</b>가 만든다. <b>가드 셋은 미검증</b>(breadth 이력이 없어서) — 07의 이력이 쌓이면 백테스트로 확정하거나 버린다. 상수는 refresh.py 상단에만 있다.`;
 }
 
 (function boot(){
