@@ -401,6 +401,68 @@
 
 </main>
 <script>
+/* ── Polaris 금고 (portfolio-tracker/data/vault.json) ─────────────────────────
+   AES-256-GCM · PBKDF2-SHA256 600,000회 — scripts/vault.py와 같은 파라미터.
+   비밀번호는 저장하지 않는다. 유도된 키만 이 기기 localStorage에 남긴다(같은 주소의
+   포트폴리오·허브·배분판이 공유). '이 기기에서 잠그기'를 누르면 지워진다.
+   이 블록은 portfolio-tracker/index.html · 허브 index.html · allocation/index.html에
+   똑같이 들어 있다 — 고칠 땐 셋 다. */
+const PolarisVault = (() => {
+  const URL_ = "/portfolio-tracker/data/vault.json", LS = "polaris-vault-key";
+  const ub = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  const bb = a => btoa(String.fromCharCode(...new Uint8Array(a)));
+  let cache = null;
+  async function fetchVault() { return (await fetch(URL_ + "?t=" + Date.now(), { cache: "no-store" })).json(); }
+  async function derive(pw, v) {
+    const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveBits"]);
+    return crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: ub(v.salt), iterations: v.iter }, base, 256);
+  }
+  async function decrypt(v, raw) {
+    const key = await crypto.subtle.importKey("raw", raw, "AES-GCM", false, ["decrypt"]);
+    const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: ub(v.iv) }, key, ub(v.ct));
+    return JSON.parse(new TextDecoder().decode(pt));
+  }
+  function saved(v) { try { const s = JSON.parse(localStorage.getItem(LS) || "null"); return s && s.salt === v.salt ? ub(s.key) : null; } catch (e) { return null; } }
+  function ask(v, msg) {
+    return new Promise(resolve => {
+      const bg = document.createElement("div");
+      bg.style.cssText = "position:fixed;inset:0;z-index:9999;background:rgba(5,8,14,.86);display:flex;align-items:center;justify-content:center;padding:16px;font-family:inherit";
+      bg.innerHTML = `<form style="width:min(360px,100%);background:#161a24;border:1px solid #2a3140;border-radius:14px;padding:20px;color:#e8eaf0">
+        <div style="font-weight:800;font-size:15px;margin-bottom:6px">🔒 포트폴리오 데이터 잠김</div>
+        <div style="font-size:12.5px;color:#9aa3b2;margin-bottom:12px">${msg || "비밀번호를 넣으면 이 기기에서 열린다. 비밀번호는 저장되지 않는다."}</div>
+        <input type="password" autocomplete="current-password" style="width:100%;box-sizing:border-box;padding:9px 11px;border-radius:9px;border:1px solid #2a3140;background:#0f1117;color:#e8eaf0;font-size:14px">
+        <label style="display:flex;gap:6px;align-items:center;font-size:12px;color:#9aa3b2;margin:10px 0 14px"><input type="checkbox" checked> 이 기기에서 기억</label>
+        <div style="display:flex;gap:8px;justify-content:flex-end"><button type="button" data-x style="background:none;border:1px solid #2a3140;color:#9aa3b2;border-radius:8px;padding:7px 12px">취소</button>
+        <button style="background:#5b6bd6;border:none;color:#fff;border-radius:8px;padding:7px 14px;font-weight:700">열기</button></div>
+        <div data-e style="font-size:12px;color:#f87171;margin-top:8px;min-height:1em"></div></form>`;
+      document.body.appendChild(bg);
+      const f = bg.querySelector("form"), inp = f.querySelector("input[type=password]"), rem = f.querySelector("input[type=checkbox]"), err = f.querySelector("[data-e]");
+      inp.focus();
+      f.querySelector("[data-x]").onclick = () => { bg.remove(); resolve(null); };
+      f.onsubmit = async e => {
+        e.preventDefault(); err.textContent = "확인 중…";
+        try {
+          const raw = await derive(inp.value, v); const data = await decrypt(v, raw);
+          if (rem.checked) localStorage.setItem(LS, JSON.stringify({ salt: v.salt, key: bb(raw) }));
+          bg.remove(); resolve(data);
+        } catch (x) { err.textContent = "비밀번호가 맞지 않는다."; inp.select(); }
+      };
+    });
+  }
+  /* open({prompt:true}) → 데이터 객체 {meta, positions, equity, journal, log, watchlist} 또는 null */
+  async function open(opts = {}) {
+    if (cache) return cache;
+    const v = await fetchVault();
+    const k = saved(v);
+    if (k) { try { return (cache = await decrypt(v, k)); } catch (e) { localStorage.removeItem(LS); } }
+    if (!opts.prompt) return null;
+    return (cache = await ask(v, opts.msg));
+  }
+  function lock() { localStorage.removeItem(LS); cache = null; }
+  return { open, lock };
+})();
+
+
 /* ═══════════════════════════════════════════════════════════════
    Polaris 통합 레이어 — 랜딩이 "문 목록"이 아니라 "상태판"이 되도록.
    ① 도구 카드에 각 도구의 현재 판정을 실시간 주입 (same-origin fetch)
@@ -477,11 +539,9 @@
     if (!card) return;
 
     if (t.kind === 'portfolio') {
-      Promise.all([
-        getJSON('/portfolio-tracker/data/meta.json'),
-        getJSON('/portfolio-tracker/data/positions.json').catch(function () { return null; })
-      ]).then(function (r) {
-        var m = r[0], pos = r[1];
+      PolarisVault.open({ prompt: false }).then(function (V) {
+        if (!V) { paint(card, { regime: '🔒 잠김', sub: '열면 이 기기에서 기억된다', tone: 'warn', asOf: null, age: 0, staleDays: t.staleDays }); return; }
+        var m = V.meta, pos = V.positions;
         var asOf = (pos && pos.asOf) || m.lastUpdated;
         /* 원화 금액은 노출하지 않는다 — 비중과 기조만 */
         var regime = pos
