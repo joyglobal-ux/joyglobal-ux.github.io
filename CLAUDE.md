@@ -113,6 +113,20 @@ index.html 카드에는 현재 파일을 걸고, 파일 상단에 이전 연도 
   단 실제 CDS 실측치를 새로 입수하면 `refresh.py`의 `CDS_ANCHOR`·`ANCHOR_DATE`를 갱신할 것
   (크레딧 프록시의 캘리브레이션 앵커. 실제 CDS는 무료 소스가 없어 변동성 프록시로 대체 중).
 
+## 앱(PWA) 껍데기 (2026-11-02)
+
+Polaris는 폰 홈 화면에 설치해 쓰는 PWA다. 루트(이 repo)가 같은 오리진의 프로젝트 사이트(rs-screener·semiconductor-cycle·portfolio-tracker·etf-tracker)까지 함께 담당한다.
+
+- `manifest.webmanifest` + `icons/`(북극성 모티프 PNG, 재생성은 `python3 _pwa/mkicons.py icons`) + `sw.js`(scope `/`).
+- **서비스워커 전략**: HTML = network-first(3.5초) → 오프라인/5xx면 캐시 · 데이터(*.json, data*.js, series-*.js) = network-first → 캐시(쿼리 떼고 경로당 1개) · 큰 파일(setups·events·series·data-us/kr)은 최근 8개만 · 아이콘/이미지/Chart.js = stale-while-revalidate.
+  캐시 구조나 전략을 바꾸면 `sw.js`의 `VERSION`을 올린다(이전 캐시 자동 삭제).
+- **모든 페이지 `<head>`에 공용 스니펫**(`<!-- polaris-app:start -->` ~ `end`): manifest·theme-color·apple 메타·서비스워커 등록·standalone 전용 하단 탭바(홈/포트폴리오/배분판/종목 리스트/리서치).
+  원본은 `_pwa/snippet.html` 하나. 고칠 땐 원본만 고치고 `python3 _pwa/inject.py <페이지들>`로 일괄 반영(블록 교체 + viewport-fit=cover).
+  **새 페이지·새 산업 파일**은 복제하면 스니펫이 따라오니 그대로 둔다. 다른 repo 페이지도 같은 명령으로(etf-tracker는 생성기 `kosdaq_etf_tracker.py`에 넣으면 f-string 이스케이프 자동).
+- 폰 폭 CSS는 각 페이지 미디어쿼리(≤640~820px) 안에만 둔다 — 데스크톱 레이아웃은 건드리지 않는다.
+- 로컬 검증: `.claude/launch.json`의 **`polaris-all`**(:8100, 루트+프로젝트 사이트를 한 오리진에 마운트)에서 `?pwa=1`을 붙이면 브라우저에서도 탭바가 보인다(세션 동안 유지).
+  `.claude/polaris-all.OFFLINE` 파일을 만들면 서버가 전부 503 → 오프라인 캐시 확인. 금고 풀린 화면은 `TEST_VAULT=<테스트 비밀번호로 만든 임시 vault.json>` env로 대체해 확인(실제 비밀번호 사용 금지, 확인 후 임시 파일 삭제).
+
 ## 스타일 규칙
 
 - 모든 페이지는 **의존성 없는 단일 HTML 파일** (외부 JS/CSS/폰트 CDN 금지).
