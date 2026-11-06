@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-05T02:41:47+00:00",
+  "generatedAt": "2026-11-06T02:45:29+00:00",
   "indicators": [
     {
       "id": "net_liquidity",
@@ -23,13 +23,9 @@
           "url": "https://fred.stlouisfed.org/series/RRPONTSYD"
         }
       ],
-      "value": 5.746,
-      "asOf": "2026-10-28",
+      "value": 5.791,
+      "asOf": "2026-11-04",
       "history": [
-        {
-          "t": "2023-11-08",
-          "v": 6.064
-        },
         {
           "t": "2023-11-15",
           "v": 6.132
@@ -649,17 +645,21 @@
         {
           "t": "2026-10-28",
           "v": 5.746
+        },
+        {
+          "t": "2026-11-04",
+          "v": 5.791
         }
       ],
       "mom": {
-        "phase": "역풍",
-        "tone": "neg",
-        "d1": -0.055,
-        "dN": -0.079,
+        "phase": "중립",
+        "tone": "neutral",
+        "d1": 0.045,
+        "dN": -0.049,
         "lookback": 13
       },
       "alert": null,
-      "momLine": "13주 Δ -0.08$T · 직전주 -0.06"
+      "momLine": "13주 Δ -0.05$T · 직전주 +0.04"
     },
     {
       "id": "m2_yoy",
@@ -834,8 +834,8 @@
       "decimals": 0,
       "source": "FRED · BAMLH0A0HYM2",
       "sourceUrl": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2",
-      "value": 340,
-      "asOf": "2026-11-03",
+      "value": 332,
+      "asOf": "2026-11-04",
       "history": [
         {
           "t": "2023-11-17",
@@ -1458,18 +1458,18 @@
           "v": 344
         },
         {
-          "t": "2026-11-03",
-          "v": 340
+          "t": "2026-11-04",
+          "v": 332
         }
       ],
       "mom": {
         "phase": "역풍",
         "tone": "neg",
-        "d1": -4,
-        "dN": 70,
+        "d1": -12,
+        "dN": 62,
         "lookback": 13
       },
-      "momLine": "13주 Δ +70bp · 직전주 -4"
+      "momLine": "13주 Δ +62bp · 직전주 -12"
     },
     {
       "id": "nfci",
@@ -2121,16 +2121,16 @@
     "regime": "유동성 역풍",
     "regimeEn": "Headwind",
     "tone": "neg",
-    "headline": "지표 4개 중 우호 1개 → 유동성 역풍.  ✖ 역풍: Fed 순유동성, 하이일드 스프레드, 금융여건지수 NFCI.",
+    "headline": "지표 4개 중 우호 1개 → 유동성 역풍.  ✖ 역풍: 하이일드 스프레드, 금융여건지수 NFCI.",
     "supportive": 1,
     "alerts": [],
     "bullets": [
       {
         "label": "Fed 순유동성",
-        "value": 5.746,
+        "value": 5.791,
         "unit": "$T",
-        "phase": "역풍",
-        "tone": "neg"
+        "phase": "중립",
+        "tone": "neutral"
       },
       {
         "label": "M2 통화량",
@@ -2141,7 +2141,7 @@
       },
       {
         "label": "하이일드 스프레드",
-        "value": 340,
+        "value": 332,
         "unit": "bp",
         "phase": "역풍",
         "tone": "neg"
