@@ -94,6 +94,10 @@ KR_GROUP_ETF = {"반도체": ("091160", "KODEX 반도체"), "IT하드웨어·전
     "에너지·유틸리티": ("117460", "KODEX 에너지화학"), "자동차": ("091180", "KODEX 자동차"), "조선·운송": ("494670", "TIGER 조선TOP10"),
     "화장품·의류·생활용품": ("228790", "TIGER 화장품"), "미디어·엔터·게임": ("228810", "TIGER 미디어컨텐츠"), "금융": ("139270", "TIGER 200 금융"),
     "레저·교육·서비스": ("228800", "TIGER 여행레저")}
+# KR 그룹 → 대응 US 섹터/산업 ETF (US 상대강도를 '확인' 신호로 쓴다. 백테스트 2012~: US 단독 선행성 없음(IC≈0), KR 자체 모멘텀 ∩ US 대응 섹터>SPY 필터가 KR 단독보다 CAGR +1~2%p·MDD 개선)
+KR_GROUP_US = {"반도체": "SMH", "IT하드웨어·전자부품": "XLK", "2차전지·전기장비": "XLI", "바이오·헬스케어": "XLV", "인터넷·소프트웨어": "IGV",
+    "기계·산업재": "XLI", "건설·건자재": "ITB", "철강·비철금속": "XME", "화학·소재": "XLB", "에너지·유틸리티": "XLE", "자동차": "XLY",
+    "조선·운송": "IYT", "화장품·의류·생활용품": "XLP", "음식료·유통": "XLP", "미디어·엔터·게임": "XLC", "금융": "XLF", "레저·교육·서비스": "JETS"}
 SCAN_LABEL = {"gap_up": "갭 상승", "ma200_cross": "200일선 돌파", "base_breakout": "베이스 돌파", "high_26w": "26주 신고가",
               "bottom_escape": "바닥 탈출", "ma30w_reclaim": "30주선 리클레임", "high_52w": "52주 신고가", "ma10m_cross": "10개월선 돌파"}
 _SETUPS_CACHE: dict[str, dict] = {}
@@ -148,9 +152,18 @@ def allowed_sectors(m: str, stocks: list[dict]) -> dict:
         su = setups(m)
         for pk in picks: pk.update(verdict(pk, su.get(pk["ticker"]), g.get("asOf") or ""))
         etf = (c["ticker"], c["name"]) if m == "us" else KR_GROUP_ETF.get(c["name"])
+        us_pair = None
+        if m == "kr" and c["name"] in KR_GROUP_US:
+            try:
+                gu = requests.get("https://joyglobal-ux.github.io/rs-screener/groups-us.json", timeout=60).json() if "_GU" not in globals() else globals()["_GU"]
+                globals()["_GU"] = gu
+                uc = next((x for x in gu["cards"] if x.get("ticker") == KR_GROUP_US[c["name"]]), None)
+                if uc: us_pair = {"ticker": uc["ticker"], "name": uc["name"], "rel3M": uc.get("rel3M"), "w": uc["badges"].get("w"), "ok": (uc.get("rel3M") or 0) > 0 and uc["badges"].get("w") == "up"}
+            except Exception as e:  # noqa
+                log(f"  us pair fetch failed: {e}")
         out.append({"id": c["id"], "name": c["name"], "rel3M": c["rel3M"], "r1M": c.get("r1M"), "badges": c["badges"], "changed": c.get("changed"),
                     "n": c.get("n"), "allowed": c["badges"].get("w") == "up", "picks": picks, "poolSize": len(pool),
-                    "etf": {"ticker": etf[0], "name": etf[1]} if etf else None})
+                    "etf": {"ticker": etf[0], "name": etf[1]} if etf else None, "usPair": us_pair})
     idx = [{"name": c["name"], "badges": c["badges"]} for c in g["cards"] if c["kind"] == "index"]
     return {"asOf": g.get("asOf"), "index": idx, "top": out}
 
