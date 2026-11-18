@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-17T04:42:56+00:00",
+  "generatedAt": "2026-11-18T03:48:26+00:00",
   "indicators": [
     {
       "id": "net_liquidity",
@@ -834,13 +834,9 @@
       "decimals": 0,
       "source": "FRED · BAMLH0A0HYM2",
       "sourceUrl": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2",
-      "value": 323,
-      "asOf": "2026-11-13",
+      "value": 334,
+      "asOf": "2026-11-16",
       "history": [
-        {
-          "t": "2023-11-24",
-          "v": 385
-        },
         {
           "t": "2023-12-01",
           "v": 387
@@ -1460,16 +1456,20 @@
         {
           "t": "2026-11-13",
           "v": 323
+        },
+        {
+          "t": "2026-11-16",
+          "v": 334
         }
       ],
       "mom": {
-        "phase": "역풍 완화",
-        "tone": "warn-pos",
-        "d1": -19,
-        "dN": 56,
+        "phase": "역풍",
+        "tone": "neg",
+        "d1": 11,
+        "dN": 64,
         "lookback": 13
       },
-      "momLine": "13주 Δ +56bp · 직전주 -19"
+      "momLine": "13주 Δ +64bp · 직전주 +11"
     },
     {
       "id": "nfci",
@@ -2121,7 +2121,7 @@
     "regime": "유동성 역풍",
     "regimeEn": "Headwind",
     "tone": "neg",
-    "headline": "지표 4개 중 우호 1개 → 유동성 역풍.  ✖ 역풍: 금융여건지수 NFCI.",
+    "headline": "지표 4개 중 우호 1개 → 유동성 역풍.  ✖ 역풍: 하이일드 스프레드, 금융여건지수 NFCI.",
     "supportive": 1,
     "alerts": [],
     "bullets": [
@@ -2141,10 +2141,10 @@
       },
       {
         "label": "하이일드 스프레드",
-        "value": 323,
+        "value": 334,
         "unit": "bp",
-        "phase": "역풍 완화",
-        "tone": "warn-pos"
+        "phase": "역풍",
+        "tone": "neg"
       },
       {
         "label": "금융여건지수 NFCI",
