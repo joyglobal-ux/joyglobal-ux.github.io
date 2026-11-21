@@ -348,6 +348,110 @@ html.pwa body{padding-bottom:calc(64px + env(safe-area-inset-bottom))!important}
 <main class="wrap">
 
   <!-- 새 노트는 이 줄 바로 아래에 추가 (최신순) -->
+  <article class="note" data-id="20261121-anthropic-s1-to-ipo" data-status="관찰">
+    <div class="nmeta">
+      <span class="date">2026.11.21</span>
+      <span class="tk">Anthropic</span>
+      <span class="tag">IPO</span>
+      <span class="tag">S-1</span>
+      <span class="tag">지배구조</span>
+      <span class="tag">순환금융</span>
+      <span class="tag">compute 약정</span>
+      <span class="tag">뉴스레터 종합</span>
+    </div>
+    <div class="ntitle">Anthropic, S-1에서 상장까지 4주 — 수요에는 값이 매겨졌고, 남은 질문은 약정 $900B를 무엇으로 떠받치느냐</div>
+    <p class="nlede">
+      <b>한 줄:</b> 주문 약 $500B·약 7배 초과청약·시초가 +34%로 <b>수요 논쟁은 끝났다.</b> 대신 S-1이 보여준 건 현금 약 $132B 대 compute 약정 약 $900B라는 간극이다.
+      이 간극을 메우는 수단은 둘이다. 하나는 <b>매출 성장</b>인데, 분기 성장률은 144%에서 약 47%로 꺾였다. 다른 하나는 <b>반복 증자</b>다.
+      5개 클래스 지배구조는 반복 증자를 해도 지배권이 흔들리지 않게 짜여 있다. <b>지배구조와 약정표는 같은 계획의 두 반쪽</b>이다.
+    </p>
+    <div class="nbody">
+    <div class="sec">
+      <div class="sech"><span class="sn">01</span><h3>숫자 — S-1과 상장 직후 공개된 것</h3></div>
+      <div class="scrollx"><table class="tbl">
+        <thead><tr><th>항목</th><th>숫자</th><th>읽는 법</th></tr></thead>
+        <tbody>
+          <tr><td>매출</td><td>상반기 $16.286B · 2Q $11.6B(YoY +1,368%) · 3Q 약 $17B(YoY 12배+, QoQ 약 +47%)</td><td>3분기 한 분기가 상반기 전체보다 크다. 연환산 매출은 2024년 말 $1B → 10월 말 약 $81B</td></tr>
+          <tr><td>이익</td><td>2Q 첫 GAAP·Non-GAAP 영업흑자 · 상반기 GAAP 순손실 약 $80.7B · 조정 순이익 약 $2.7B</td><td>손실의 약 $72B는 Google·Amazon에 판 전환사채·우선주의 공정가치 변동이다. Amazon·Alphabet은 같은 항목을 평가이익으로 잡는다(WSJ Weil). Levine은 Non-GAAP 조정이 맞다고 본다</td></tr>
+          <tr><td>원가</td><td>상반기 functional cost of revenue $2.380B → ARK 계산 매출총이익률 85.4%</td><td><b>컴퓨트 대부분이 원가 밖에 있다.</b> 같은 ARK 글에서 컴퓨트·인프라 비용은 매출의 <b>48% → 58%</b>(2Q→3Q)로 올랐다</td></tr>
+          <tr><td>효율</td><td>compute $1당 매출 $0.40(1Q25) → $2.08 · SpaceX 단기계약 반영 시 $1.72</td><td>SemiAnalysis 추정으로 추론은 매출 $1당 약 65센트를 남긴다(상반기 2026, 2024년엔 94센트 손실)</td></tr>
+          <tr><td>성장 대 비용</td><td>분기 매출 성장 144% → 약 47% · compute 지출 +77%</td><td>Chamath의 핵심 지적이다. 비용이 매출보다 빨리 는다</td></tr>
+        </tbody>
+      </table></div>
+      <div class="fix"><span class="fh">같은 숫자, 반대 결론</span>
+        ARK는 YoY 12배와 compute 효율 5배 개선을 보고 "학습 투자가 회수되고 있다"고 읽는다. Chamath는 QoQ 감속과 compute +77%를 보고 위험으로 읽는다.
+        둘 다 틀리지 않았다. <b>연간으로 보면 폭발, 분기로 보면 감속</b>이다. 상장 후 주가는 분기 쪽에 무게를 싣기 시작했다(§04).
+        <br>※ 10/31 브리핑에 실린 "compute 비용 $8.95B 중 $2.4B만 원가, 영업이익률 (4)%"는 웹 2차 출처(FourWeekMBA)였고 메일 원문으로 확인되지 않아 이 노트에서 뺐다.
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sech"><span class="sn">02</span><h3>지배구조 — 지분이 얼마나 희석돼도 지배권은 그대로</h3></div>
+      <div class="scrollx"><table class="tbl">
+        <thead><tr><th>클래스</th><th>누구</th><th>권리</th></tr></thead>
+        <tbody>
+          <tr><td>A</td><td>공모 투자자</td><td>1주 1표. 그러나 "항상 창업자에게 진다"(Levine)</td></tr>
+          <tr><td>F</td><td>창업자 7명</td><td>지분과 무관하게 <b>의결권 50.1% 고정</b></td></tr>
+          <tr><td>T</td><td>장기 이익 신탁(LTBT)</td><td>이사 7명 중 4명 임명·해임. 트러스티 5명, 연 $400,000, 주식 보유 금지</td></tr>
+          <tr><td>N</td><td>Amazon·Google·공급사 앵커</td><td>의결권 0. 매도하면 A로 전환</td></tr>
+          <tr><td>E</td><td>직원</td><td>6개월 근무마다 1주. 4번째 신탁 이사 지명이 막히면 표결권을 가진다</td></tr>
+        </tbody>
+      </table></div>
+      <p class="p">
+        결과는 <b>창업자 7명이 지분 약 13%로 의결권 61%</b>를 쥐는 구조다. 공모에 $81B를 넣은 투자자의 의결권은 약 5.5%다.
+        전통적인 10배 의결권 주식과 달리 50.1%가 <b>고정값</b>이라 증자를 몇 번 해도 지배권이 줄지 않는다.
+        Thompson의 요약: "핵심 사업은 매우 수익성이 높지만 경쟁이 이익을 다 먹을 수 있고, 투자자는 끝없는 희석을 감수하도록 설계돼 있다."
+      </p>
+      <div class="why">
+        <b>같은 달의 대조군 — Nvidia.</b> 창업자 지분 약 3.4%에 특별 의결권이 없어 CEO 거취를 이사회가 결정했다(Levine 11/16).
+        Levine은 이 사건 뒤 테크가 창업자 중심 지배구조를 더 원하게 될 거라고 본다. Anthropic 공모 수요는 그 판단과 같은 방향이다.
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sech"><span class="sn">03</span><h3>공급사가 앵커가 된다 — 약정과 지분의 순환</h3></div>
+      <div class="rows">
+        <div class="r"><div class="lab">앵커 사모</div><div class="val">공모와 동시에 <b>$26.0B Class N 사모</b>. 참여사는 AMD, Broadcom, Google, Micron, Microsoft, NVIDIA, TSMC. 수수료 0, 의결권 0, 미등록 주식이라 <b>약 6개월간 사실상 매도 불가</b>. 공급사 입장에선 지분과 자기 매출이 함께 돌아오는 주식이다.</div></div>
+        <div class="r"><div class="lab">Google 약정</div><div class="val">2026.4~2033.7 최소 약 <b>$121.3B</b>. 여기에 추가 TPU 조달 <b>$125~150B</b>(추정)가 계약 의무표에서 빠져 있다. Levine 어림으로 7년간 약 $250B.</div></div>
+        <div class="r"><div class="lab">전체 약정</div><div class="val">약 <b>$895B</b>(Nscale $44.6B·Lambda $41.3B 포함), 2045년까지 <b>$900.9B</b>. Lambda는 리스 기한을 놓쳐 $34.9B를 <b>양쪽 모두</b> 해지할 수 있다(Anthropic은 해지 계획 없음). SpaceX Colossus는 월 $1.25B, 초기 기간 후 90일 통지로 해지 가능.</div></div>
+        <div class="r"><div class="lab">대비</div><div class="val">9/30 현금·단기투자 약 <b>$132B</b>. 누적 조달 $141B. 약정은 현금의 약 7배다.</div></div>
+      </div>
+      <div class="why">
+        <b>왜 순환 구조가 중요한가.</b> 공급사가 고객의 주식을 사면 그 돈은 다시 공급사 매출로 돌아온다. 수요가 강할 때는 서로의 숫자를 키우지만,
+        고객의 다음 증자가 막히면 <b>공급사의 매출과 보유 지분이 함께 흔들린다.</b> 앵커 사모가 진짜 수요인지, 공급사가 만든 수요인지는 아직 가를 수 없다.
+        조달 사다리 전체의 그림은 <a href="/research/semiconductor-ai.html#20261121-buildout-ballot-credit">반도체 노트(11/21)</a>에 있다.
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sech"><span class="sn">04</span><h3>가격 발견 — 4주간의 타임라인</h3></div>
+      <div class="tl">
+        <div class="ev done"><div class="when">10/26</div><div class="what">S-1 공개. 5개 클래스 구조, 상반기 순손실 $80.7B가 먼저 화제가 됐다</div></div>
+        <div class="ev done"><div class="when">11/3</div><div class="what">Hyperliquid 프리IPO 퍼프 약 $1.8T 대 기관 요구가 $1.5~1.6T — 약 20% 팝 구조(Levine)</div></div>
+        <div class="ev done"><div class="when">11/8</div><div class="what">보도 밸류 $1~1.3T, 12/1 전 상장 확률 약 80% → 50% 근처(Yahoo). <b>바닥 심리</b></div></div>
+        <div class="ev done"><div class="when">11/10</div><div class="what">밴드 $70~78·825M주(회사 801.4M + 공동창업자 23.6M), 사모 포함 최대 $90.4B, 완전희석 약 $1.4T. 출시 시점에 이미 전량 주문</div></div>
+        <div class="ev done"><div class="when">11/18</div><div class="what">약 7배 초과청약, 주문 약 $500B — 2026년 미국 IPO 연초 이후 누적 $165B의 3배. 퍼프 약 $1.7T</div></div>
+        <div class="ev done"><div class="when">11/19</div><div class="what">가격 <b>$83</b>, 주식 수 825M → 980M(+19%, SEC 20% 한도 직전). 약 $107B 조달, 완전희석 약 $1.5T. 시초가 <b>$111.50(+34%)</b>, 오후 $95.79. 기관 약 1,200곳 중 절반 이상 0주 배정</div></div>
+        <div class="ev done"><div class="when">11/20~21</div><div class="what">첫 이틀 약 $2T → $1.76T, 금요일 오전 "12% 넘게" 하락(Chamath, 기준 미명시)</div></div>
+      </div>
+      <div class="fix"><span class="fh">퍼프는 두 번 다 높게 불렀다</span>
+        SpaceX 때도 퍼프는 약 $176을 가리켰지만 실제 시초가는 $150(공모가 $135)였다. Anthropic도 퍼프 약 $1.7~1.8T 대비 시초가 기준 약 $2T로 잠깐 넘었다가 바로 밑으로 내려왔다.
+        Levine 말대로 초과청약 배수와 프리IPO 가격은 <b>관행상 부풀려진 신호</b>다. 다음 대형 AI IPO에서도 같은 할인을 적용할 것.
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sech"><span class="sn">05</span><h3>판정 · 반대논리 · KPI</h3></div>
+      <div class="rows">
+        <div class="r"><div class="lab">확인된 것</div><div class="val"><b>수요.</b> 주문 $500B, 3Q 매출 약 $17B, compute 효율 개선. "프론티어 랩에 돈이 몰리나"는 더 이상 질문이 아니다.</div></div>
+        <div class="r"><div class="lab">확인 안 된 것</div><div class="val"><b>약정을 떠받칠 속도.</b> compute 비용 비율 48% → 58%, 분기 성장 144% → 47%. 이 추세면 약정을 채우려면 증자가 반복돼야 하고, <b>상장 후 주가가 그 증자의 비용</b>이 된다.</div></div>
+        <div class="r"><div class="lab">반대논리</div><div class="val">ARK: Claude Code·Cowork 기반 지식노동 시장이 아직 초기라 연 단위 성장은 유지된다. compute $1당 매출이 1년 반 만에 5배가 된 효율 곡선이 계속되면 58%는 일시적이다.</div></div>
+        <div class="r verdict"><div class="lab">판정</div><div class="val"><b>관찰.</b> 회사가 아니라 <b>AI 조달 사이클의 온도계</b>로 본다. 볼 것: ① 상장 후 첫 실적에서 compute/매출 비율이 58% 아래로 내려오는지 ② 분기 성장률 47% 유지 여부 ③ 약정표 변화(Lambda $34.9B 해지 여부) ④ <b>Class N 앵커 지분 매도 가능 시점(상장 후 약 6개월, 2027년 5월 전후) — 오버행</b> ⑤ 추가 증자 시점과 가격.</div></div>
+      </div>
+    </div>
+    <p class="disc">
+      <span class="src">자료:</span> 뉴스레터 원문(메일 본문 대조 완료) — Matt Levine Money Stuff(10/26·10/28·11/3·11/10·11/16·11/18·11/19), ARK Invest(11/2·11/16·11/20), Chamath Palihapitiya(11/16·11/20), Stratechery(10/30, 요약문), Yahoo Finance Week in Tech(11/8).
+      Levine·WSJ가 인용한 S-1 수치는 2차 인용이다. Polaris 브리핑 10/28~11/21 항목을 테마로 묶었다. 투자 권유 아님.
+    </p>
+    </div>
+  </article>
+
   <article class="note" data-id="20261103-pltr-q3-sovereign-ai" data-status="관찰">
     <div class="nmeta">
       <span class="date">2026.11.03</span>
