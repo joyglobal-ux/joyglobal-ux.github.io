@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-24T06:17:51+00:00",
+  "generatedAt": "2026-11-25T04:59:20+00:00",
   "indicators": [
     {
       "id": "net_liquidity",
@@ -669,13 +669,9 @@
       "decimals": 1,
       "source": "FRED · M2SL",
       "sourceUrl": "https://fred.stlouisfed.org/series/M2SL",
-      "value": 5.71,
-      "asOf": "2026-09",
+      "value": 5.89,
+      "asOf": "2026-10",
       "history": [
-        {
-          "t": "2023-10",
-          "v": -3.41
-        },
         {
           "t": "2023-11",
           "v": -3.11
@@ -815,16 +811,20 @@
         {
           "t": "2026-09",
           "v": 5.71
+        },
+        {
+          "t": "2026-10",
+          "v": 5.89
         }
       ],
       "mom": {
         "phase": "우호 지속",
         "tone": "pos",
-        "d1": 0.11,
-        "dN": 0.41,
+        "d1": 0.18,
+        "dN": 0.53,
         "lookback": 3
       },
-      "momLine": "3개월 Δ +0.4%p · 직전월 +0.1"
+      "momLine": "3개월 Δ +0.5%p · 직전월 +0.2"
     },
     {
       "id": "hy_oas",
@@ -834,13 +834,9 @@
       "decimals": 0,
       "source": "FRED · BAMLH0A0HYM2",
       "sourceUrl": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2",
-      "value": 376,
-      "asOf": "2026-11-20",
+      "value": 363,
+      "asOf": "2026-11-23",
       "history": [
-        {
-          "t": "2023-12-01",
-          "v": 387
-        },
         {
           "t": "2023-12-08",
           "v": 375
@@ -1460,16 +1456,20 @@
         {
           "t": "2026-11-20",
           "v": 376
+        },
+        {
+          "t": "2026-11-23",
+          "v": 363
         }
       ],
       "mom": {
         "phase": "역풍",
         "tone": "neg",
-        "d1": 53,
-        "dN": 106,
+        "d1": -13,
+        "dN": 103,
         "lookback": 13
       },
-      "momLine": "13주 Δ +106bp · 직전주 +53"
+      "momLine": "13주 Δ +103bp · 직전주 -13"
     },
     {
       "id": "nfci",
@@ -2134,14 +2134,14 @@
       },
       {
         "label": "M2 통화량",
-        "value": 5.71,
+        "value": 5.89,
         "unit": "% YoY",
         "phase": "우호 지속",
         "tone": "pos"
       },
       {
         "label": "하이일드 스프레드",
-        "value": 376,
+        "value": 363,
         "unit": "bp",
         "phase": "역풍",
         "tone": "neg"
